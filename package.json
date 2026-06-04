@@ -1,0 +1,27 @@
+{
+  "name": "cold-mail-bot",
+  "version": "1.0.0",
+  "description": "AI Cold Email + Lead Finder Automation",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "scrape": "node src/scraper/run.js",
+    "personalize": "node src/ai/run.js",
+    "send": "node src/sender/run.js",
+    "followup": "node src/sender/followup.js",
+    "report": "node src/report.js",
+    "daily": "node src/sender/run.js && node src/sender/followup.js && node src/report.js",
+    "cron": "node src/cron.js",
+    "test:db": "node src/db/test.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "groq-sdk": "^0.9.1",
+    "mongoose": "^8.6.0",
+    "nodemailer": "^6.9.14",
+    "playwright": "^1.47.0",
+    "node-cron": "^3.0.3",
+    "cheerio": "^1.0.0",
+    "p-limit": "^6.1.0"
+  }
+}

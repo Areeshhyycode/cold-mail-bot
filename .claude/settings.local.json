@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Bash(npm install *)",
+      "Bash(node src/db/test.js)",
+      "Bash(node -e \"import\\('dns'\\).then\\(d=>d.promises.resolveTxt\\('cluster0.4p8gnny.mongodb.net'\\).then\\(r=>console.log\\('DNS OK:',JSON.stringify\\(r\\)\\)\\).catch\\(e=>console.log\\('DNS FAIL:',e.code\\)\\)\\)\")",
+      "Bash(node -e \"import\\('dns'\\).then\\(d=>d.promises.resolve4\\('google.com'\\).then\\(r=>console.log\\('google.com OK:',r\\)\\).catch\\(e=>console.log\\('FAIL:',e.code\\)\\)\\)\")",
+      "Bash(node -e \"import\\('dns'\\).then\\(d=>{d.setServers\\(['8.8.8.8','1.1.1.1']\\);d.promises.resolveTxt\\('cluster0.4p8gnny.mongodb.net'\\).then\\(r=>console.log\\('DNS OK via 8.8.8.8:',JSON.stringify\\(r\\)\\)\\).catch\\(e=>console.log\\('FAIL:',e.code\\)\\)}\\)\")",
+      "Bash(timeout 25 node -e \"import\\('dns'\\).then\\(d=>{d.setServers\\(['8.8.8.8','1.1.1.1']\\);return d.promises.resolveTxt\\('cluster0.4p8gnny.mongodb.net'\\)}\\).then\\(r=>console.log\\('DNS OK:',JSON.stringify\\(r\\)\\)\\).catch\\(e=>console.log\\('FAIL:',e.code\\)\\)\")",
+      "Bash(echo \"exit: $?\")",
+      "Bash(npx playwright *)",
+      "Bash(node src/report.js)",
+      "Bash(git --version)",
+      "Bash(gh --version)",
+      "Bash(gh auth *)",
+      "Bash(git init *)",
+      "Bash(git add *)"
+    ]
+  }
+}
