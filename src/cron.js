@@ -26,10 +26,14 @@ cron.schedule("0 9 * * *", async () => {
   await runScript("sender/run.js");
 });
 
-// Roz dopahar 2 baje follow-ups
+// Roz dopahar 2 baje: pehle replies check karo, phir follow-ups, phir report
 cron.schedule("0 14 * * *", async () => {
-  console.log(`\n[${new Date().toLocaleString()}] 📨 Follow-ups...`);
+  console.log(`\n[${new Date().toLocaleString()}] 💬 Checking replies...`);
+  await runScript("tracker/replyChecker.js");
+  console.log(`📨 Follow-ups...`);
   await runScript("sender/followup.js");
+  console.log(`📊 Report...`);
+  await runScript("report.js");
 });
 
 // process zinda rakho

@@ -15,7 +15,22 @@
       "Bash(gh --version)",
       "Bash(gh auth *)",
       "Bash(git init *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit -q -m 'Initial commit: AI cold email + lead finder automation *)",
+      "Bash(git remote *)",
+      "Bash(git branch *)",
+      "Bash(git push *)",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\xoxom\\\\OneDrive\\\\Desktop\\\\cold-mail-bot\" -Force)",
+      "Bash(Select-Object Mode, Name)",
+      "Bash(git pull *)",
+      "Bash(git checkout *)",
+      "Bash(git commit *)",
+      "Bash(git config *)",
+      "Bash(timeout 180 node src/scraper/run.js \"web design agency in Lahore\" 5 webdesign)",
+      "Bash(timeout 90 node src/ai/run.js)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\xoxom\\.claude\\projects\\c--Users-xoxom-OneDrive-Desktop-cold-mail-bot"
     ]
   }
 }

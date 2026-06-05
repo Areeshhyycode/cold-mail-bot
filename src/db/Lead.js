@@ -35,6 +35,7 @@ const leadSchema = new mongoose.Schema(
         "followup_1",
         "followup_2",
         "replied",
+        "unsubscribed",
         "done",
         "bounced",
       ],
