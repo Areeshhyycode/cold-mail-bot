@@ -1,26 +1,44 @@
 import dotenv from "dotenv";
+import nodemailer from "nodemailer";
 dotenv.config();
 
 /**
- * Notification bhejta hai — Telegram (preferred) ya WhatsApp (CallMeBot).
- * Jo bhi configure hoga, usse bhej dega. Dono ho to dono pe.
+ * Notification bhejta hai. DEFAULT: apne Gmail pe email (zero setup — Gmail already connected).
+ * Phone pe Gmail app ki notification aa jayegi.
  *
- * ---- TELEGRAM SETUP (1 min, reliable + instant) ----
- *   1. Telegram me @BotFather kholo -> /newbot -> naam do -> BOT TOKEN milega
- *   2. Apne naye bot ko koi bhi message bhejo (jaise "hi")
- *   3. Apna CHAT ID lene ke liye @userinfobot ko message karo -> wo ID dega
- *   4. .env me daalo:
- *        TELEGRAM_BOT_TOKEN=123456:ABC-DEF...
- *        TELEGRAM_CHAT_ID=123456789
- *
- * ---- WHATSAPP SETUP (CallMeBot, optional) ----
- *        WHATSAPP_PHONE=92300...   CALLMEBOT_APIKEY=...
+ * Optional (chaaho to): Telegram / WhatsApp bhi — par zaroori nahi.
  */
-export async function notify(message) {
+export async function notify(message, subject = "🎉 Cold Mail Bot — Reply aaya!") {
   let sent = false;
-  if (await sendTelegram(message)) sent = true;
-  if (await sendWhatsApp(message)) sent = true;
+  if (await sendSelfEmail(message, subject)) sent = true; // default
+  if (await sendTelegram(message)) sent = true; // agar set ho
+  if (await sendWhatsApp(message)) sent = true; // agar set ho
   return sent;
+}
+
+// apne aap ko email bhejo (notification ke liye) — koi extra setup nahi
+let mailTransporter;
+async function sendSelfEmail(message, subject) {
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) return false;
+  try {
+    if (!mailTransporter) {
+      mailTransporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+      });
+    }
+    const to = process.env.NOTIFY_EMAIL || process.env.SMTP_USER;
+    await mailTransporter.sendMail({
+      from: `"Cold Mail Bot 🔔" <${process.env.SMTP_USER}>`,
+      to,
+      subject,
+      text: message,
+    });
+    return true;
+  } catch (err) {
+    console.log("   ⚠️ Self-email notify fail:", err.message);
+    return false;
+  }
 }
 
 // purane code ke liye alias
