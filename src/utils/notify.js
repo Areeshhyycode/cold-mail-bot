@@ -2,25 +2,53 @@ import dotenv from "dotenv";
 dotenv.config();
 
 /**
- * WhatsApp pe notification bhejta hai (CallMeBot — free).
+ * Notification bhejta hai — Telegram (preferred) ya WhatsApp (CallMeBot).
+ * Jo bhi configure hoga, usse bhej dega. Dono ho to dono pe.
  *
- * Setup (ek baar):
- *   1. Apne WhatsApp me +34 644 84 71 89 ko contact me add karo (naam: CallMeBot)
- *   2. Us number ko WhatsApp message bhejo: "I allow callmebot to send me messages"
- *   3. Reply me ek API key milegi
+ * ---- TELEGRAM SETUP (1 min, reliable + instant) ----
+ *   1. Telegram me @BotFather kholo -> /newbot -> naam do -> BOT TOKEN milega
+ *   2. Apne naye bot ko koi bhi message bhejo (jaise "hi")
+ *   3. Apna CHAT ID lene ke liye @userinfobot ko message karo -> wo ID dega
  *   4. .env me daalo:
- *        WHATSAPP_PHONE=923001234567   (country code ke saath, + ke bina)
- *        CALLMEBOT_APIKEY=123456
+ *        TELEGRAM_BOT_TOKEN=123456:ABC-DEF...
+ *        TELEGRAM_CHAT_ID=123456789
  *
- * Agar phone/apikey set nahi hain to chup-chaap skip kar deta hai.
+ * ---- WHATSAPP SETUP (CallMeBot, optional) ----
+ *        WHATSAPP_PHONE=92300...   CALLMEBOT_APIKEY=...
  */
-export async function notifyWhatsApp(message) {
+export async function notify(message) {
+  let sent = false;
+  if (await sendTelegram(message)) sent = true;
+  if (await sendWhatsApp(message)) sent = true;
+  return sent;
+}
+
+// purane code ke liye alias
+export const notifyWhatsApp = notify;
+
+async function sendTelegram(message) {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+  if (!token || !chatId) return false;
+
+  try {
+    const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: chatId, text: message }),
+      signal: AbortSignal.timeout(15000),
+    });
+    return res.ok;
+  } catch (err) {
+    console.log("   ⚠️ Telegram notify fail:", err.message);
+    return false;
+  }
+}
+
+async function sendWhatsApp(message) {
   const phone = process.env.WHATSAPP_PHONE;
   const apikey = process.env.CALLMEBOT_APIKEY;
-
-  if (!phone || !apikey) {
-    return false; // setup nahi hua, skip
-  }
+  if (!phone || !apikey) return false;
 
   try {
     const url =
@@ -28,7 +56,6 @@ export async function notifyWhatsApp(message) {
       `?phone=${encodeURIComponent(phone)}` +
       `&text=${encodeURIComponent(message)}` +
       `&apikey=${encodeURIComponent(apikey)}`;
-
     const res = await fetch(url, { signal: AbortSignal.timeout(15000) });
     return res.ok;
   } catch (err) {
