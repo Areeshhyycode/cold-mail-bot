@@ -5,6 +5,9 @@ const EMAIL_RE = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
 // in emails ko skip karo (junk / placeholder)
 const BAD_PATTERNS = [
   "example.com",
+  "example.org",
+  "domain.com",
+  "yourdomain",
   "sentry.io",
   "wixpress.com",
   ".png",
@@ -12,14 +15,26 @@ const BAD_PATTERNS = [
   ".jpeg",
   ".gif",
   ".webp",
+  ".svg",
   "@2x",
   "your-email",
+  "your@",
   "email@",
+  "name@",
+  "user@",
+  "info@email",
+  "test@",
+  "abc@",
+  "@email.",
 ];
+
+// asli email ka strict format (TLD 2-24 letters)
+const VALID_EMAIL = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,24}$/;
 
 function cleanEmails(emails) {
   return [...new Set(emails)].filter((e) => {
-    const low = e.toLowerCase();
+    const low = e.toLowerCase().trim();
+    if (!VALID_EMAIL.test(low)) return false;
     return !BAD_PATTERNS.some((bad) => low.includes(bad));
   });
 }

@@ -38,7 +38,7 @@ async function fetchSiteSummary(website) {
 export async function generateEmail(lead, offer) {
   const summary = await fetchSiteSummary(lead.website);
 
-  const prompt = `Tum ek expert cold-email copywriter ho. Ek SHORT, personalized cold email likho.
+  const prompt = `Tum ek expert cold-email copywriter ho. Ek business ke liye email ke PARTS likho.
 
 BUSINESS DETAILS:
 - Naam: ${lead.businessName}
@@ -48,14 +48,14 @@ BUSINESS DETAILS:
 MERI SERVICE (jo main bech raha hun):
 - ${offer.service}
 
-RULES:
-- Pehli line PERSONALIZED ho — dikhaye maine unki website/business dekha hai. Generic mat likho.
-- Total 60-90 words. Short rakho.
-- Casual, human tone. Corporate jargon mat use karo.
-- Ek clear soft CTA (jaise "15 min call?" ya "interested ho to reply karo").
-- NO emojis. NO "Dear Sir/Madam".
-- Sirf JSON return karo is format me: {"subject": "...", "body": "..."}
-- Body me greeting "Hi ${lead.ownerName || "there"}," se shuru karo aur "${offer.senderName}\n${offer.senderTitle}" se khatam.`;
+JSON return karo EXACTLY is format me (sirf English, no emojis, no jargon):
+{
+  "subject": "5-7 word curiosity subject line, salesy mat lagao",
+  "opener": "1 personalized line jo SPECIFICALLY un ke business/website ke baare me ho — dikhaye maine dekha hai. Generic 'I came across' mat likho.",
+  "pitch": "1-2 line jisme meri service ka clear benefit ho un ke liye",
+  "cta": "1 short soft question, jaise 'Worth a quick 15-min call?'"
+}
+Har field short rakho. Total email 60 words se kam.`;
 
   const completion = await groq.chat.completions.create({
     model: MODEL,
@@ -65,15 +65,35 @@ RULES:
   });
 
   const raw = completion.choices[0]?.message?.content || "{}";
-  let parsed;
+  let p;
   try {
-    parsed = JSON.parse(raw);
+    p = JSON.parse(raw);
   } catch {
-    parsed = { subject: `Quick idea for ${lead.businessName}`, body: raw };
+    p = {};
   }
 
+  const greeting = `Hi ${lead.ownerName || "there"},`;
+  const opener = p.opener || `I came across ${lead.businessName} and was impressed.`;
+  const pitch = p.pitch || offer.service;
+  const cta = p.cta || "Worth a quick 15-min call?";
+
+  // body khud assemble karo — proper line breaks guaranteed
+  const body = [
+    greeting,
+    "",
+    opener,
+    "",
+    pitch,
+    "",
+    cta,
+    "",
+    "Best,",
+    offer.senderName,
+    offer.senderTitle,
+  ].join("\n");
+
   return {
-    subject: parsed.subject || `Quick idea for ${lead.businessName}`,
-    body: parsed.body || "",
+    subject: p.subject || `Quick idea for ${lead.businessName}`,
+    body,
   };
 }
