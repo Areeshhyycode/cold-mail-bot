@@ -4,6 +4,7 @@ import { connectDB, disconnectDB } from "../db/connect.js";
 import { Lead } from "../db/Lead.js";
 import { scrapeGoogleMaps } from "./googleMaps.js";
 import { extractEmail } from "./emailExtractor.js";
+import { verifyEmail } from "./verifyEmail.js";
 
 dotenv.config();
 
@@ -40,18 +41,28 @@ async function main() {
           return;
         }
 
+        // email verify karo (MX check) — invalid ko save mat karo
+        const emailStatus = await verifyEmail(email);
+        if (emailStatus === "invalid") {
+          skipped++;
+          console.log(`   ❌ ${biz.businessName} — ${email} (invalid, skip)`);
+          return;
+        }
+
         try {
           await Lead.create({
             businessName: biz.businessName,
             website: biz.website,
             email,
+            emailStatus,
             ownerName,
             niche,
             city: biz.city || "",
             status: "new",
           });
           saved++;
-          console.log(`   ✅ ${biz.businessName} — ${email}`);
+          const tag = emailStatus === "risky" ? " ⚠️risky" : "";
+          console.log(`   ✅ ${biz.businessName} — ${email}${tag}`);
         } catch (err) {
           if (err.code === 11000) {
             skipped++; // duplicate

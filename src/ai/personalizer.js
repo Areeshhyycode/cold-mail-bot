@@ -45,17 +45,17 @@ BUSINESS DETAILS:
 - Niche: ${lead.niche}
 - Website ka content: ${summary || "(website content nahi mila)"}
 
-MERI SERVICE (jo main bech raha hun):
-- ${offer.service}
+MERE BAARE ME (jo main offer karta hun):
+${offer.service}
 
-JSON return karo EXACTLY is format me (sirf English, no emojis, no jargon):
+JSON return karo EXACTLY is format me (sirf English, professional tone, no emojis, no jargon):
 {
-  "subject": "5-7 word curiosity subject line, salesy mat lagao",
-  "opener": "1 personalized line jo SPECIFICALLY un ke business/website ke baare me ho — dikhaye maine dekha hai. Generic 'I came across' mat likho.",
-  "pitch": "1-2 line jisme meri service ka clear benefit ho un ke liye",
-  "cta": "1 short soft question, jaise 'Worth a quick 15-min call?'"
+  "ownerName": "agar website content me kisi owner/founder/CEO ka FIRST name clearly mile to wo, warna empty string \"\". Guess mat karo.",
+  "subject": "5-7 word professional subject line, salesy/spammy mat lagao",
+  "opener": "1 warm personalized line jo SPECIFICALLY un ke business/website ke baare me ho — dikhaye maine dekha hai. Generic 'I came across' mat likho.",
+  "intro": "1 line jisme main professionally introduce karoon ke main kya karti hun (full-stack + AI developer) aur unke business ko kaise help kar sakti hun"
 }
-Har field short rakho. Total email 60 words se kam.`;
+Har field short rakho aur professional. No fake claims.`;
 
   const completion = await groq.chat.completions.create({
     model: MODEL,
@@ -72,22 +72,31 @@ Har field short rakho. Total email 60 words se kam.`;
     p = {};
   }
 
-  const greeting = `Hi ${lead.ownerName || "there"},`;
-  const opener = p.opener || `I came across ${lead.businessName} and was impressed.`;
-  const pitch = p.pitch || offer.service;
-  const cta = p.cta || "Worth a quick 15-min call?";
+  // owner name: pehle scrape se mila, warna AI ne dhoondha, warna "there"
+  const ownerName = lead.ownerName || (p.ownerName || "").trim() || "there";
+  const greeting = `Hi ${ownerName},`;
+  const opener = p.opener || `I recently came across ${lead.businessName} and was impressed by your work.`;
+  const intro =
+    p.intro ||
+    "I'm a full-stack and AI developer, and I help businesses build modern web/mobile apps and AI automation.";
 
-  // body khud assemble karo — proper line breaks guaranteed
+  // services ki bullet list
+  const services = (offer.serviceList || []).map((s) => `  • ${s}`).join("\n");
+
+  // professional body — services list + clear "if interested, contact" CTA
   const body = [
     greeting,
     "",
     opener,
     "",
-    pitch,
+    intro,
     "",
-    cta,
+    "Here are a few things I can help you with:",
+    services,
     "",
-    "Best,",
+    "If any of this sounds useful for your business, I'd love to connect — just reply to this email and we can take it from there.",
+    "",
+    "Best regards,",
     offer.senderName,
     offer.senderTitle,
   ].join("\n");
@@ -95,5 +104,6 @@ Har field short rakho. Total email 60 words se kam.`;
   return {
     subject: p.subject || `Quick idea for ${lead.businessName}`,
     body,
+    ownerName: ownerName === "there" ? "" : ownerName,
   };
 }

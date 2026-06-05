@@ -20,40 +20,65 @@ function getTransporter() {
   return transporter;
 }
 
+const TRACK_BASE = (process.env.TRACK_BASE_URL || "").replace(/\/$/, "");
+
 // CAN-SPAM/GDPR: har email me opt-out + physical address zaroori hai
-function buildFooter() {
-  const sender = process.env.SMTP_USER;
+function footerText(leadId) {
   const company = process.env.SENDER_TITLE || "";
   const address = process.env.SENDER_ADDRESS || "Lahore, Pakistan";
-  return (
-    `\n\n—\n` +
-    `${company} · ${address}\n` +
-    `Don't want these emails? Just reply "unsubscribe" and I'll remove you right away.`
-  );
+  let unsub = `Don't want these emails? Just reply "unsubscribe" and I'll remove you right away.`;
+  if (TRACK_BASE && leadId) {
+    unsub = `Don't want these emails? Unsubscribe: ${TRACK_BASE}/unsubscribe?id=${leadId}`;
+  }
+  return `\n\n—\n${company} · ${address}\n${unsub}`;
+}
+
+// HTML version (open-tracking pixel + clickable unsubscribe ke saath)
+function buildHtml(text, leadId) {
+  const company = process.env.SENDER_TITLE || "";
+  const address = process.env.SENDER_ADDRESS || "Lahore, Pakistan";
+  const safe = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/\n/g, "<br>");
+  const pixel = `<img src="${TRACK_BASE}/api/track/open?id=${leadId}" width="1" height="1" alt="" style="display:none">`;
+  const unsubLink = `<a href="${TRACK_BASE}/unsubscribe?id=${leadId}" style="color:#888">unsubscribe</a>`;
+  return `<div style="font-family:Arial,sans-serif;font-size:14px;color:#222;line-height:1.6">
+${safe}
+<br><br>—<br>
+<span style="color:#888;font-size:12px">${company} · ${address}<br>Don't want these emails? ${unsubLink}.</span>
+${pixel}
+</div>`;
 }
 
 /**
  * Ek email bhejta hai (unsubscribe footer + header automatic add hote hain).
- * @param {object} opts - { to, subject, text }
+ * Agar TRACK_BASE_URL set hai aur leadId diya hai, to HTML + open-tracking pixel bhejta hai.
+ * @param {object} opts - { to, subject, text, leadId }
  */
-export async function sendEmail({ to, subject, text }) {
+export async function sendEmail({ to, subject, text, leadId }) {
   const t = getTransporter();
   const fromName = process.env.SENDER_NAME || "Cold Mail Bot";
   const sender = process.env.SMTP_USER;
 
-  const info = await t.sendMail({
+  const useTracking = TRACK_BASE && leadId;
+  const listUnsub = useTracking
+    ? `<${TRACK_BASE}/unsubscribe?id=${leadId}>, <mailto:${sender}?subject=Unsubscribe>`
+    : `<mailto:${sender}?subject=Unsubscribe>`;
+
+  const mail = {
     from: `"${fromName}" <${sender}>`,
     to,
     subject,
-    text: text + buildFooter(),
+    text: text + footerText(leadId),
     // List-Unsubscribe header — Gmail/Outlook isse "Unsubscribe" button dikhate hain
     headers: {
-      "List-Unsubscribe": `<mailto:${sender}?subject=Unsubscribe>`,
+      "List-Unsubscribe": listUnsub,
       "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
     },
-    // plain text best hai cold email ke liye (spam kam)
-  });
+  };
 
+  // tracking on ho to HTML bhi bhejo (pixel ke liye HTML zaroori)
+  if (useTracking) mail.html = buildHtml(text, leadId);
+
+  const info = await t.sendMail(mail);
   return info.messageId;
 }
 

@@ -22,7 +22,7 @@ async function main() {
   let sent = 0;
   for (const lead of leads) {
     try {
-      await sendEmail({ to: lead.email, subject: lead.subject, text: lead.body });
+      await sendEmail({ to: lead.email, subject: lead.subject, text: lead.body, leadId: lead._id.toString() });
 
       lead.status = "sent";
       lead.currentStep = 0;

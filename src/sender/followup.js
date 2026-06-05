@@ -64,7 +64,7 @@ async function sendBatch(leads, step, newStatus) {
     try {
       const body = FOLLOWUPS[step](lead);
       const subject = `Re: ${lead.subject}`;
-      await sendEmail({ to: lead.email, subject, text: body });
+      await sendEmail({ to: lead.email, subject, text: body, leadId: lead._id.toString() });
 
       lead.status = newStatus;
       lead.currentStep = step;

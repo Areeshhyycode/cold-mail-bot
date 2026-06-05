@@ -17,6 +17,11 @@ const leadSchema = new mongoose.Schema(
     businessName: { type: String, required: true },
     website: { type: String },
     email: { type: String, required: true, lowercase: true, trim: true },
+    emailStatus: {
+      type: String,
+      enum: ["valid", "risky", "invalid", "unknown"],
+      default: "unknown",
+    },
     ownerName: { type: String, default: "" },
     niche: { type: String, default: "" },
     city: { type: String, default: "" },
@@ -44,6 +49,12 @@ const leadSchema = new mongoose.Schema(
     currentStep: { type: Number, default: 0 }, // 0=first, 1=fu1, 2=fu2
     lastSentAt: { type: Date },
     sentCount: { type: Number, default: 0 },
+
+    // open tracking (pixel)
+    opened: { type: Boolean, default: false },
+    openCount: { type: Number, default: 0 },
+    firstOpenedAt: { type: Date },
+    lastOpenedAt: { type: Date },
 
     // kis client/campaign ke liye (jab multiple clients honge)
     campaign: { type: String, default: "default" },

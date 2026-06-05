@@ -3,7 +3,10 @@
     "allow": [
       "Bash(node src/ai/run.js)",
       "Bash(timeout 60 node src/tracker/replyChecker.js)",
-      "Bash(timeout 300 node src/scraper/run.js \"digital marketing agency in Karachi\" 12 marketing)"
+      "Bash(timeout 300 node src/scraper/run.js \"digital marketing agency in Karachi\" 12 marketing)",
+      "Bash(npm run *)",
+      "Bash(echo \"---exit: $?\")",
+      "WebFetch(domain:portfolio-szj4.vercel.app)"
     ]
   }
 }
