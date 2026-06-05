@@ -2,6 +2,7 @@ import { ImapFlow } from "imapflow";
 import dotenv from "dotenv";
 import { connectDB, disconnectDB } from "../db/connect.js";
 import { Lead } from "../db/Lead.js";
+import { notifyWhatsApp } from "../utils/notify.js";
 
 dotenv.config();
 
@@ -67,9 +68,14 @@ async function main() {
       if (isUnsub) {
         unsubscribed++;
         console.log(`   🚫 Unsubscribed: ${fromEmail}`);
+        await notifyWhatsApp(`🚫 Unsubscribe: ${lead.businessName} (${fromEmail})`);
       } else {
         replied++;
         console.log(`   💬 Replied: ${fromEmail} (sequence rok di)`);
+        // 🎉 reply aaya — WhatsApp pe turant batao!
+        await notifyWhatsApp(
+          `🎉 NEW REPLY!\n\n${lead.businessName}\n📧 ${fromEmail}\n\nKisi ne tumhari cold email ka reply diya hai. Gmail check karo!`
+        );
       }
     }
   } finally {
