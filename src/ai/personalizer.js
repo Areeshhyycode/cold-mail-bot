@@ -88,7 +88,7 @@ Har field short rakho aur professional. No fake claims.`;
       p.opener || `I came across ${lead.businessName} and noticed your website could use a modern, mobile-friendly refresh.`;
     const intro =
       p.intro ||
-      `I build clean, mobile-friendly websites for small businesses — and right now I'm offering a professional site for just ${offer.promoPrice} as a promo.`;
+      "I build clean, mobile-friendly websites for small businesses that help bring in more customers.";
     body = [
       greeting,
       "",
@@ -100,9 +100,9 @@ Har field short rakho aur professional. No fake claims.`;
       "",
       services,
       "",
-      "I can even send you a free demo/mockup first, so you can see exactly how your new site would look — no commitment.",
+      "Here's the simplest part: I'll make you a FREE demo/mockup of your new site first — no payment, no commitment. You only decide on pricing after you see it and like it (and I keep it affordable).",
       "",
-      "If you're interested, just reply and I'll prepare your free demo.",
+      "If you'd like your free demo, just reply and I'll get started.",
       "",
       "Best regards,",
       offer.senderName,

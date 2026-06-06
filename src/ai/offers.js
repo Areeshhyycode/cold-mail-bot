@@ -31,13 +31,12 @@ export const OFFERS = {
     type: "website",
     ...SENDER,
     service:
-      "I build affordable, modern, mobile-friendly websites for small businesses. Promotional price + free demo/mockup before they pay.",
-    promoPrice: process.env.PROMO_PRICE || "$5",
+      "I build modern, mobile-friendly websites for small businesses. I offer a FREE demo/mockup first — they only decide on (affordable) pricing after they see it and like it.",
     serviceList: [
       "Modern, mobile-friendly design",
       "Fast loading & SEO-ready",
-      "Free demo/mockup before you decide",
-      "Done in days, not weeks",
+      "Free demo/mockup — see it before you pay",
+      "Affordable pricing, done in days",
     ],
   },
 };
