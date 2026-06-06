@@ -75,15 +75,19 @@ Har field short rakho aur professional. No fake claims.`;
   // owner name: pehle scrape se mila, warna AI ne dhoondha, warna "there"
   const ownerName = lead.ownerName || (p.ownerName || "").trim() || "there";
   const greeting = `Hi ${ownerName},`;
-  const opener = p.opener || `I recently came across ${lead.businessName} and was impressed by your work.`;
+  const opener =
+    p.opener || `I came across ${lead.businessName} and noticed your work in web development and digital solutions.`;
   const intro =
     p.intro ||
-    "I'm a full-stack and AI developer, and I help businesses build modern web/mobile apps and AI automation.";
+    "I'm a Full-Stack & AI Developer, helping businesses build smarter products and automate workflows using modern AI technologies.";
 
   // services ki bullet list
-  const services = (offer.serviceList || []).map((s) => `  • ${s}`).join("\n");
+  const services = (offer.serviceList || []).map((s) => `• ${s}`).join("\n");
 
-  // professional body — services list + clear "if interested, contact" CTA
+  // signature ke links (LinkedIn / Portfolio / GitHub)
+  const links = Object.entries(offer.links || {}).map(([k, v]) => `${k}: ${v}`);
+
+  // professional body — tumhare polished format me
   const body = [
     greeting,
     "",
@@ -91,14 +95,16 @@ Har field short rakho aur professional. No fake claims.`;
     "",
     intro,
     "",
-    "Here are a few things I can help you with:",
+    "Some areas where I can help include:",
+    "",
     services,
     "",
-    "If any of this sounds useful for your business, I'd love to connect — just reply to this email and we can take it from there.",
+    "If you're exploring AI initiatives or need additional development support, I'd be happy to connect and discuss how I can help.",
     "",
     "Best regards,",
     offer.senderName,
     offer.senderTitle,
+    ...(links.length ? ["", ...links] : []),
   ].join("\n");
 
   return {

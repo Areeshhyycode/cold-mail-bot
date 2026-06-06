@@ -1,103 +1,156 @@
-# 🤖 Cold Mail Bot — AI Cold Email + Lead Finder
+# Cold Mail Bot
 
-Leads dhundo → AI se personalized email banao → auto send + follow-up.
-Stack: **Node.js + MongoDB + Groq AI + Gmail SMTP + Playwright** (sab free tier).
+An end-to-end **email outreach automation pipeline** built to explore full-stack
+backend engineering: web scraping, AI text generation, a job scheduler, an SMTP
+sending layer, and a live dashboard — all wired together on free-tier services.
 
----
-
-## 📦 Setup (ek baar)
-
-```bash
-# 1. dependencies install
-npm install
-
-# 2. Playwright browser install (scraping ke liye)
-npx playwright install chromium
-
-# 3. .env file ready karo (.env.example dekho)
-#    - MONGODB_URI
-#    - GROQ_API_KEY
-#    - SMTP_USER + SMTP_PASS (Gmail App Password)
-```
-
-### Gmail App Password kaise banaye
-1. Google account me **2-Step Verification** ON karo
-2. Jao: https://myaccount.google.com/apppasswords
-3. Naya app password banao → wo 16-digit code `.env` ke `SMTP_PASS` me daalo
-   (apna normal Gmail password mat use karna)
+> **Note:** This is a learning / portfolio project. It is intended for
+> permission-based, compliant outreach only (e.g. emailing your own leads or
+> contacts who expect to hear from you). Always follow anti-spam law
+> (CAN-SPAM, GDPR) and include an opt-out in every message.
 
 ---
 
-## 🚀 Use kaise kare (workflow)
+## What it demonstrates
 
-```bash
-# Step 0: DB connection test
-npm run test:db
+- **Web scraping** — collecting business listings with Playwright and extracting
+  contact emails from their websites.
+- **AI integration** — generating personalized email copy per lead via the Groq
+  LLM API.
+- **Data modeling** — a MongoDB/Mongoose schema that tracks each lead through a
+  finite-state lifecycle.
+- **Email delivery** — sending and follow-up sequencing over Gmail SMTP with
+  Nodemailer, respecting daily send caps.
+- **Scheduling** — a cron layer (and a GitHub Actions workflow) to run the
+  pipeline automatically.
+- **Dashboard** — a Next.js app for tracking opens, unsubscribes, and lead
+  status.
 
-# Step 1: leads scrape karo
-#   node src/scraper/run.js "<query>" <kitne> <niche>
-node src/scraper/run.js "web design agency in Lahore" 20 webdesign
-
-# Step 2: AI se personalized emails banao (src/ai/run.js me OFFER edit karo)
-npm run personalize
-
-# Step 3: pehle emails bhejo (daily limit ke saath)
-npm run send
-
-# Step 4: follow-ups bhejo (3 din baad wale)
-npm run followup
-```
-
-### Ya sab auto chalao (scheduler)
-```bash
-npm run cron   # roz 9AM emails, 2PM follow-ups
-```
+**Stack:** Node.js · MongoDB · Groq AI · Gmail SMTP · Playwright · Next.js
 
 ---
 
-## 🔄 Lead ka safar (status flow)
+## Architecture
+
+```
+ Scraper            AI Layer           Sender           Dashboard
+ ───────            ────────           ──────           ─────────
+ Playwright   ──►   Groq LLM     ──►   Nodemailer  ──►  Next.js
+ (find leads)       (personalize)      (Gmail SMTP)     (track/opt-out)
+       │                 │                  │                 │
+       └─────────────────┴──────┬───────────┴─────────────────┘
+                                ▼
+                          MongoDB (Lead store)
+                                ▲
+                                │
+                          cron / GitHub Actions
+```
+
+### Lead lifecycle
 
 ```
 new → ready → sent → followup_1 → followup_2 → done
-                          ↘ (reply aaye to) → replied
+                          ↘ (on reply) → replied
 ```
 
 ---
 
-## ⚠️ ZAROORI — pehle ye padho
+## Setup
 
-1. **Gmail se start theek hai, par scale pe alag domain kharido.**
-   Apna main email blacklist ho sakta hai. ~30-40/day se zyada mat bhejo.
+```bash
+# 1. install dependencies
+npm install
 
-2. **Deliverability:** SPF, DKIM, DMARC set karo (jab apna domain ho).
+# 2. install the Playwright browser used for scraping
+npx playwright install chromium
 
-3. **Legal:** Har email me unsubscribe/opt-out option do. US me CAN-SPAM,
-   EU me GDPR follow karo. Apne target country ke rules jaan lo.
+# 3. create a .env file (see .env.example for all keys)
+#    - MONGODB_URI
+#    - GROQ_API_KEY
+#    - SMTP_USER + SMTP_PASS   (Gmail App Password, not your real password)
+```
 
-4. **Reply tracking (TODO):** abhi manual — jab koi reply kare, us lead ka
-   status DB me `replied` kar do taaki follow-up na jaye. (IMAP listener
-   baad me add kar sakte hain.)
+### Creating a Gmail App Password
+1. Enable **2-Step Verification** on your Google account.
+2. Go to https://myaccount.google.com/apppasswords
+3. Generate a new app password and put the 16-digit code in `SMTP_PASS`.
 
 ---
 
-## 📁 Structure
+## Usage
+
+```bash
+# verify the database connection
+npm run test:db
+
+# 1. scrape leads:  node src/scraper/run.js "<query>" <count> <niche>
+node src/scraper/run.js "web design agency in Lahore" 20 webdesign
+
+# 2. generate personalized copy (edit the OFFER in src/ai/run.js first)
+npm run personalize
+
+# 3. send the first emails (respects the daily limit)
+npm run send
+
+# 4. send scheduled follow-ups
+npm run followup
+```
+
+Run the whole thing on a schedule:
+
+```bash
+npm run cron   # e.g. emails in the morning, follow-ups in the afternoon
+```
+
+---
+
+## Project structure
 
 ```
 src/
 ├── db/
-│   ├── connect.js      # MongoDB connection
-│   ├── Lead.js         # Lead model (schema)
-│   └── test.js         # connection test
+│   ├── connect.js          # MongoDB connection
+│   ├── Lead.js             # Lead model (schema)
+│   └── test.js             # connection test
 ├── scraper/
-│   ├── googleMaps.js   # businesses scrape
-│   ├── emailExtractor.js # website se email
-│   └── run.js          # scraper chalao
+│   ├── googleMaps.js       # scrape business listings
+│   ├── emailExtractor.js   # extract emails from websites
+│   ├── verifyEmail.js      # basic email validation
+│   └── run.js              # scraper entry point
 ├── ai/
-│   ├── personalizer.js # Groq se email banao
-│   └── run.js          # personalization chalao
+│   ├── personalizer.js     # generate copy via Groq
+│   └── run.js              # personalization entry point
 ├── sender/
-│   ├── mailer.js       # Nodemailer (Gmail)
-│   ├── run.js          # pehle emails
-│   └── followup.js     # follow-up sequence
-└── cron.js             # daily scheduler
+│   ├── mailer.js           # Nodemailer / Gmail transport
+│   ├── run.js              # send first emails
+│   └── followup.js         # follow-up sequencing
+├── tracker/
+│   └── replyChecker.js     # detect replies → update status
+├── utils/
+│   └── notify.js           # notifications
+├── report.js               # run summary
+└── cron.js                 # scheduler
+
+dashboard/                  # Next.js app: open tracking, unsubscribe, status
+.github/workflows/          # scheduled run via GitHub Actions
 ```
+
+---
+
+## Responsible use
+
+This project sends real email. Before using it against any real recipients:
+
+- Only contact people who have a legitimate reason to hear from you.
+- Include a working **unsubscribe / opt-out** in every message.
+- Keep volume low on shared providers (Gmail caps out fast); use a dedicated
+  domain with **SPF, DKIM, and DMARC** configured for anything at scale.
+- Comply with **CAN-SPAM**, **GDPR**, and your target country's regulations.
+
+---
+
+## License
+
+MIT — for educational use. You are responsible for how you use it.
+```
+

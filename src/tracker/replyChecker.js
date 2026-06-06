@@ -39,6 +39,7 @@ async function main() {
   const lock = await client.getMailboxLock("INBOX");
   let replied = 0;
   let unsubscribed = 0;
+  let bounced = 0;
 
   try {
     // last 7 din ke messages
@@ -48,20 +49,57 @@ async function main() {
       { since },
       { envelope: true, source: true }
     )) {
-      const fromEmail = parseEmail(msg.envelope?.from?.[0]?.address || msg.envelope?.from?.[0]?.name);
+      const fromRaw = (msg.envelope?.from?.[0]?.address || "").toLowerCase();
+      const subject = (msg.envelope?.subject || "").toLowerCase();
+      const rawBody = msg.source ? msg.source.toString("utf-8") : "";
+      const body = rawBody.toLowerCase();
+
+      // ---- BOUNCE detection (address not found / delivery failed) ----
+      const isBounce =
+        fromRaw.includes("mailer-daemon") ||
+        fromRaw.includes("postmaster") ||
+        subject.includes("delivery status notification") ||
+        subject.includes("undelivered mail") ||
+        subject.includes("mail delivery failed") ||
+        subject.includes("delivery has failed") ||
+        subject.includes("address not found") ||
+        subject.includes("returned mail");
+
+      if (isBounce) {
+        // bounce message me wo email dhoondo jo fail hui
+        const emails = [
+          ...new Set(
+            (rawBody.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g) || []).map((e) =>
+              e.toLowerCase()
+            )
+          ),
+        ];
+        for (const e of emails) {
+          const lead = await Lead.findOne({
+            email: e,
+            status: { $in: ["sent", "followup_1", "followup_2", "ready"] },
+          });
+          if (lead) {
+            lead.status = "bounced";
+            await lead.save();
+            bounced++;
+            console.log(`   ⚠️ Bounced: ${e} (${lead.businessName}) — address not found`);
+          }
+        }
+        continue; // bounce ko reply mat samjho
+      }
+
+      // ---- REPLY / UNSUBSCRIBE detection ----
+      const fromEmail = parseEmail(fromRaw || msg.envelope?.from?.[0]?.name);
       if (!fromEmail) continue;
 
-      // ye email kisi active lead ka hai?
       const lead = await Lead.findOne({
         email: fromEmail,
         status: { $in: ["sent", "followup_1", "followup_2"] },
       });
       if (!lead) continue;
 
-      // message body me unsubscribe word?
-      const body = msg.source ? msg.source.toString("utf-8").toLowerCase() : "";
       const isUnsub = UNSUB_WORDS.some((w) => body.includes(w));
-
       lead.status = isUnsub ? "unsubscribed" : "replied";
       await lead.save();
 
@@ -72,7 +110,7 @@ async function main() {
       } else {
         replied++;
         console.log(`   💬 Replied: ${fromEmail} (sequence rok di)`);
-        // 🎉 reply aaya — WhatsApp pe turant batao!
+        // 🎉 reply aaya — turant batao!
         await notifyWhatsApp(
           `🎉 NEW REPLY!\n\n${lead.businessName}\n📧 ${fromEmail}\n\nKisi ne tumhari cold email ka reply diya hai. Gmail check karo!`
         );
@@ -83,7 +121,7 @@ async function main() {
     await client.logout();
   }
 
-  console.log(`\n📊 ${replied} replies, ${unsubscribed} unsubscribes process hue`);
+  console.log(`\n📊 ${replied} replies, ${unsubscribed} unsubscribes, ${bounced} bounced process hue`);
   await disconnectDB();
 }
 

@@ -6,7 +6,13 @@
       "Bash(timeout 300 node src/scraper/run.js \"digital marketing agency in Karachi\" 12 marketing)",
       "Bash(npm run *)",
       "Bash(echo \"---exit: $?\")",
-      "WebFetch(domain:portfolio-szj4.vercel.app)"
+      "WebFetch(domain:portfolio-szj4.vercel.app)",
+      "WebFetch(domain:www.callmebot.com)",
+      "Bash(node -e \"const fs=require\\('fs'\\);for\\(const f of ['.env','.env.example','src/utils/notify.js']\\){let t=fs.readFileSync\\(f,'utf8'\\);t=t.replace\\(/\\\\+?34 644 84 71 89/g,'+34 644 66 32 62'\\);fs.writeFileSync\\(f,t\\);}console.log\\('✅ Number updated in .env, .env.example, notify.js'\\);\")",
+      "Bash(timeout 280 node src/scraper/run.js \"software house in Islamabad\" 8 software)",
+      "Bash(timeout 500 node src/sender/run.js)",
+      "Bash(grep -i \"\\\\.env$\\\\|\\\\.env\\\\.\")",
+      "Bash(timeout 90 node src/tracker/replyChecker.js)"
     ]
   }
 }

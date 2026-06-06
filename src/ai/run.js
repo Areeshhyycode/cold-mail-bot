@@ -19,6 +19,11 @@ const OFFER = {
   ],
   senderName: process.env.SENDER_NAME || "Areesha Rafiq",
   senderTitle: process.env.SENDER_TITLE || "Full Stack & AI Developer",
+  links: {
+    LinkedIn: "https://www.linkedin.com/in/areesha-rafiq-net/",
+    Portfolio: "https://portfolio-szj4.vercel.app/",
+    GitHub: "https://github.com/Areeshhyycode",
+  },
 };
 
 async function main() {
