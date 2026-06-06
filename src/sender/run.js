@@ -16,8 +16,25 @@ async function main() {
 
   const dailyLimit = parseInt(process.env.DAILY_SEND_LIMIT || "40", 10);
 
-  const leads = await Lead.find({ status: "ready" }).limit(dailyLimit);
-  console.log(`📤 ${leads.length} pehle emails bhejne hain (limit ${dailyLimit})...`);
+  // aaj ab tak kitne first-emails bheje? (taaki workflow din me kai baar chale
+  // tab bhi total daily limit se zyada na jaye — bas fail hone par retry ho)
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+  const sentToday = await Lead.countDocuments({
+    currentStep: 0,
+    lastSentAt: { $gte: startOfDay },
+    status: { $in: ["sent", "followup_1", "followup_2", "replied", "unsubscribed", "done"] },
+  });
+
+  const remaining = Math.max(0, dailyLimit - sentToday);
+  if (remaining === 0) {
+    console.log(`✅ Aaj ka quota pura (${sentToday}/${dailyLimit}). Kuch nahi bhejna.`);
+    await disconnectDB();
+    return;
+  }
+
+  const leads = await Lead.find({ status: "ready" }).limit(remaining);
+  console.log(`📤 ${leads.length} emails bhejne hain (aaj ${sentToday}/${dailyLimit} ho chuke, ${remaining} bacha)...`);
 
   let sent = 0;
   for (const lead of leads) {

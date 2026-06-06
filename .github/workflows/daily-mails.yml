@@ -1,10 +1,16 @@
 name: Daily Cold Mails
 
-# Roz chalega + manually bhi chala sakte ho (Actions tab se "Run workflow")
+# Roz kai baar chalega + manually bhi (Actions tab se "Run workflow")
+# Din me kai timings — agar ek run fail ho to agle ghante retry ho jaye.
+# Daily limit phir bhi safe hai: total sirf DAILY_SEND_LIMIT emails/day jayengi.
 on:
   schedule:
-    # UTC time. 09:00 PKT = 04:00 UTC. Apne hisaab se badal lena.
-    - cron: "0 4 * * *"
+    # UTC time (PKT = UTC+5). 9,10,11,12,2 baje PKT:
+    - cron: "0 4 * * *"  #  9:00 AM PKT
+    - cron: "0 5 * * *"  # 10:00 AM PKT
+    - cron: "0 6 * * *"  # 11:00 AM PKT
+    - cron: "0 7 * * *"  # 12:00 PM PKT
+    - cron: "0 9 * * *"  #  2:00 PM PKT
   workflow_dispatch: {}
 
 permissions:
