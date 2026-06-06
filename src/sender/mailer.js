@@ -22,28 +22,31 @@ function getTransporter() {
 
 const TRACK_BASE = (process.env.TRACK_BASE_URL || "").replace(/\/$/, "");
 
+// footer ki identity line — empty parts skip (koi dangling " · " nahi)
+function identityLine() {
+  const name = process.env.SENDER_NAME || "Areesha Rafiq";
+  const address = process.env.SENDER_ADDRESS || "Karachi, Pakistan";
+  return [name, address].filter(Boolean).join(" · ");
+}
+
 // CAN-SPAM/GDPR: har email me opt-out + physical address zaroori hai
 function footerText(leadId) {
-  const company = process.env.SENDER_TITLE || "";
-  const address = process.env.SENDER_ADDRESS || "Lahore, Pakistan";
   let unsub = `Don't want these emails? Just reply "unsubscribe" and I'll remove you right away.`;
   if (TRACK_BASE && leadId) {
     unsub = `Don't want these emails? Unsubscribe: ${TRACK_BASE}/unsubscribe?id=${leadId}`;
   }
-  return `\n\n—\n${company} · ${address}\n${unsub}`;
+  return `\n\n—\n${identityLine()}\n${unsub}`;
 }
 
 // HTML version (open-tracking pixel + clickable unsubscribe ke saath)
 function buildHtml(text, leadId) {
-  const company = process.env.SENDER_TITLE || "";
-  const address = process.env.SENDER_ADDRESS || "Lahore, Pakistan";
   const safe = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/\n/g, "<br>");
   const pixel = `<img src="${TRACK_BASE}/api/track/open?id=${leadId}" width="1" height="1" alt="" style="display:none">`;
   const unsubLink = `<a href="${TRACK_BASE}/unsubscribe?id=${leadId}" style="color:#888">unsubscribe</a>`;
   return `<div style="font-family:Arial,sans-serif;font-size:14px;color:#222;line-height:1.6">
 ${safe}
 <br><br>—<br>
-<span style="color:#888;font-size:12px">${company} · ${address}<br>Don't want these emails? ${unsubLink}.</span>
+<span style="color:#888;font-size:12px">${identityLine()}<br>Don't want these emails? ${unsubLink}.</span>
 ${pixel}
 </div>`;
 }
