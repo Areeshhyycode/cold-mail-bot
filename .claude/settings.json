@@ -12,7 +12,8 @@
       "Bash(timeout 280 node src/scraper/run.js \"software house in Islamabad\" 8 software)",
       "Bash(timeout 500 node src/sender/run.js)",
       "Bash(grep -i \"\\\\.env$\\\\|\\\\.env\\\\.\")",
-      "Bash(timeout 90 node src/tracker/replyChecker.js)"
+      "Bash(timeout 90 node src/tracker/replyChecker.js)",
+      "Bash(timeout 120 node --env-file=.env src/daily.js)"
     ]
   }
 }

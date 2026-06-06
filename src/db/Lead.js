@@ -25,6 +25,21 @@ const leadSchema = new mongoose.Schema(
     ownerName: { type: String, default: "" },
     niche: { type: String, default: "" },
     city: { type: String, default: "" },
+    phone: { type: String, default: "" },
+    location: { type: String, default: "" },
+
+    // website quality (kis ko naye website ki zaroorat hai)
+    websiteQuality: {
+      type: String,
+      enum: ["none", "outdated", "ok", "unknown"],
+      default: "unknown",
+    },
+    auditReasons: { type: [String], default: [] },
+    outreachChannel: {
+      type: String,
+      enum: ["email", "phone"],
+      default: "email",
+    },
 
     // AI se bani email
     subject: { type: String, default: "" },

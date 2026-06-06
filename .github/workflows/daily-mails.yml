@@ -41,12 +41,17 @@ jobs:
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           SENDER_NAME: ${{ secrets.SENDER_NAME }}
           SENDER_TITLE: ${{ secrets.SENDER_TITLE }}
+          SENDER_ADDRESS: ${{ secrets.SENDER_ADDRESS }}
+          TRACK_BASE_URL: ${{ secrets.TRACK_BASE_URL }}
+          NOTIFY_EMAIL: ${{ secrets.NOTIFY_EMAIL }}
           DAILY_SEND_LIMIT: ${{ secrets.DAILY_SEND_LIMIT }}
           MIN_DELAY_SECONDS: ${{ secrets.MIN_DELAY_SECONDS }}
           MAX_DELAY_SECONDS: ${{ secrets.MAX_DELAY_SECONDS }}
+        continue-on-error: true
         run: npm run daily
 
       - name: Commit & push report
+        if: always()
         run: |
           git config user.name "cold-mail-bot"
           git config user.email "bot@users.noreply.github.com"

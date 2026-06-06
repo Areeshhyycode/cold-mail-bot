@@ -37,6 +37,8 @@ async function fetchSiteSummary(website) {
  */
 export async function generateEmail(lead, offer) {
   const summary = await fetchSiteSummary(lead.website);
+  const isWebsite = offer.type === "website";
+  const auditNote = (lead.auditReasons || []).join(", ");
 
   const prompt = `Tum ek expert cold-email copywriter ho. Ek business ke liye email ke PARTS likho.
 
@@ -44,6 +46,7 @@ BUSINESS DETAILS:
 - Naam: ${lead.businessName}
 - Niche: ${lead.niche}
 - Website ka content: ${summary || "(website content nahi mila)"}
+${isWebsite ? `- Website ki problem: ${auditNote || "purani / mobile-friendly nahi"}` : ""}
 
 MERE BAARE ME (jo main offer karta hun):
 ${offer.service}
@@ -51,9 +54,9 @@ ${offer.service}
 JSON return karo EXACTLY is format me (sirf English, professional tone, no emojis, no jargon):
 {
   "ownerName": "agar website content me kisi owner/founder/CEO ka FIRST name clearly mile to wo, warna empty string \"\". Guess mat karo.",
-  "subject": "5-7 word professional subject line, salesy/spammy mat lagao",
-  "opener": "1 warm personalized line jo SPECIFICALLY un ke business/website ke baare me ho — dikhaye maine dekha hai. Generic 'I came across' mat likho.",
-  "intro": "1 line jisme main professionally introduce karoon ke main kya karti hun (full-stack + AI developer) aur unke business ko kaise help kar sakti hun"
+  "subject": "5-7 word ${isWebsite ? "helpful subject about improving their website" : "professional"} subject line, spammy mat lagao",
+  "opener": "1 warm personalized line jo SPECIFICALLY un ke business${isWebsite ? " ki website ki problem (jaise mobile-friendly nahi)" : "/website"} ke baare me ho. Generic 'I came across' mat likho.",
+  "intro": "1 line jisme main professionally batau ke main ${isWebsite ? "modern mobile-friendly websites banati hoon" : "full-stack + AI developer hoon"} aur unki kaise help kar sakti hoon"
 }
 Har field short rakho aur professional. No fake claims.`;
 
@@ -75,37 +78,63 @@ Har field short rakho aur professional. No fake claims.`;
   // owner name: pehle scrape se mila, warna AI ne dhoondha, warna "there"
   const ownerName = lead.ownerName || (p.ownerName || "").trim() || "there";
   const greeting = `Hi ${ownerName},`;
-  const opener =
-    p.opener || `I came across ${lead.businessName} and noticed your work in web development and digital solutions.`;
-  const intro =
-    p.intro ||
-    "I'm a Full-Stack & AI Developer, helping businesses build smarter products and automate workflows using modern AI technologies.";
-
-  // services ki bullet list
   const services = (offer.serviceList || []).map((s) => `• ${s}`).join("\n");
-
-  // signature ke links (LinkedIn / Portfolio / GitHub)
   const links = Object.entries(offer.links || {}).map(([k, v]) => `${k}: ${v}`);
 
-  // professional body — tumhare polished format me
-  const body = [
-    greeting,
-    "",
-    opener,
-    "",
-    intro,
-    "",
-    "Some areas where I can help include:",
-    "",
-    services,
-    "",
-    "If you're exploring AI initiatives or need additional development support, I'd be happy to connect and discuss how I can help.",
-    "",
-    "Best regards,",
-    offer.senderName,
-    offer.senderTitle,
-    ...(links.length ? ["", ...links] : []),
-  ].join("\n");
+  let body;
+  if (isWebsite) {
+    // ---- $5 WEBSITE OFFER ----
+    const opener =
+      p.opener || `I came across ${lead.businessName} and noticed your website could use a modern, mobile-friendly refresh.`;
+    const intro =
+      p.intro ||
+      `I build clean, mobile-friendly websites for small businesses — and right now I'm offering a professional site for just ${offer.promoPrice} as a promo.`;
+    body = [
+      greeting,
+      "",
+      opener,
+      "",
+      intro,
+      "",
+      "What you get:",
+      "",
+      services,
+      "",
+      "I can even send you a free demo/mockup first, so you can see exactly how your new site would look — no commitment.",
+      "",
+      "If you're interested, just reply and I'll prepare your free demo.",
+      "",
+      "Best regards,",
+      offer.senderName,
+      offer.senderTitle,
+      ...(links.length ? ["", ...links] : []),
+    ].join("\n");
+  } else {
+    // ---- DEV / AI SERVICES OFFER ----
+    const opener =
+      p.opener || `I came across ${lead.businessName} and noticed your work in web development and digital solutions.`;
+    const intro =
+      p.intro ||
+      "I'm a Full-Stack & AI Developer, helping businesses build smarter products and automate workflows using modern AI technologies.";
+    body = [
+      greeting,
+      "",
+      opener,
+      "",
+      intro,
+      "",
+      "Some areas where I can help include:",
+      "",
+      services,
+      "",
+      "If you're exploring AI initiatives or need additional development support, I'd be happy to connect and discuss how I can help.",
+      "",
+      "Best regards,",
+      offer.senderName,
+      offer.senderTitle,
+      ...(links.length ? ["", ...links] : []),
+    ].join("\n");
+  }
 
   return {
     subject: p.subject || `Quick idea for ${lead.businessName}`,

@@ -11,7 +11,7 @@
     "followup": "node src/sender/followup.js",
     "report": "node src/report.js",
     "replycheck": "node src/tracker/replyChecker.js",
-    "daily": "node src/tracker/replyChecker.js && node src/sender/run.js && node src/sender/followup.js && node src/report.js",
+    "daily": "node src/daily.js",
     "cron": "node src/cron.js",
     "test:db": "node src/db/test.js"
   },

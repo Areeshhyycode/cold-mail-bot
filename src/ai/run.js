@@ -2,31 +2,15 @@ import dotenv from "dotenv";
 import { connectDB, disconnectDB } from "../db/connect.js";
 import { Lead } from "../db/Lead.js";
 import { generateEmail } from "./personalizer.js";
+import { getOffer } from "./offers.js";
 
 dotenv.config();
 
-// Yahan apni service/offer define karo
-const OFFER = {
-  // Areesha ki asli services (portfolio se)
-  service:
-    "I'm a full-stack (MERN) + AI developer. I build AI-powered web & mobile apps, AI chatbots & customer-support agents (RAG), and workflow automation (Gmail, WhatsApp, Slack, n8n). 1+ year experience, 7 AI platforms shipped.",
-  // ye services email me list hongi
-  serviceList: [
-    "AI-powered web & mobile apps (Next.js, React Native)",
-    "AI chatbots & RAG customer-support agents",
-    "Workflow automation (Gmail, WhatsApp, Slack, n8n)",
-    "Full-stack MERN development",
-  ],
-  senderName: process.env.SENDER_NAME || "Areesha Rafiq",
-  senderTitle: process.env.SENDER_TITLE || "Full Stack & AI Developer",
-  links: {
-    LinkedIn: "https://www.linkedin.com/in/areesha-rafiq-net/",
-    Portfolio: "https://portfolio-szj4.vercel.app/",
-    GitHub: "https://github.com/Areeshhyycode",
-  },
-};
+// CAMPAIGN env se offer choose hota hai: "dev" (default) ya "website"
+const OFFER = getOffer();
 
 async function main() {
+  console.log(`📣 Campaign: ${OFFER.type}`);
   await connectDB();
 
   // sirf wo leads jinki email abhi nahi bani (status: new)

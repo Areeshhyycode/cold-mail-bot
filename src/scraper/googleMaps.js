@@ -53,15 +53,29 @@ export async function scrapeGoogleMaps(query, maxResults = 30) {
       prevCount = results.length;
     }
 
-    // har business ka website nikalo (detail page khol kar)
+    // har business ka website + phone + address nikalo (detail page khol kar)
     for (const biz of results.slice(0, maxResults)) {
       try {
         await page.goto(biz._link, { waitUntil: "domcontentloaded" });
         await page.waitForTimeout(1500);
-        const website = await page
+
+        biz.website = await page
           .$eval('a[data-item-id="authority"]', (el) => el.href)
           .catch(() => "");
-        biz.website = website;
+
+        // phone (Google Maps button me "Phone: ..." hota hai)
+        biz.phone = await page
+          .$eval('button[data-item-id^="phone"]', (el) =>
+            (el.getAttribute("aria-label") || "").replace(/phone:?/i, "").trim()
+          )
+          .catch(() => "");
+
+        // address
+        biz.location = await page
+          .$eval('button[data-item-id="address"]', (el) =>
+            (el.getAttribute("aria-label") || "").replace(/address:?/i, "").trim()
+          )
+          .catch(() => "");
       } catch {
         /* skip */
       }
