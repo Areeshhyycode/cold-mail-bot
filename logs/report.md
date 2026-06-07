@@ -1,14 +1,14 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-06T21:14:12.918Z_
+_Last updated: 2026-06-07T07:49:30.631Z_
 
 ## Summary
 
 | Metric | Value |
 |---|---|
 | Total leads | 15 |
-| Emails sent (unique leads) | 14 |
-| Sent today | 15 |
+| Emails sent (unique leads) | 13 |
+| Sent today | 0 |
 | Replies | 0 |
 | Reply rate | 0.0% |
 
@@ -16,8 +16,8 @@ _Last updated: 2026-06-06T21:14:12.918Z_
 
 | Status | Count |
 |---|---|
-| sent | 14 |
-| bounced | 1 |
+| sent | 13 |
+| bounced | 2 |
 
 ## Recent activity (last 15)
 
@@ -26,7 +26,7 @@ _Last updated: 2026-06-06T21:14:12.918Z_
 | CentigmaSoft | Software Company | Software Development Company in Islamabad | Mobile App | Software Outsourcing | Consultant | info@centigmasoft.com | sent | 1 | 2026-06-06 21:14 |
 | Software Development Hub | info@softwaredevelopmenthub.com | sent | 1 | 2026-06-06 21:13 |
 | AKSA-SDS | contact@aksa-sds.com | sent | 1 | 2026-06-06 21:11 |
-| Absoluit | info@absoluit.com | sent | 1 | 2026-06-06 21:10 |
+| Absoluit | info@absoluit.com | bounced | 1 | 2026-06-06 21:10 |
 | Jantrah Tech (Pvt) Ltd. - Software House in Islamabad | info@jantrah.com | sent | 1 | 2026-06-06 21:09 |
 | Artimization – Digital Marketing Company in Karachi | info@artimization.com | sent | 1 | 2026-06-06 21:07 |
 | The Alifa | Best Digital Marketing Agency in Karachi | Best SEO Agency | Social Media Marketing | Web Designing Development | contact@thealifa.com | sent | 1 | 2026-06-06 21:06 |
