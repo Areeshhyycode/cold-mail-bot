@@ -9,6 +9,7 @@
     "import": "node src/scraper/importLeads.js",
     "find-dupes": "node src/db/findDuplicates.js",
     "personalize": "node src/ai/run.js",
+    "repersonalize": "node src/ai/repersonalize.js",
     "send": "node src/sender/run.js",
     "followup": "node src/sender/followup.js",
     "report": "node src/report.js",
