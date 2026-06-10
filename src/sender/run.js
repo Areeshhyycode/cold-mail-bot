@@ -7,6 +7,34 @@ dotenv.config();
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+// company/website ko normalize karke compare karte hain (www, https, trailing slash hata ke)
+const norm = (s = "") =>
+  s.toLowerCase().replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/\/+$/, "").trim();
+
+// already-contacted statuses — agar isi company ko in me se kisi address pe bhej chuke hain to dobara mat bhejo
+const CONTACTED = ["sent", "followup_1", "followup_2", "replied", "unsubscribed", "done", "bounced"];
+
+/**
+ * true agar is lead ki company (same naam ya same website) ko pehle se
+ * kisi DOOSRE address pe contact kar chuke hain. Taaki ek company ko
+ * uske multiple emails (info@, hr@...) pe alag-alag mail na jaye.
+ */
+async function alreadyContactedCompany(lead) {
+  const site = norm(lead.website);
+  const ors = [];
+  if (lead.businessName) ors.push({ businessName: lead.businessName });
+  if (site) ors.push({ website: new RegExp(`^https?://(www\\.)?${escapeRegex(site)}/?$`, "i") });
+  if (!ors.length) return null;
+  return Lead.findOne({
+    _id: { $ne: lead._id },
+    email: { $ne: lead.email },
+    status: { $in: CONTACTED },
+    $or: ors,
+  });
+}
+
+const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 /**
  * Aaj ke batch ka pehla email bhejta hai (status: ready -> sent).
  * Daily limit respect karta hai.
@@ -37,8 +65,19 @@ async function main() {
   console.log(`📤 ${leads.length} emails bhejne hain (aaj ${sentToday}/${dailyLimit} ho chuke, ${remaining} bacha)...`);
 
   let sent = 0;
+  let dupSkipped = 0;
   for (const lead of leads) {
     try {
+      // same company doosre address pe already contact ho chuki? to skip (no double-mailing)
+      const twin = await alreadyContactedCompany(lead);
+      if (twin) {
+        lead.status = "done";
+        await lead.save();
+        dupSkipped++;
+        console.log(`   ⏭️  ${lead.email} — same company (${lead.businessName}) already contacted on ${twin.email}, skip`);
+        continue;
+      }
+
       await sendEmail({ to: lead.email, subject: lead.subject, text: lead.body, leadId: lead._id.toString() });
 
       lead.status = "sent";
@@ -66,7 +105,7 @@ async function main() {
     }
   }
 
-  console.log(`\n📊 ${sent} emails bheje gaye`);
+  console.log(`\n📊 ${sent} emails bheje gaye${dupSkipped ? `, ${dupSkipped} duplicate company skip` : ""}`);
   await disconnectDB();
 }
 

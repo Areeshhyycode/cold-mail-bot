@@ -11,9 +11,9 @@ const DAY = 24 * 60 * 60 * 1000;
 // follow-up messages (plain, short)
 const FOLLOWUPS = {
   1: (lead) =>
-    `Hi ${lead.ownerName || "there"},\n\nJust floating this back to the top of your inbox — did you get a chance to see my last email about ${lead.businessName}?\n\nHappy to keep it to a quick 10-min call.\n\n${process.env.SENDER_NAME || ""}`,
+    `Hi ${lead.ownerName || "there"},\n\nJust floating this back to the top of your inbox — did you get a chance to see my last email about ${lead.businessName}?\n\nHappy to keep it to a quick 10-min call.\n\n${process.env.SENDER_NAME || "Areesha Rafiq"}`,
   2: (lead) =>
-    `Hi ${lead.ownerName || "there"},\n\nLast one from me — if getting more clients for ${lead.businessName} isn't a priority right now, no worries at all.\n\nIf it is, just reply "yes" and I'll send a couple of times that work.\n\n${process.env.SENDER_NAME || ""}`,
+    `Hi ${lead.ownerName || "there"},\n\nLast one from me — if getting more clients for ${lead.businessName} isn't a priority right now, no worries at all.\n\nIf it is, just reply "yes" and I'll send a couple of times that work.\n\n${process.env.SENDER_NAME || "Areesha Rafiq"}`,
 };
 
 /**

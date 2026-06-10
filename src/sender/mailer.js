@@ -58,7 +58,7 @@ ${pixel}
  */
 export async function sendEmail({ to, subject, text, leadId }) {
   const t = getTransporter();
-  const fromName = process.env.SENDER_NAME || "Cold Mail Bot";
+  const fromName = process.env.SENDER_NAME || "Areesha Rafiq";
   const sender = process.env.SMTP_USER;
 
   const useTracking = TRACK_BASE && leadId;
