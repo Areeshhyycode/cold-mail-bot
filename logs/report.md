@@ -1,6 +1,6 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-09T11:54:15.728Z_
+_Last updated: 2026-06-10T08:49:59.542Z_
 
 ## Summary
 
@@ -8,7 +8,7 @@ _Last updated: 2026-06-09T11:54:15.728Z_
 |---|---|
 | Total leads | 15 |
 | Emails sent (unique leads) | 13 |
-| Sent today | 4 |
+| Sent today | 9 |
 | Replies | 0 |
 | Reply rate | 0.0% |
 
@@ -16,26 +16,25 @@ _Last updated: 2026-06-09T11:54:15.728Z_
 
 | Status | Count |
 |---|---|
-| sent | 9 |
-| followup_1 | 4 |
+| followup_1 | 13 |
 | bounced | 2 |
 
 ## Recent activity (last 15)
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
+| CentigmaSoft | Software Company | Software Development Company in Islamabad | Mobile App | Software Outsourcing | Consultant | info@centigmasoft.com | followup_1 | 2 | 2026-06-10 08:48 |
+| Software Development Hub | info@softwaredevelopmenthub.com | followup_1 | 2 | 2026-06-10 08:46 |
+| AKSA-SDS | contact@aksa-sds.com | followup_1 | 2 | 2026-06-10 08:44 |
+| Jantrah Tech (Pvt) Ltd. - Software House in Islamabad | info@jantrah.com | followup_1 | 2 | 2026-06-10 08:09 |
+| Artimization – Digital Marketing Company in Karachi | info@artimization.com | followup_1 | 2 | 2026-06-10 08:08 |
+| The Alifa | Best Digital Marketing Agency in Karachi | Best SEO Agency | Social Media Marketing | Web Designing Development | contact@thealifa.com | followup_1 | 2 | 2026-06-10 08:07 |
+| Aspire Digital Pakistan Marketing Advertising Agency | hello@aspiredigital.pk | followup_1 | 2 | 2026-06-10 08:06 |
+| Now Seo Agency PVT LTD - Digital Marketing Agency in Karachi - Website Development | info@nowseoagency.com | followup_1 | 2 | 2026-06-10 08:04 |
+| Fuxac Pvt. Ltd. | Best SEO agency in Karachi & Digital Marketing Agency in Karachi | info@fuxac.com | followup_1 | 2 | 2026-06-10 08:02 |
 | Ozzun Solutions | Best Digital Marketing Agency | info@ozzun.com | followup_1 | 2 | 2026-06-09 07:45 |
 | ArtXPro Digital Marketing Agency | Social Media Marketing | SEO Services in Karachi | contact@artxpro.com | followup_1 | 2 | 2026-06-09 07:44 |
 | Hub Sol | Web Design & Development in Lahore | info@hubsol.com | followup_1 | 2 | 2026-06-09 07:42 |
 | Webiconz Technologies | Website Development Agency | SEO Services Provider in Lahore Pakistan | info@webiconz.com | followup_1 | 2 | 2026-06-09 07:40 |
-| CentigmaSoft | Software Company | Software Development Company in Islamabad | Mobile App | Software Outsourcing | Consultant | info@centigmasoft.com | sent | 1 | 2026-06-06 21:14 |
-| Software Development Hub | info@softwaredevelopmenthub.com | sent | 1 | 2026-06-06 21:13 |
-| AKSA-SDS | contact@aksa-sds.com | sent | 1 | 2026-06-06 21:11 |
 | Absoluit | info@absoluit.com | bounced | 1 | 2026-06-06 21:10 |
-| Jantrah Tech (Pvt) Ltd. - Software House in Islamabad | info@jantrah.com | sent | 1 | 2026-06-06 21:09 |
-| Artimization – Digital Marketing Company in Karachi | info@artimization.com | sent | 1 | 2026-06-06 21:07 |
-| The Alifa | Best Digital Marketing Agency in Karachi | Best SEO Agency | Social Media Marketing | Web Designing Development | contact@thealifa.com | sent | 1 | 2026-06-06 21:06 |
-| Aspire Digital Pakistan Marketing Advertising Agency | hello@aspiredigital.pk | sent | 1 | 2026-06-06 21:05 |
-| Now Seo Agency PVT LTD - Digital Marketing Agency in Karachi - Website Development | info@nowseoagency.com | sent | 1 | 2026-06-06 21:03 |
-| Fuxac Pvt. Ltd. | Best SEO agency in Karachi & Digital Marketing Agency in Karachi | info@fuxac.com | sent | 1 | 2026-06-06 20:39 |
 | First Idea Web Development (Pvt) Ltd. Domain Hosting Company | Web Development Software House | info@firstideaweb.com | bounced | 1 | 2026-06-06 06:31 |
