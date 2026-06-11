@@ -1,14 +1,14 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-10T13:03:54.817Z_
+_Last updated: 2026-06-11T08:29:58.120Z_
 
 ## Summary
 
 | Metric | Value |
 |---|---|
 | Total leads | 15 |
-| Emails sent (unique leads) | 13 |
-| Sent today | 9 |
+| Emails sent (unique leads) | 12 |
+| Sent today | 0 |
 | Replies | 0 |
 | Reply rate | 0.0% |
 
@@ -16,14 +16,15 @@ _Last updated: 2026-06-10T13:03:54.817Z_
 
 | Status | Count |
 |---|---|
-| followup_1 | 13 |
+| followup_1 | 12 |
 | bounced | 2 |
+| unsubscribed | 1 |
 
 ## Recent activity (last 15)
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
-| CentigmaSoft | Software Company | Software Development Company in Islamabad | Mobile App | Software Outsourcing | Consultant | info@centigmasoft.com | followup_1 | 2 | 2026-06-10 08:48 |
+| CentigmaSoft | Software Company | Software Development Company in Islamabad | Mobile App | Software Outsourcing | Consultant | info@centigmasoft.com | unsubscribed | 2 | 2026-06-10 08:48 |
 | Software Development Hub | info@softwaredevelopmenthub.com | followup_1 | 2 | 2026-06-10 08:46 |
 | AKSA-SDS | contact@aksa-sds.com | followup_1 | 2 | 2026-06-10 08:44 |
 | Jantrah Tech (Pvt) Ltd. - Software House in Islamabad | info@jantrah.com | followup_1 | 2 | 2026-06-10 08:09 |
