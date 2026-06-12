@@ -1,6 +1,6 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-11T12:37:56.978Z_
+_Last updated: 2026-06-12T08:24:36.925Z_
 
 ## Summary
 
@@ -8,7 +8,7 @@ _Last updated: 2026-06-11T12:37:56.978Z_
 |---|---|
 | Total leads | 15 |
 | Emails sent (unique leads) | 12 |
-| Sent today | 0 |
+| Sent today | 4 |
 | Replies | 0 |
 | Reply rate | 0.0% |
 
@@ -16,7 +16,8 @@ _Last updated: 2026-06-11T12:37:56.978Z_
 
 | Status | Count |
 |---|---|
-| followup_1 | 12 |
+| followup_1 | 8 |
+| followup_2 | 4 |
 | bounced | 2 |
 | unsubscribed | 1 |
 
@@ -24,6 +25,10 @@ _Last updated: 2026-06-11T12:37:56.978Z_
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
+| Ozzun Solutions | Best Digital Marketing Agency | info@ozzun.com | followup_2 | 3 | 2026-06-12 08:23 |
+| ArtXPro Digital Marketing Agency | Social Media Marketing | SEO Services in Karachi | contact@artxpro.com | followup_2 | 3 | 2026-06-12 08:21 |
+| Hub Sol | Web Design & Development in Lahore | info@hubsol.com | followup_2 | 3 | 2026-06-12 08:20 |
+| Webiconz Technologies | Website Development Agency | SEO Services Provider in Lahore Pakistan | info@webiconz.com | followup_2 | 3 | 2026-06-12 08:18 |
 | CentigmaSoft | Software Company | Software Development Company in Islamabad | Mobile App | Software Outsourcing | Consultant | info@centigmasoft.com | unsubscribed | 2 | 2026-06-10 08:48 |
 | Software Development Hub | info@softwaredevelopmenthub.com | followup_1 | 2 | 2026-06-10 08:46 |
 | AKSA-SDS | contact@aksa-sds.com | followup_1 | 2 | 2026-06-10 08:44 |
@@ -33,9 +38,5 @@ _Last updated: 2026-06-11T12:37:56.978Z_
 | Aspire Digital Pakistan Marketing Advertising Agency | hello@aspiredigital.pk | followup_1 | 2 | 2026-06-10 08:06 |
 | Now Seo Agency PVT LTD - Digital Marketing Agency in Karachi - Website Development | info@nowseoagency.com | followup_1 | 2 | 2026-06-10 08:04 |
 | Fuxac Pvt. Ltd. | Best SEO agency in Karachi & Digital Marketing Agency in Karachi | info@fuxac.com | followup_1 | 2 | 2026-06-10 08:02 |
-| Ozzun Solutions | Best Digital Marketing Agency | info@ozzun.com | followup_1 | 2 | 2026-06-09 07:45 |
-| ArtXPro Digital Marketing Agency | Social Media Marketing | SEO Services in Karachi | contact@artxpro.com | followup_1 | 2 | 2026-06-09 07:44 |
-| Hub Sol | Web Design & Development in Lahore | info@hubsol.com | followup_1 | 2 | 2026-06-09 07:42 |
-| Webiconz Technologies | Website Development Agency | SEO Services Provider in Lahore Pakistan | info@webiconz.com | followup_1 | 2 | 2026-06-09 07:40 |
 | Absoluit | info@absoluit.com | bounced | 1 | 2026-06-06 21:10 |
 | First Idea Web Development (Pvt) Ltd. Domain Hosting Company | Web Development Software House | info@firstideaweb.com | bounced | 1 | 2026-06-06 06:31 |
