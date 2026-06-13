@@ -1,6 +1,6 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-13T08:26:25.846Z_
+_Last updated: 2026-06-13T09:28:20.770Z_
 
 ## Summary
 
@@ -8,7 +8,7 @@ _Last updated: 2026-06-13T08:26:25.846Z_
 |---|---|
 | Total leads | 15 |
 | Emails sent (unique leads) | 12 |
-| Sent today | 6 |
+| Sent today | 8 |
 | Replies | 0 |
 | Reply rate | 0.0% |
 
@@ -16,15 +16,16 @@ _Last updated: 2026-06-13T08:26:25.846Z_
 
 | Status | Count |
 |---|---|
-| followup_2 | 10 |
+| followup_2 | 12 |
 | bounced | 2 |
-| followup_1 | 2 |
 | unsubscribed | 1 |
 
 ## Recent activity (last 15)
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
+| Software Development Hub | info@softwaredevelopmenthub.com | followup_2 | 3 | 2026-06-13 09:26 |
+| AKSA-SDS | contact@aksa-sds.com | followup_2 | 3 | 2026-06-13 09:25 |
 | Jantrah Tech (Pvt) Ltd. - Software House in Islamabad | info@jantrah.com | followup_2 | 3 | 2026-06-13 08:25 |
 | Artimization – Digital Marketing Company in Karachi | info@artimization.com | followup_2 | 3 | 2026-06-13 08:23 |
 | The Alifa | Best Digital Marketing Agency in Karachi | Best SEO Agency | Social Media Marketing | Web Designing Development | contact@thealifa.com | followup_2 | 3 | 2026-06-13 08:22 |
@@ -36,7 +37,5 @@ _Last updated: 2026-06-13T08:26:25.846Z_
 | Hub Sol | Web Design & Development in Lahore | info@hubsol.com | followup_2 | 3 | 2026-06-12 08:20 |
 | Webiconz Technologies | Website Development Agency | SEO Services Provider in Lahore Pakistan | info@webiconz.com | followup_2 | 3 | 2026-06-12 08:18 |
 | CentigmaSoft | Software Company | Software Development Company in Islamabad | Mobile App | Software Outsourcing | Consultant | info@centigmasoft.com | unsubscribed | 2 | 2026-06-10 08:48 |
-| Software Development Hub | info@softwaredevelopmenthub.com | followup_1 | 2 | 2026-06-10 08:46 |
-| AKSA-SDS | contact@aksa-sds.com | followup_1 | 2 | 2026-06-10 08:44 |
 | Absoluit | info@absoluit.com | bounced | 1 | 2026-06-06 21:10 |
 | First Idea Web Development (Pvt) Ltd. Domain Hosting Company | Web Development Software House | info@firstideaweb.com | bounced | 1 | 2026-06-06 06:31 |
