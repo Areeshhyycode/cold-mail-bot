@@ -1,6 +1,6 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-16T13:24:00.766Z_
+_Last updated: 2026-06-17T09:27:03.335Z_
 
 ## Summary
 
@@ -16,8 +16,7 @@ _Last updated: 2026-06-16T13:24:00.766Z_
 
 | Status | Count |
 |---|---|
-| followup_2 | 8 |
-| done | 4 |
+| done | 12 |
 | bounced | 2 |
 | unsubscribed | 1 |
 
@@ -25,14 +24,14 @@ _Last updated: 2026-06-16T13:24:00.766Z_
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
-| Software Development Hub | info@softwaredevelopmenthub.com | followup_2 | 3 | 2026-06-13 09:26 |
-| AKSA-SDS | contact@aksa-sds.com | followup_2 | 3 | 2026-06-13 09:25 |
-| Jantrah Tech (Pvt) Ltd. - Software House in Islamabad | info@jantrah.com | followup_2 | 3 | 2026-06-13 08:25 |
-| Artimization – Digital Marketing Company in Karachi | info@artimization.com | followup_2 | 3 | 2026-06-13 08:23 |
-| The Alifa | Best Digital Marketing Agency in Karachi | Best SEO Agency | Social Media Marketing | Web Designing Development | contact@thealifa.com | followup_2 | 3 | 2026-06-13 08:22 |
-| Aspire Digital Pakistan Marketing Advertising Agency | hello@aspiredigital.pk | followup_2 | 3 | 2026-06-13 08:20 |
-| Now Seo Agency PVT LTD - Digital Marketing Agency in Karachi - Website Development | info@nowseoagency.com | followup_2 | 3 | 2026-06-13 08:19 |
-| Fuxac Pvt. Ltd. | Best SEO agency in Karachi & Digital Marketing Agency in Karachi | info@fuxac.com | followup_2 | 3 | 2026-06-13 08:18 |
+| Software Development Hub | info@softwaredevelopmenthub.com | done | 3 | 2026-06-13 09:26 |
+| AKSA-SDS | contact@aksa-sds.com | done | 3 | 2026-06-13 09:25 |
+| Jantrah Tech (Pvt) Ltd. - Software House in Islamabad | info@jantrah.com | done | 3 | 2026-06-13 08:25 |
+| Artimization – Digital Marketing Company in Karachi | info@artimization.com | done | 3 | 2026-06-13 08:23 |
+| The Alifa | Best Digital Marketing Agency in Karachi | Best SEO Agency | Social Media Marketing | Web Designing Development | contact@thealifa.com | done | 3 | 2026-06-13 08:22 |
+| Aspire Digital Pakistan Marketing Advertising Agency | hello@aspiredigital.pk | done | 3 | 2026-06-13 08:20 |
+| Now Seo Agency PVT LTD - Digital Marketing Agency in Karachi - Website Development | info@nowseoagency.com | done | 3 | 2026-06-13 08:19 |
+| Fuxac Pvt. Ltd. | Best SEO agency in Karachi & Digital Marketing Agency in Karachi | info@fuxac.com | done | 3 | 2026-06-13 08:18 |
 | Ozzun Solutions | Best Digital Marketing Agency | info@ozzun.com | done | 3 | 2026-06-12 08:23 |
 | ArtXPro Digital Marketing Agency | Social Media Marketing | SEO Services in Karachi | contact@artxpro.com | done | 3 | 2026-06-12 08:21 |
 | Hub Sol | Web Design & Development in Lahore | info@hubsol.com | done | 3 | 2026-06-12 08:20 |
