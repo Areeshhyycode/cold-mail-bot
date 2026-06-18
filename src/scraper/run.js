@@ -1,157 +1,155 @@
 import dotenv from "dotenv";
 import pLimit from "p-limit";
 import fs from "fs/promises";
-import path from "path";
+
 import { connectDB, disconnectDB } from "../db/connect.js";
-import { Lead } from "../db/Lead.js";
-import { scrapeGoogleMaps } from "./googleMaps.js";
 import { extractEmail } from "./emailExtractor.js";
 import { verifyEmail } from "./verifyEmail.js";
 import { auditWebsite } from "./websiteAudit.js";
+import { scrapeGoogleMaps } from "./googleMaps.js";
+import { generateQueries } from "./leadGenerator.js";
+import { scrapeAllJobBoards } from "./jobBoards.js";
+import { scrapeSoftwareHouses } from "./softwareHouses.js";
+import { saveLead, saveLeads } from "./ingest.js";
+import { ROLE_KEYWORDS } from "../ai/intent.js";
 
 dotenv.config();
 
-/**
- * Usage:
- *   node src/scraper/run.js "<query>" <count> <niche>
- *   e.g. node src/scraper/run.js "dental clinic in New York" 30 dental
- *
- * Logic (website-finder mode):
- *   - website MODERN (ok)   -> skip (in ko zaroorat nahi)
- *   - website OUTDATED      -> EMAIL outreach target (email scrape + save lead)
- *   - NO website / broken   -> PHONE outreach list me save (data/phone-leads.json)
- *
- * AUDIT_MODE=off karo to purana behaviour (sabki email scrape, no audit).
- */
-async function main() {
-  const query = process.argv[2] || "dental clinic in New York";
-  const max = parseInt(process.argv[3] || "20", 10);
-  const niche = process.argv[4] || "general";
+/* =======================
+   📊 STATS (service queries ke liye)
+======================= */
+const STATS_FILE = "src/queries/queryStats.json";
+
+async function loadStats() {
+  try {
+    return JSON.parse(await fs.readFile(STATS_FILE, "utf-8"));
+  } catch {
+    return { data: {} };
+  }
+}
+async function saveStats(stats) {
+  try {
+    await fs.writeFile(STATS_FILE, JSON.stringify(stats, null, 2));
+  } catch (err) {
+    console.error("❌ Failed to save stats:", err.message);
+  }
+}
+
+/* =======================
+   🧩 SOURCE 1: JOB BOARDS
+======================= */
+async function runJobBoards() {
+  const keyword = ROLE_KEYWORDS.slice(0, 8).join(" ");
+  console.log(`\n🧩 JOB BOARDS (filter: roles)`);
+  const leads = await scrapeAllJobBoards(keyword);
+  await saveLeads(leads, "job-boards");
+}
+
+/* =======================
+   🏢 SOURCE 2: SOFTWARE HOUSES (speculative JOB)
+======================= */
+async function runSoftwareHouses() {
+  console.log(`\n🏢 SOFTWARE HOUSES (speculative job applications)`);
+  const r = await scrapeSoftwareHouses();
+  console.log(`   📥 software houses → new: ${r.created}, dup: ${r.dup}, no-email: ${r.noEmail}`);
+}
+
+/* =======================
+   🌐 SOURCE 3: SERVICE LEADS (Google Maps + website audit)
+======================= */
+async function runService(max) {
   const auditOn = process.env.AUDIT_MODE !== "off";
+  const stats = await loadStats();
+  const queries = generateQueries().slice(0, 8);
+  console.log(`\n🌐 SERVICE LEADS | queries: ${queries.length} | audit: ${auditOn ? "on" : "off"}`);
 
-  console.log(`🔍 Scraping: "${query}" (max ${max}) | audit: ${auditOn ? "ON" : "off"}`);
+  for (const query of queries) {
+    console.log(`\n🔍 Query: "${query}"`);
+    try {
+      const businesses = await scrapeGoogleMaps(query, max);
+      const result = await processServiceBusinesses(businesses, auditOn);
 
+      if (!stats.data[query]) stats.data[query] = { runs: 0, emails: 0, phones: 0 };
+      stats.data[query].runs += 1;
+      stats.data[query].emails += result.created;
+      await saveStats(stats);
+    } catch (err) {
+      console.error(`❌ Query failed: ${query}`, err.message);
+    }
+  }
+}
+
+async function processServiceBusinesses(businesses, auditOn) {
+  const limit = pLimit(5);
+  let created = 0;
+  let skipped = 0;
+
+  const tasks = businesses.map((biz) =>
+    limit(async () => {
+      try {
+        let quality = "unknown";
+        if (auditOn && biz.website) {
+          const audit = await auditWebsite(biz.website);
+          quality = audit?.quality || "unknown";
+          if (quality === "ok") {
+            skipped++;
+            return; // accha website hai -> service lead nahi
+          }
+        }
+
+        const { email } = await extractEmail(biz.website);
+        if (!email) {
+          skipped++;
+          return;
+        }
+        if ((await verifyEmail(email)) === "invalid") {
+          skipped++;
+          return;
+        }
+
+        const r = await saveLead({
+          leadType: "SERVICE",
+          source: "gmaps",
+          businessName: biz.businessName,
+          email,
+          website: biz.website,
+          niche: "business",
+          location: biz.location || "",
+          city: biz.city || "",
+          phone: biz.phone || "",
+        });
+        if (r === "created") created++;
+        else skipped++;
+      } catch {
+        skipped++;
+      }
+    })
+  );
+
+  await Promise.all(tasks);
+  console.log(`📊 Service → new: ${created}, skipped: ${skipped}`);
+  return { created, skipped };
+}
+
+/* =======================
+   🚀 MAIN — mode: all | jobs | software | service
+======================= */
+async function main() {
+  const mode = (process.argv[2] || "all").toLowerCase();
+  const max = parseInt(process.argv[3] || "20", 10);
+
+  console.log(`🚀 Scraper started | mode: ${mode}`);
   await connectDB();
 
-  const businesses = await scrapeGoogleMaps(query, max);
-  console.log(`📍 ${businesses.length} businesses mile\n`);
+  if (mode === "all" || mode === "jobs") await runJobBoards();
+  if (mode === "all" || mode === "software") await runSoftwareHouses();
+  if (mode === "all" || mode === "service") await runService(max);
 
-  const limit = pLimit(5);
-  let emailLeads = 0;
-  let phoneLeads = 0;
-  let skipped = 0;
-  const phoneList = [];
-
-  await Promise.all(
-    businesses.map((biz) =>
-      limit(async () => {
-        // 1. website ka audit
-        const { quality, reasons } = auditOn
-          ? await auditWebsite(biz.website)
-          : { quality: "unknown", reasons: [] };
-
-        // 2. modern site -> skip (target nahi)
-        if (auditOn && quality === "ok") {
-          skipped++;
-          console.log(`   ⏭️  ${biz.businessName} — modern site, skip`);
-          return;
-        }
-
-        // 3. NO website -> phone outreach list
-        if (auditOn && quality === "none") {
-          if (!biz.phone) {
-            skipped++;
-            console.log(`   ⏭️  ${biz.businessName} — no website, no phone`);
-            return;
-          }
-          phoneLeads++;
-          phoneList.push({
-            businessName: biz.businessName,
-            phone: biz.phone,
-            location: biz.location || "",
-            niche,
-            reason: reasons.join("; "),
-          });
-          console.log(`   📞 ${biz.businessName} — ${biz.phone} (no website → phone)`);
-          return;
-        }
-
-        // 4. OUTDATED (ya audit off) -> email outreach target
-        const { email, ownerName } = await extractEmail(biz.website);
-        if (!email) {
-          // website hai par email nahi mila -> phone fallback
-          if (biz.phone) {
-            phoneLeads++;
-            phoneList.push({
-              businessName: biz.businessName,
-              phone: biz.phone,
-              location: biz.location || "",
-              niche,
-              reason: reasons.join("; ") || "no email on site",
-            });
-            console.log(`   📞 ${biz.businessName} — ${biz.phone} (no email → phone)`);
-          } else {
-            skipped++;
-            console.log(`   ⏭️  ${biz.businessName} — koi email/phone nahi`);
-          }
-          return;
-        }
-
-        const emailStatus = await verifyEmail(email);
-        if (emailStatus === "invalid") {
-          skipped++;
-          console.log(`   ❌ ${biz.businessName} — ${email} (invalid)`);
-          return;
-        }
-
-        try {
-          await Lead.create({
-            businessName: biz.businessName,
-            website: biz.website,
-            email,
-            emailStatus,
-            ownerName,
-            niche,
-            city: biz.city || "",
-            phone: biz.phone || "",
-            location: biz.location || "",
-            websiteQuality: quality,
-            auditReasons: reasons,
-            outreachChannel: "email",
-            status: "new",
-          });
-          emailLeads++;
-          const why = reasons.length ? ` [${reasons[0]}]` : "";
-          console.log(`   ✅ ${biz.businessName} — ${email}${why}`);
-        } catch (err) {
-          if (err.code === 11000) skipped++;
-          else console.log(`   ⚠️  ${biz.businessName} — ${err.message}`);
-        }
-      })
-    )
-  );
-
-  // phone leads ko file me save karo (manual phone/WhatsApp outreach ke liye)
-  if (phoneList.length) {
-    const dir = path.join(process.cwd(), "data");
-    await fs.mkdir(dir, { recursive: true });
-    const file = path.join(dir, "phone-leads.json");
-    let existing = [];
-    try {
-      existing = JSON.parse(await fs.readFile(file, "utf-8"));
-    } catch {
-      /* file nahi hai */
-    }
-    await fs.writeFile(file, JSON.stringify([...existing, ...phoneList], null, 2));
-  }
-
-  console.log(
-    `\n📊 Result: ${emailLeads} email-leads (DB), ${phoneLeads} phone-leads (data/phone-leads.json), ${skipped} skip`
-  );
   await disconnectDB();
+  console.log("\n✅ Done!");
 }
 
 main().catch((err) => {
-  console.error("❌ Error:", err.message);
+  console.error("❌ Fatal Error:", err.message);
   process.exit(1);
 });

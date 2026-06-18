@@ -14,9 +14,13 @@ import mongoose from "mongoose";
  */
 const leadSchema = new mongoose.Schema(
   {
-    businessName: { type: String, required: true },
+    // businessName ab required NAHI — job leads me company naam aata hai (niche
+    // company field), service leads me businessName. Dono me se ek hamesha hoga.
+    businessName: { type: String, default: "" },
     website: { type: String },
-    email: { type: String, required: true, lowercase: true, trim: true },
+    // email optional — RemoteOK/job-board leads me sirf apply URL ho sakta hai
+    // (email nahi). Aise leads DB me to aate hain par sender unhe skip karta hai.
+    email: { type: String, lowercase: true, trim: true },
     emailStatus: {
       type: String,
       enum: ["valid", "risky", "invalid", "unknown"],
@@ -27,6 +31,33 @@ const leadSchema = new mongoose.Schema(
     city: { type: String, default: "" },
     phone: { type: String, default: "" },
     location: { type: String, default: "" },
+
+    /* =========================================================
+       HYBRID ROUTING — har lead JOB ya SERVICE hota hai.
+       leadType  -> final decision (kis flow me jayega)
+       intent    -> detector ka raw output (JOB | SERVICE | HYBRID)
+    ========================================================= */
+    leadType: {
+      type: String,
+      enum: ["JOB", "SERVICE"],
+      default: "SERVICE",
+    },
+    intent: {
+      type: String,
+      enum: ["JOB", "SERVICE", "HYBRID"],
+      default: "HYBRID",
+    },
+    score: { type: Number, default: 0 }, // lead quality score (intent.js se)
+
+    /* ---- JOB lead specific fields ---- */
+    company: { type: String, default: "" }, // hiring company / software house
+    jobTitle: { type: String, default: "" }, // "" => speculative application
+    // jobUrl ka koi default NAHI (undefined rehta hai jab tak set na ho) — taaki
+    // service leads partial unique index me na aayen (warna sab "" pe collide karte).
+    jobUrl: { type: String }, // posting / apply link
+    jobDescription: { type: String, default: "" }, // AI personalization ke liye
+    source: { type: String, default: "" }, // hn | remoteok | remotive | wwr | gmaps
+    datePosted: { type: Date }, // jab posting mili / publish hui
 
     // website quality (kis ko naye website ki zaroorat hai)
     websiteQuality: {
@@ -77,7 +108,19 @@ const leadSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// ek email + campaign duplicate na ho
-leadSchema.index({ email: 1, campaign: 1 }, { unique: true });
+// ek email + campaign duplicate na ho — PARTIAL: sirf tab unique enforce karo
+// jab email actually mojood ho. Job leads jinme email nahi (sirf apply URL) woh
+// is index me aate hi nahi, isliye "duplicate null email" wala crash nahi hota.
+leadSchema.index(
+  { email: 1, campaign: 1 },
+  { unique: true, partialFilterExpression: { email: { $type: "string" } } }
+);
+
+// job leads ki dedupe — same posting URL dobara save na ho. PARTIAL: sirf jab
+// jobUrl set ho (string). Service leads me jobUrl undefined hota hai -> index me nahi.
+leadSchema.index(
+  { jobUrl: 1, campaign: 1 },
+  { unique: true, partialFilterExpression: { jobUrl: { $type: "string" } } }
+);
 
 export const Lead = mongoose.models.Lead || mongoose.model("Lead", leadSchema);

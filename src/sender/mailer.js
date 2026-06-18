@@ -54,9 +54,10 @@ ${pixel}
 /**
  * Ek email bhejta hai (unsubscribe footer + header automatic add hote hain).
  * Agar TRACK_BASE_URL set hai aur leadId diya hai, to HTML + open-tracking pixel bhejta hai.
- * @param {object} opts - { to, subject, text, leadId }
+ * @param {object} opts - { to, subject, text, leadId, attachments }
+ *   attachments: nodemailer attachments array, e.g. [{ filename, path }]
  */
-export async function sendEmail({ to, subject, text, leadId }) {
+export async function sendEmail({ to, subject, text, leadId, attachments }) {
   const t = getTransporter();
   const fromName = process.env.SENDER_NAME || "Areesha Rafiq";
   const sender = process.env.SMTP_USER;
@@ -77,6 +78,9 @@ export async function sendEmail({ to, subject, text, leadId }) {
       "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
     },
   };
+
+  // CV / portfolio jaise attachments (job applications ke liye)
+  if (Array.isArray(attachments) && attachments.length) mail.attachments = attachments;
 
   // tracking on ho to HTML bhi bhejo (pixel ke liye HTML zaroori)
   if (useTracking) mail.html = buildHtml(text, leadId);

@@ -4,3 +4,15 @@ playwright-report/
 test-results/
 data/
 config.bat
+
+# secrets
+.env
+.env.*
+!.env.example
+
+# CV (personal info)
+assets/cv.pdf
+
+# large accidental dumps
+files.txt
+output.txt

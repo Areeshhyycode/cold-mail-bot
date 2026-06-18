@@ -1,0 +1,48 @@
+name: Daily Lead Sourcing
+
+# Din me ek baar: fresh leads dhoondo (job boards + Karachi software houses + service
+# businesses) aur DB me save karo. Ye HEAVY hai (Playwright/Chromium Google Maps ke liye)
+# isliye send workflow se ALAG aur sirf 1x/din chalta hai. Send workflow (daily-mails.yml)
+# in leads ko personalize karke bhej deta hai.
+on:
+  schedule:
+    - cron: "30 3 * * *" # 8:30 AM PKT (send runs se thoda pehle)
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Scrape mode: all | jobs | software | service"
+        required: false
+        default: "all"
+
+permissions:
+  contents: read
+
+jobs:
+  source-leads:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Google Maps scraping ke liye Chromium chahiye (software + service modes)
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Source fresh leads
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GROQ_MODEL: ${{ secrets.GROQ_MODEL }}
+          CAMPAIGN: ${{ secrets.CAMPAIGN }}
+          AUDIT_MODE: ${{ secrets.AUDIT_MODE }}
+        continue-on-error: true
+        run: node src/scraper/run.js ${{ github.event.inputs.mode || 'all' }}

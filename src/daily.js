@@ -9,16 +9,22 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
  * Har step ko chalata hai — agar koi step fail ho to BAAKI steps phir bhi chalte hain
  * (graceful failure handling). Progress DB me save rehta hai, isliye kuch nahi khota.
  */
+// SCRAPE_MODE: "jobs" (default, API-only, koi browser nahi) | "all" | "software" | "service"
+// "all"/"software"/"service" ke liye Playwright (chromium) install hona chahiye.
+const SCRAPE_MODE = process.env.SCRAPE_MODE || "jobs";
+
 const STEPS = [
+  { name: "Find fresh leads", file: "scraper/run.js", args: [SCRAPE_MODE] },
+  { name: "Personalize (route JOB/SERVICE)", file: "ai/run.js" },
   { name: "Check replies + bounces", file: "tracker/replyChecker.js" },
   { name: "Send first emails", file: "sender/run.js" },
   { name: "Send follow-ups", file: "sender/followup.js" },
   { name: "Generate report", file: "report.js" },
 ];
 
-function runStep(file) {
+function runStep(file, args = []) {
   return new Promise((resolve) => {
-    const child = spawn("node", [path.join(__dirname, file)], { stdio: "inherit" });
+    const child = spawn("node", [path.join(__dirname, file), ...args], { stdio: "inherit" });
     child.on("exit", (code) => resolve(code ?? 1));
     child.on("error", () => resolve(1));
   });
@@ -33,7 +39,7 @@ async function main() {
     let code = 1;
     // ek step ke liye 2 retries (graceful, auto-retry)
     for (let attempt = 1; attempt <= 2; attempt++) {
-      code = await runStep(step.file);
+      code = await runStep(step.file, step.args);
       if (code === 0) break;
       console.log(`   ⚠️ "${step.name}" fail (try ${attempt}). ${attempt < 2 ? "Retry..." : "Skip."}`);
     }

@@ -1,40 +1,48 @@
 /**
- * DEMO: "Jo log openly kaam de rahe hain" un job-posts ko scrape karta hai.
+ * JOB-BOARD SCRAPERS — public sources jahan log openly hiring post karte hain.
+ * Har scraper normalized job-leads return karta hai:
+ *   { source, company, jobTitle, jobUrl, jobDescription, email, location, datePosted, hasEmail }
  *
- * Upwork/Fiverr client emails public nahi karte (ToS + Connects wall), isliye
- * yahan woh sources use karte hain jahan log KHUD openly hiring post karte hain
- * aur contact bhi aksar public hota hai:
+ * Sources:
+ *   1. Hacker News "Who is hiring"  (Algolia API, aksar EMAIL ke saath)
+ *   2. RemoteOK                     (public API, aksar sirf apply URL)
+ *   3. Remotive                     (public API)
+ *   4. WeWorkRemotely               (public RSS)
  *
- *   1. Hacker News "Who is hiring" -> monthly thread, log openly hiring post karte
- *      hain, aksar EMAIL ke saath (free public Algolia API, login nahi chahiye)
- *   2. RemoteOK          -> companies jo remote hiring kar rahi hain (public API)
- *
- * Standalone demo hai — DB nahi chahiye. Bas chalao:
- *   node src/scraper/jobBoards.js
- *   node src/scraper/jobBoards.js "developer designer wordpress"   # keyword filter
- *
- * Output: ek list of leads { source, title, contact, link }.
- * Jahan email/contact mila woh aapki existing pipeline (AI personalize -> send)
- * me seedha plug ho sakta hai.
+ * Standalone bhi chalta hai (DB me ingest karta hai):
+ *   node src/scraper/jobBoards.js "react node next"
+ *   node src/scraper/jobBoards.js                      # default keyword filter (roles)
  */
+import dotenv from "dotenv";
+import * as cheerio from "cheerio";
+import { fileURLToPath } from "url";
+import { connectDB, disconnectDB } from "../db/connect.js";
+import { saveLeads } from "./ingest.js";
+import { ROLE_KEYWORDS } from "../ai/intent.js";
+
+dotenv.config();
 
 const EMAIL_RE = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,24}/g;
-const BAD = ["example.com", ".png", ".jpg", ".svg", "u/", "reddit.com", "@2x", "removed"];
+const BAD = ["example.com", ".png", ".jpg", ".svg", "u/", "reddit.com", "@2x", "removed", "sentry.io"];
 
-// text me se pehla asli-dikhne wala email nikaalo (junk skip)
 function findEmail(text = "") {
   const hits = [...new Set((text.match(EMAIL_RE) || []).map((e) => e.toLowerCase()))];
   return hits.find((e) => !BAD.some((b) => e.includes(b))) || "";
 }
 
-// HTML/markdown ko thoda saaf karke plain-ish text (email/contact dhoondne ke liye)
 function strip(text = "") {
   return text.replace(/<[^>]+>/g, " ").replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
 }
 
+// keyword match helper — har word me se koi ek bhi mile to pass
+function matchesKeyword(hay, kw) {
+  if (!kw) return true;
+  const h = hay.toLowerCase();
+  return kw.toLowerCase().split(/\s+/).some((w) => w && h.includes(w));
+}
+
 /* ------------------------- Hacker News "Who is hiring" ---------------------- */
-async function scrapeHN(keyword = "") {
-  // 1. latest "Ask HN: Who is hiring?" thread dhoondo
+export async function scrapeHN(keyword = "") {
   const search = await fetch(
     "https://hn.algolia.com/api/v1/search_by_date" +
       "?tags=story,author_whoishiring&query=" + encodeURIComponent("Ask HN: Who is hiring"),
@@ -44,99 +52,180 @@ async function scrapeHN(keyword = "") {
   const story = (await search.json()).hits?.[0];
   if (!story) throw new Error("HN: koi 'Who is hiring' thread nahi mila");
 
-  // 2. us thread ke top-level comments (= job posts) laao
   const thread = await fetch(`https://hn.algolia.com/api/v1/items/${story.objectID}`, {
     signal: AbortSignal.timeout(15000),
   });
   if (!thread.ok) throw new Error(`HN thread HTTP ${thread.status}`);
   const data = await thread.json();
+  const link = `https://news.ycombinator.com/item?id=${story.objectID}`;
 
-  const kw = keyword.toLowerCase();
   return (data.children || [])
     .filter((c) => c && c.text)
     .map((c) => {
       const body = strip(c.text);
-      return { body, email: findEmail(body) };
+      // HN posts aksar "Company | Role | Location | ..." format me hote hain
+      const parts = body.split("|").map((s) => s.trim());
+      const company = parts.length > 1 ? parts[0].slice(0, 80) : "";
+      return {
+        source: "hn",
+        leadType: "JOB",
+        company,
+        jobTitle: (parts[1] || body).slice(0, 90),
+        jobUrl: `${link}#${c.id}`, // per-post anchor -> unique dedupe key
+        jobDescription: body,
+        email: findEmail(body),
+        location: /remote/i.test(body) ? "remote" : "",
+      };
     })
-    .filter((c) => (kw ? kw.split(/\s+/).some((w) => c.body.toLowerCase().includes(w)) : true))
-    .slice(0, 50)
-    .map((c) => ({
-      source: "hn/whoishiring",
-      title: c.body.slice(0, 90),
-      contact: c.email || "(text me apply instructions)",
-      hasEmail: Boolean(c.email),
-      link: `https://news.ycombinator.com/item?id=${story.objectID}`,
-    }));
+    .filter((c) => matchesKeyword(c.jobDescription, keyword))
+    .map((c) => ({ ...c, hasEmail: Boolean(c.email) }));
 }
 
 /* -------------------------------- RemoteOK -------------------------------- */
-async function scrapeRemoteOK(keyword = "") {
+export async function scrapeRemoteOK(keyword = "") {
   const res = await fetch("https://remoteok.com/api", {
-    headers: { "User-Agent": "lead-demo/1.0" },
+    headers: { "User-Agent": "lead-bot/1.0" },
     signal: AbortSignal.timeout(15000),
   });
   if (!res.ok) throw new Error(`RemoteOK HTTP ${res.status}`);
   const json = await res.json();
 
-  // pehla element legal/metadata hota hai -> skip
-  const jobs = json.filter((j) => j && j.position);
-  const kw = keyword.toLowerCase();
-  return jobs
-    .filter((j) => {
-      if (!kw) return true;
-      const hay = `${j.position} ${j.company} ${(j.tags || []).join(" ")}`.toLowerCase();
-      return kw.split(/\s+/).some((w) => hay.includes(w));
-    })
-    .slice(0, 40)
+  return json
+    .filter((j) => j && j.position)
+    .filter((j) => matchesKeyword(`${j.position} ${j.company} ${(j.tags || []).join(" ")}`, keyword))
     .map((j) => {
-      const email = findEmail(strip(j.description || ""));
+      const desc = strip(j.description || "");
+      const email = findEmail(desc);
       return {
         source: "remoteok",
-        title: `${j.position} @ ${j.company}`.slice(0, 90),
-        contact: email || j.apply_url || j.url || "",
+        leadType: "JOB",
+        company: j.company || "",
+        jobTitle: j.position || "",
+        jobUrl: j.url || j.apply_url || "",
+        jobDescription: desc,
+        email,
+        location: j.location || "remote",
+        datePosted: j.date ? new Date(j.date) : undefined,
         hasEmail: Boolean(email),
-        link: j.url || j.apply_url || "",
       };
     });
 }
 
-/* ---------------------------------- main ---------------------------------- */
-async function main() {
-  const keyword = process.argv.slice(2).join(" ").trim();
-  console.log(
-    `\n🔎 Job-board demo${keyword ? ` (filter: "${keyword}")` : ""} — "jo log kaam de rahe hain"\n`
-  );
+/* -------------------------------- Remotive -------------------------------- */
+export async function scrapeRemotive(keyword = "") {
+  const url =
+    "https://remotive.com/api/remote-jobs?category=software-dev" +
+    (keyword ? `&search=${encodeURIComponent(keyword)}` : "");
+  const res = await fetch(url, {
+    headers: { "User-Agent": "lead-bot/1.0" },
+    signal: AbortSignal.timeout(15000),
+  });
+  if (!res.ok) throw new Error(`Remotive HTTP ${res.status}`);
+  const jobs = (await res.json()).jobs || [];
 
-  const results = await Promise.allSettled([scrapeHN(keyword), scrapeRemoteOK(keyword)]);
-
-  const leads = [];
-  for (const r of results) {
-    if (r.status === "fulfilled") leads.push(...r.value);
-    else console.log(`   ⚠️  ek source fail: ${r.reason.message}`);
-  }
-
-  if (!leads.length) {
-    console.log("   Kuch nahi mila (network/rate-limit ho sakta hai — dobara try karo).");
-    return;
-  }
-
-  // jin me email mila woh upar (ready-to-email leads)
-  leads.sort((a, b) => Number(b.hasEmail) - Number(a.hasEmail));
-
-  const withEmail = leads.filter((l) => l.hasEmail);
-  for (const l of leads) {
-    const tag = l.hasEmail ? "📧" : "  ";
-    console.log(`${tag} [${l.source}] ${l.title}`);
-    console.log(`     → ${l.contact}`);
-    console.log(`     ${l.link}\n`);
-  }
-
-  console.log(
-    `📊 Total ${leads.length} hiring-posts | ${withEmail.length} me direct EMAIL mila (ready to outreach)\n`
-  );
+  return jobs.slice(0, 60).map((j) => {
+    const desc = strip(j.description || "");
+    const email = findEmail(desc);
+    return {
+      source: "remotive",
+      leadType: "JOB",
+      company: j.company_name || "",
+      jobTitle: j.title || "",
+      jobUrl: j.url || "",
+      jobDescription: desc.slice(0, 4000),
+      email,
+      location: j.candidate_required_location || "remote",
+      datePosted: j.publication_date ? new Date(j.publication_date) : undefined,
+      hasEmail: Boolean(email),
+    };
+  });
 }
 
-main().catch((err) => {
-  console.error("❌ Error:", err.message);
-  process.exit(1);
-});
+/* ----------------------------- WeWorkRemotely ----------------------------- */
+export async function scrapeWWR(keyword = "") {
+  const res = await fetch("https://weworkremotely.com/categories/remote-programming-jobs.rss", {
+    headers: { "User-Agent": "lead-bot/1.0" },
+    signal: AbortSignal.timeout(15000),
+  });
+  if (!res.ok) throw new Error(`WWR HTTP ${res.status}`);
+  const xml = await res.text();
+  const $ = cheerio.load(xml, { xmlMode: true });
+
+  const out = [];
+  $("item").each((_, el) => {
+    const item = $(el);
+    const rawTitle = item.find("title").text().trim(); // "Company: Role"
+    const linkEl = item.find("link").text().trim();
+    const desc = strip(item.find("description").text());
+    const pub = item.find("pubDate").text().trim();
+    if (!rawTitle || !linkEl) return;
+    if (!matchesKeyword(`${rawTitle} ${desc}`, keyword)) return;
+
+    const [company, ...roleParts] = rawTitle.split(":");
+    out.push({
+      source: "wwr",
+      leadType: "JOB",
+      company: (company || "").trim(),
+      jobTitle: (roleParts.join(":").trim() || rawTitle).slice(0, 90),
+      jobUrl: linkEl,
+      jobDescription: desc.slice(0, 4000),
+      email: findEmail(desc),
+      location: "remote",
+      datePosted: pub ? new Date(pub) : undefined,
+      hasEmail: Boolean(findEmail(desc)),
+    });
+  });
+  return out;
+}
+
+/**
+ * Saare job sources chalata hai aur leads ka flat array return karta hai.
+ * (DB save NAHI karta — caller decide kare. main() neeche save karta hai.)
+ */
+export async function scrapeAllJobBoards(keyword = "") {
+  const settled = await Promise.allSettled([
+    scrapeHN(keyword),
+    scrapeRemoteOK(keyword),
+    scrapeRemotive(keyword),
+    scrapeWWR(keyword),
+  ]);
+
+  const leads = [];
+  const names = ["hn", "remoteok", "remotive", "wwr"];
+  settled.forEach((r, i) => {
+    if (r.status === "fulfilled") {
+      leads.push(...r.value);
+      console.log(`   ✅ ${names[i]}: ${r.value.length} posts`);
+    } else {
+      console.log(`   ⚠️  ${names[i]} fail: ${r.reason.message}`);
+    }
+  });
+  return leads;
+}
+
+/* ---------------------------------- main ---------------------------------- */
+// default keyword = hamari target roles (taaki relevant jobs hi aayen)
+const DEFAULT_KEYWORD = ROLE_KEYWORDS.slice(0, 8).join(" ");
+
+async function main() {
+  const keyword = process.argv.slice(2).join(" ").trim() || DEFAULT_KEYWORD;
+  console.log(`\n🔎 Job boards scrape (filter: "${keyword}")\n`);
+
+  const leads = await scrapeAllJobBoards(keyword);
+  const withEmail = leads.filter((l) => l.hasEmail).length;
+  console.log(`\n📊 Total ${leads.length} job posts | ${withEmail} me direct email (ready to apply)\n`);
+
+  if (!leads.length) return;
+
+  await connectDB();
+  await saveLeads(leads, "job-boards");
+  await disconnectDB();
+}
+
+// sirf tab chalao jab file DIRECTLY run ho (scraper/run.js import kare to nahi)
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+  main().catch((err) => {
+    console.error("❌ Error:", err.message);
+    process.exit(1);
+  });
+}

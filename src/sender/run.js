@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import { connectDB, disconnectDB } from "../db/connect.js";
 import { Lead } from "../db/Lead.js";
 import { sendEmail, randomDelay } from "./mailer.js";
+import { getCvAttachment } from "../ai/profile.js";
 
 dotenv.config();
 
@@ -61,8 +62,19 @@ async function main() {
     return;
   }
 
-  const leads = await Lead.find({ status: "ready" }).limit(remaining);
+  // sirf wo ready leads jinke paas email hai (job-board leads jinme sirf apply-URL
+  // hai woh auto-send nahi ho sakte). High score pehle.
+  const leads = await Lead.find({
+    status: "ready",
+    email: { $exists: true, $nin: [null, ""] },
+  })
+    .sort({ score: -1 })
+    .limit(remaining);
   console.log(`📤 ${leads.length} emails bhejne hain (aaj ${sentToday}/${dailyLimit} ho chuke, ${remaining} bacha)...`);
+
+  // CV attachment ek hi baar resolve karo (job leads ke saath jata hai)
+  const cv = getCvAttachment();
+  if (!cv.length) console.log("   ℹ️  CV file nahi mili — job emails bina attachment ke jayengi (portfolio link rahega).");
 
   let sent = 0;
   let dupSkipped = 0;
@@ -78,7 +90,15 @@ async function main() {
         continue;
       }
 
-      await sendEmail({ to: lead.email, subject: lead.subject, text: lead.body, leadId: lead._id.toString() });
+      // JOB leads ke saath CV attach karo; service leads ke saath nahi
+      const attachments = lead.leadType === "JOB" ? cv : [];
+      await sendEmail({
+        to: lead.email,
+        subject: lead.subject,
+        text: lead.body,
+        leadId: lead._id.toString(),
+        attachments,
+      });
 
       lead.status = "sent";
       lead.currentStep = 0;

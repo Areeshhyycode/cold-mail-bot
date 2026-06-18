@@ -16,7 +16,8 @@
       "Bash(timeout 120 node --env-file=.env src/daily.js)",
       "Bash(node src/scraper/jobBoards.js)",
       "Bash(node -e ' *)",
-      "Bash(node src/scraper/jobBoards.js \"developer designer web\")"
+      "Bash(node src/scraper/jobBoards.js \"developer designer web\")",
+      "Bash(node src/scraper/linkedinLeads.js \"web developer\" 8)"
     ]
   }
 }
