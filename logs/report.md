@@ -1,14 +1,14 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-18T12:18:41.665Z_
+_Last updated: 2026-06-18T16:08:04.944Z_
 
 ## Summary
 
 | Metric | Value |
 |---|---|
-| Total leads | 36 |
-| Emails sent (unique leads) | 31 |
-| Sent today | 21 |
+| Total leads | 174 |
+| Emails sent (unique leads) | 52 |
+| Sent today | 42 |
 | Replies | 0 |
 | Reply rate | 0.0% |
 
@@ -16,7 +16,9 @@ _Last updated: 2026-06-18T12:18:41.665Z_
 
 | Status | Count |
 |---|---|
-| sent | 19 |
+| new | 88 |
+| sent | 40 |
+| ready | 29 |
 | done | 12 |
 | bounced | 4 |
 | unsubscribed | 1 |
@@ -25,18 +27,18 @@ _Last updated: 2026-06-18T12:18:41.665Z_
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
-| VirtualReality - Professional Web Services & Digital Marketing Agency | info@virtualreality.com.pk | sent | 1 | 2026-06-18 09:05 |
-| Digiown Agency - Best SEO Services In Karachi, Pakistan | support@digiown.agency | sent | 1 | 2026-06-18 09:04 |
-| Monarch Seo Agency | Professional SEO Company in Karachi, Pakistan | contact@seomyagency.com | sent | 1 | 2026-06-18 09:03 |
-| Bali Enterprises Builders And Developers | info@thebalibuilders.com | sent | 1 | 2026-06-18 09:01 |
-| Property Point - Estate & Builders | info@propertypoint.com.pk | sent | 1 | 2026-06-18 08:59 |
-| Web Developers Academy | info@webdevelopersacademy.com | sent | 1 | 2026-06-18 08:57 |
-| Aish Tycoons (Web Development Company) | info@aishtycoons.com | sent | 1 | 2026-06-18 08:56 |
-| Website Design & eCommerce Development Company In Pakistan | sales@webtors.com | sent | 1 | 2026-06-18 08:54 |
-| Expertizo | info@expertizo.pk | sent | 1 | 2026-06-18 08:53 |
-| Global Dezigns - Website development Company | info@globaldezigns.com | sent | 1 | 2026-06-18 08:52 |
-| Jahan Numa Estate | jahan.numa.estate@gmail.com | sent | 1 | 2026-06-18 08:50 |
-| Digital Flag - Digital Marketing Agency | webmaster@digitalflag.org | bounced | 1 | 2026-06-18 08:49 |
-| Crezy No | Digital Marketing Agency Pakistan | info@crezyno.com | sent | 1 | 2026-06-18 08:48 |
-| Swiftwave Digital - Digital Marketing Agency in Bahria Town, Phase 4, Rawalpindi | info@swiftwavedigital.com | sent | 1 | 2026-06-18 08:46 |
-| Operations PRO Digital Marketing Agency | info@operationspro.pk | sent | 1 | 2026-06-18 08:46 |
+| Pelotech | henry.anderson@pelo.tech | sent | 1 | 2026-06-18 16:07 |
+| Estuary | careers@estuary.dev | sent | 1 | 2026-06-18 16:06 |
+| Hatchet | alexander@hatchet.run | sent | 1 | 2026-06-18 16:05 |
+| SEEKING WORK | dmitriy.finswim@gmail.com | sent | 1 | 2026-06-18 16:05 |
+| Servicing Copilot | info@readifinancial.com | sent | 1 | 2026-06-18 16:03 |
+| Fusionbox | info@fusionbox.com | sent | 1 | 2026-06-18 16:02 |
+| Ohr | ai@ohr.xyz | sent | 1 | 2026-06-18 16:00 |
+| Senior Python Backend Engineer | hiring@reef.pl | sent | 1 | 2026-06-18 15:58 |
+| Bit Technologies - Website development Company / Software House Karachi | contact@bittechnologies.co | sent | 1 | 2026-06-18 15:57 |
+| MongoDB | hani.benhabiles+hn@mongodb.com | sent | 1 | 2026-06-18 15:56 |
+| Hotwash | hiring@hotwash.com | sent | 1 | 2026-06-18 15:55 |
+| Coder | careers@coder.com | sent | 1 | 2026-06-18 15:53 |
+| Storetasker | experts@storetasker.com | sent | 1 | 2026-06-18 15:52 |
+| SEO Lahore (SEO Services In Lahore, Web Development Company In Lahore) | 9343393info@seolahore.com | sent | 1 | 2026-06-18 15:51 |
+| Website & Mobile App Development Company | Software Development Company Karachi | High On Cyber | info@highoncyber.com | sent | 1 | 2026-06-18 15:49 |
