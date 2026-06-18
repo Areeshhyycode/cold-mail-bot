@@ -52,37 +52,50 @@ ${pixel}
 }
 
 /**
- * Ek email bhejta hai (unsubscribe footer + header automatic add hote hain).
- * Agar TRACK_BASE_URL set hai aur leadId diya hai, to HTML + open-tracking pixel bhejta hai.
- * @param {object} opts - { to, subject, text, leadId, attachments }
+ * Ek email bhejta hai.
+ *
+ * SERVICE (agency) emails: unsubscribe footer + List-Unsubscribe header + open-tracking
+ *   pixel automatic lagte hain (cold marketing ke liye CAN-SPAM/GDPR compliance zaroori).
+ *
+ * JOB application emails (leadType === "JOB"): clean bheji jati hain — koi unsubscribe
+ *   footer/header nahi, koi tracking pixel nahi. Job application pe "unsubscribe" likhna
+ *   unprofessional lagta hai. Signature already body me hota hai (jobEmail.js se).
+ *
+ * @param {object} opts - { to, subject, text, leadId, attachments, leadType }
  *   attachments: nodemailer attachments array, e.g. [{ filename, path }]
  */
-export async function sendEmail({ to, subject, text, leadId, attachments }) {
+export async function sendEmail({ to, subject, text, leadId, attachments, leadType }) {
   const t = getTransporter();
   const fromName = process.env.SENDER_NAME || "Areesha Rafiq";
   const sender = process.env.SMTP_USER;
 
-  const useTracking = TRACK_BASE && leadId;
-  const listUnsub = useTracking
-    ? `<${TRACK_BASE}/unsubscribe?id=${leadId}>, <mailto:${sender}?subject=Unsubscribe>`
-    : `<mailto:${sender}?subject=Unsubscribe>`;
+  const isJob = leadType === "JOB";
+  const useTracking = TRACK_BASE && leadId && !isJob; // job emails track nahi karte
 
   const mail = {
     from: `"${fromName}" <${sender}>`,
     to,
     subject,
-    text: text + footerText(leadId),
-    // List-Unsubscribe header — Gmail/Outlook isse "Unsubscribe" button dikhate hain
-    headers: {
+    // JOB: plain professional body (no footer). SERVICE: unsubscribe footer add karo.
+    text: isJob ? text : text + footerText(leadId),
+  };
+
+  // List-Unsubscribe header sirf SERVICE (marketing) emails pe — job apps pe nahi
+  if (!isJob) {
+    const listUnsub =
+      TRACK_BASE && leadId
+        ? `<${TRACK_BASE}/unsubscribe?id=${leadId}>, <mailto:${sender}?subject=Unsubscribe>`
+        : `<mailto:${sender}?subject=Unsubscribe>`;
+    mail.headers = {
       "List-Unsubscribe": listUnsub,
       "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
-    },
-  };
+    };
+  }
 
   // CV / portfolio jaise attachments (job applications ke liye)
   if (Array.isArray(attachments) && attachments.length) mail.attachments = attachments;
 
-  // tracking on ho to HTML bhi bhejo (pixel ke liye HTML zaroori)
+  // tracking on ho to HTML bhi bhejo (pixel ke liye HTML zaroori) — sirf SERVICE
   if (useTracking) mail.html = buildHtml(text, leadId);
 
   const info = await t.sendMail(mail);

@@ -18,16 +18,14 @@ import * as cheerio from "cheerio";
 import { fileURLToPath } from "url";
 import { connectDB, disconnectDB } from "../db/connect.js";
 import { saveLeads } from "./ingest.js";
+import { extractEmailsFromText } from "./emailExtractor.js";
 import { ROLE_KEYWORDS } from "../ai/intent.js";
 
 dotenv.config();
 
-const EMAIL_RE = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,24}/g;
-const BAD = ["example.com", ".png", ".jpg", ".svg", "u/", "reddit.com", "@2x", "removed", "sentry.io"];
-
+// shared strict filter — placeholder/junk (email@example.org, your@…) block ho jate hain
 function findEmail(text = "") {
-  const hits = [...new Set((text.match(EMAIL_RE) || []).map((e) => e.toLowerCase()))];
-  return hits.find((e) => !BAD.some((b) => e.includes(b))) || "";
+  return extractEmailsFromText(text)[0] || "";
 }
 
 function strip(text = "") {

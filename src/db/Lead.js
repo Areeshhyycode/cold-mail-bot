@@ -89,6 +89,7 @@ const leadSchema = new mongoose.Schema(
         "unsubscribed",
         "done",
         "bounced",
+        "skipped",
       ],
       default: "new",
     },

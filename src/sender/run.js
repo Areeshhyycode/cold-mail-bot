@@ -98,6 +98,7 @@ async function main() {
         text: lead.body,
         leadId: lead._id.toString(),
         attachments,
+        leadType: lead.leadType,
       });
 
       lead.status = "sent";

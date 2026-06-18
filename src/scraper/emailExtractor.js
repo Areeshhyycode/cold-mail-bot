@@ -2,10 +2,11 @@ import * as cheerio from "cheerio";
 
 const EMAIL_RE = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
 
-// in emails ko skip karo (junk / placeholder)
-const BAD_PATTERNS = [
+// junk SUBSTRINGS — email me kahin bhi mile to reject (placeholder domains, image files)
+const BAD_SUBSTRINGS = [
   "example.com",
   "example.org",
+  "example.net",
   "domain.com",
   "yourdomain",
   "sentry.io",
@@ -18,15 +19,29 @@ const BAD_PATTERNS = [
   ".svg",
   "@2x",
   "your-email",
-  "your@",
-  "email@",
-  "name@",
-  "user@",
   "info@email",
-  "test@",
-  "abc@",
   "@email.",
+  "@domain.",
 ];
+
+// placeholder LOCAL-PARTS (@ se pehle wala hissa) — sirf tab junk jab PURA local part
+// yahi ho. (Pehle "user@" substring match karta tha jisse "thanhaeuser@bitcap.com"
+// jaise asli email galti se reject ho jate the.)
+const BAD_LOCALPARTS = new Set([
+  "your",
+  "email",
+  "name",
+  "user",
+  "username",
+  "test",
+  "abc",
+  "xyz",
+  "example",
+  "noreply",
+  "no-reply",
+  "donotreply",
+  "do-not-reply",
+]);
 
 // asli email ka strict format (TLD 2-24 letters)
 const VALID_EMAIL = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,24}$/;
@@ -35,8 +50,21 @@ function cleanEmails(emails) {
   return [...new Set(emails)].filter((e) => {
     const low = e.toLowerCase().trim();
     if (!VALID_EMAIL.test(low)) return false;
-    return !BAD_PATTERNS.some((bad) => low.includes(bad));
+    if (BAD_SUBSTRINGS.some((bad) => low.includes(bad))) return false;
+    if (BAD_LOCALPARTS.has(low.split("@")[0])) return false; // exact local-part match only
+    return true;
   });
+}
+
+/**
+ * Kisi bhi free text (job description, post body) me se valid emails nikaalta hai,
+ * placeholder/junk (email@example.org, your@…, info@email…) filter karke.
+ * jobBoards.js isko reuse karta hai taaki sample emails galti se na bhej dein.
+ * @param {string} text
+ * @returns {string[]}
+ */
+export function extractEmailsFromText(text = "") {
+  return cleanEmails(String(text).match(EMAIL_RE) || []);
 }
 
 /**
