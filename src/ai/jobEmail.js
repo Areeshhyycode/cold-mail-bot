@@ -101,8 +101,17 @@ JSON return karo EXACTLY is format me. English only, professional & confident (o
 
   const links = Object.entries(profile.links).map(([k, v]) => `${k}: ${v}`);
 
+  // company naam aksar Google Maps/HN se lamba ya SEO-stuffed hota hai
+  // (e.g. "Best Web Dev & Digital Marketing... - Siwtech."). Greeting me sirf short,
+  // clean naam use karo; warna neutral "Hello," — taaki greeting professional rahe.
+  const greetName =
+    company && company.length <= 32 && !/[|–—]|services|solutions|company|marketing/i.test(company)
+      ? company.replace(/[.,]+$/, "").trim()
+      : "";
+  const greeting = greetName ? `Hi ${greetName} team,` : "Hello,";
+
   const body = [
-    `Hi ${company} team,`,
+    greeting,
     "",
     opener,
     "",
