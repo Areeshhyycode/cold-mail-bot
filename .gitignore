@@ -10,8 +10,8 @@ config.bat
 .env.*
 !.env.example
 
-# CV (personal info)
-assets/cv.pdf
+# NOTE: assets/cv.pdf intentionally committed (user chose public) so cloud
+# (GitHub Actions) job emails can attach it.
 
 # large accidental dumps
 files.txt
