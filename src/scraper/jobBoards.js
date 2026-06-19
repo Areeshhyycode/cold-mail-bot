@@ -19,7 +19,7 @@ import { fileURLToPath } from "url";
 import { connectDB, disconnectDB } from "../db/connect.js";
 import { saveLeads } from "./ingest.js";
 import { extractEmailsFromText } from "./emailExtractor.js";
-import { ROLE_KEYWORDS } from "../ai/intent.js";
+import { ROLE_KEYWORDS, isSeniorRole } from "../ai/intent.js";
 
 dotenv.config();
 
@@ -198,7 +198,12 @@ export async function scrapeAllJobBoards(keyword = "") {
       console.log(`   ⚠️  ${names[i]} fail: ${r.reason.message}`);
     }
   });
-  return leads;
+
+  // SENIOR roles (5+ years / Lead / Principal / Manager) drop karo — user ~1 saal
+  // experience hai, junior/internship target hai. Remote + onsite dono allowed.
+  const junior = leads.filter((l) => !isSeniorRole(`${l.jobTitle} ${l.jobDescription}`));
+  console.log(`   🎯 senior roles skipped: ${leads.length - junior.length} | junior/mid bache: ${junior.length}`);
+  return junior;
 }
 
 /* ---------------------------------- main ---------------------------------- */

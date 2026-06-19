@@ -21,6 +21,7 @@
     "clean-emails": "node src/db/cleanBadEmails.js",
     "fix-greetings": "node src/db/fixGreetings.js",
     "followup": "node src/sender/followup.js",
+    "warm": "node src/warm.js",
     "report": "node src/report.js",
     "replycheck": "node src/tracker/replyChecker.js",
     "daily": "node src/daily.js",

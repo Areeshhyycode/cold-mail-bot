@@ -7,6 +7,7 @@
  */
 import { Lead } from "../db/Lead.js";
 import { classify } from "../ai/intent.js";
+import { normalizeEmail, isJobSeekerPost } from "./targetFilter.js";
 
 const CAMPAIGN = process.env.CAMPAIGN || "default";
 
@@ -18,7 +19,8 @@ const CAMPAIGN = process.env.CAMPAIGN || "default";
  * @returns {Promise<"created"|"dup"|"skipped">}
  */
 export async function saveLead(raw = {}) {
-  const email = (raw.email || "").toLowerCase().trim();
+  // glued phone/junk digits saaf karo ("9343393info@x.com" -> "info@x.com")
+  const email = normalizeEmail(raw.email || "");
 
   // text jisse intent/score nikaalte hain
   const text = [raw.jobTitle, raw.jobDescription, raw.company, raw.businessName, raw.niche, raw.title]
@@ -27,6 +29,10 @@ export async function saveLead(raw = {}) {
 
   // koi useful identity hi nahi -> skip
   if (!email && !raw.jobUrl) return "skipped";
+
+  // JOB-SEEKER post (HN "Who wants to be hired?" wale log) -> hum employer nahi
+  // dhoond rahe inse; inhe DB me daalna hi waste hai.
+  if (isJobSeekerPost(text, raw.company || raw.businessName)) return "skipped";
 
   const { intent, score } = classify(text, { hasEmail: Boolean(email) });
   const leadType =

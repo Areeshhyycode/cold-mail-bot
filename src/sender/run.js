@@ -1,8 +1,9 @@
 import dotenv from "dotenv";
 import { connectDB, disconnectDB } from "../db/connect.js";
 import { Lead } from "../db/Lead.js";
-import { sendEmail, randomDelay } from "./mailer.js";
+import { sendEmail, randomDelay, verifyConnection } from "./mailer.js";
 import { getCvAttachment } from "../ai/profile.js";
+import { jobLeadSendable } from "../scraper/targetFilter.js";
 
 dotenv.config();
 
@@ -43,6 +44,14 @@ const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 async function main() {
   await connectDB();
 
+  // preflight: SMTP login/connection sahi hai? warna 40 "sent" log honge par
+  // asal me kuch deliver nahi hoga. Yahan jaldi fail karo.
+  if (!(await verifyConnection())) {
+    console.log("🛑 SMTP connection/auth fail — Gmail App Password (.env SMTP_PASS) check karo. Kuch nahi bheja.");
+    await disconnectDB();
+    return;
+  }
+
   const dailyLimit = parseInt(process.env.DAILY_SEND_LIMIT || "40", 10);
 
   // aaj ab tak kitne first-emails bheje? (taaki workflow din me kai baar chale
@@ -78,8 +87,23 @@ async function main() {
 
   let sent = 0;
   let dupSkipped = 0;
+  let lowQuality = 0;
   for (const lead of leads) {
     try {
+      // JOB leads: generic inbox (info@/contact@) ya job-seeker post pe bhejna bekaar
+      // hai — ye hi 0% reply-rate ki sabse badi wajah thi. SERVICE leads pe ye filter
+      // nahi (woh business ko pitch karte hain, info@ bilkul valid hai).
+      if (lead.leadType === "JOB") {
+        const q = jobLeadSendable(lead);
+        if (!q.ok) {
+          lead.status = "skipped";
+          await lead.save();
+          lowQuality++;
+          console.log(`   ⏭️  ${lead.email} — ${q.reason}, skip`);
+          continue;
+        }
+      }
+
       // same company doosre address pe already contact ho chuki? to skip (no double-mailing)
       const twin = await alreadyContactedCompany(lead);
       if (twin) {
@@ -92,7 +116,7 @@ async function main() {
 
       // JOB leads ke saath CV attach karo; service leads ke saath nahi
       const attachments = lead.leadType === "JOB" ? cv : [];
-      await sendEmail({
+      const result = await sendEmail({
         to: lead.email,
         subject: lead.subject,
         text: lead.body,
@@ -101,14 +125,16 @@ async function main() {
         leadType: lead.leadType,
       });
 
-      lead.status = "sent";
+      // SMTP ne accept kiya? to "sent", warna "bounced" (taaki report sach dikhaye)
+      const delivered = result?.delivered !== false;
+      lead.status = delivered ? "sent" : "bounced";
       lead.currentStep = 0;
       lead.lastSentAt = new Date();
       lead.sentCount += 1;
       await lead.save();
 
       sent++;
-      console.log(`   ✅ ${lead.email} (${sent}/${leads.length})`);
+      console.log(`   ${delivered ? "✅" : "⚠️ "} ${lead.email} (${sent}/${leads.length})`);
 
       // human-like random delay (aakhri ke baad nahi)
       if (sent < leads.length) {
@@ -126,7 +152,11 @@ async function main() {
     }
   }
 
-  console.log(`\n📊 ${sent} emails bheje gaye${dupSkipped ? `, ${dupSkipped} duplicate company skip` : ""}`);
+  console.log(
+    `\n📊 ${sent} emails bheje gaye` +
+      (dupSkipped ? `, ${dupSkipped} duplicate company skip` : "") +
+      (lowQuality ? `, ${lowQuality} low-quality target skip (generic inbox / job-seeker)` : "")
+  );
   await disconnectDB();
 }
 

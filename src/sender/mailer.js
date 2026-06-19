@@ -99,7 +99,39 @@ export async function sendEmail({ to, subject, text, leadId, attachments, leadTy
   if (useTracking) mail.html = buildHtml(text, leadId);
 
   const info = await t.sendMail(mail);
-  return info.messageId;
+
+  // DELIVERABILITY VISIBILITY — pehle hum blind the (sirf messageId milta tha).
+  // Ab dekho SMTP server ne kya accept/reject kiya. Agar `to` rejected me hai ya
+  // accepted me nahi, to delivery FAIL hui (chahe exception na aaye).
+  const accepted = info.accepted || [];
+  const rejected = info.rejected || [];
+  const ok = accepted.map((a) => String(a).toLowerCase()).includes(String(to).toLowerCase());
+  if (rejected.length || !ok) {
+    console.log(`   ⚠️  delivery doubtful → ${to} | accepted: [${accepted}] rejected: [${rejected}] | ${info.response || ""}`);
+  }
+
+  return {
+    messageId: info.messageId,
+    accepted,
+    rejected,
+    delivered: ok && !rejected.length,
+    response: info.response || "",
+  };
+}
+
+/**
+ * SMTP connection + auth verify karta hai (bina email bheje). Daily run se pehle
+ * call karke confirm karo ke Gmail App Password sahi hai aur server reachable.
+ * @returns {Promise<boolean>}
+ */
+export async function verifyConnection() {
+  try {
+    await getTransporter().verify();
+    return true;
+  } catch (err) {
+    console.log(`   ❌ SMTP verify fail: ${err.message}`);
+    return false;
+  }
 }
 
 // random delay (seconds) — taaki robot na lage

@@ -86,7 +86,54 @@ const SERVICE_PHRASES = [
   "improve our website",
 ];
 
+// Karachi onsite AUR remote dono chalte hain (user: Karachi me onsite, baqi remote)
 const LOCATION_KEYWORDS = ["karachi", "lahore", "islamabad", "pakistan", "remote"];
+
+// SENIOR roles (user ~1 saal experience hai, inhe avoid karna hai)
+const SENIOR_KEYWORDS = [
+  "senior",
+  "sr.",
+  "sr ",
+  "lead ",
+  " lead",
+  "principal",
+  "staff ",
+  "architect",
+  "manager",
+  "director",
+  "head of",
+  " vp",
+  "vp ",
+  "5+ years",
+  "6+ years",
+  "7+ years",
+  "8+ years",
+  "9+ years",
+  "10+ years",
+  "5+ yrs",
+  "6+ yrs",
+  "7+ yrs",
+];
+
+// JUNIOR / ~1-year roles (user ke level ke — inhe boost karna hai)
+const JUNIOR_KEYWORDS = [
+  "junior",
+  "jr.",
+  "jr ",
+  "entry level",
+  "entry-level",
+  "graduate",
+  "intern",
+  "internship",
+  "associate",
+  "fresh",
+  "0-2 year",
+  "1 year",
+  "1+ year",
+  "1-2 year",
+  "1 to 2 year",
+  "2 years",
+];
 
 function normalize(text = "") {
   return String(text).toLowerCase();
@@ -94,6 +141,16 @@ function normalize(text = "") {
 
 function anyHit(haystack, needles) {
   return needles.some((n) => haystack.includes(n));
+}
+
+/** Senior role hai? (5+ years / Lead / Principal etc.) */
+export function isSeniorRole(text = "") {
+  return anyHit(normalize(text), SENIOR_KEYWORDS);
+}
+
+/** Junior / ~1-year experience friendly role hai? */
+export function isJuniorFriendly(text = "") {
+  return anyHit(normalize(text), JUNIOR_KEYWORDS);
 }
 
 /**
@@ -129,13 +186,18 @@ export function scoreLead({ text = "", intent, hasEmail = false } = {}) {
   const finalIntent = intent || detectIntent(t);
   if (finalIntent !== "HYBRID") score += 25;
 
-  // location relevance (karachi/remote etc.)
+  // location relevance (karachi onsite YA remote — dono theek)
   if (anyHit(t, LOCATION_KEYWORDS)) score += 15;
 
   // direct email = ready to outreach (sabse valuable)
   if (hasEmail) score += 20;
 
-  return Math.min(score, 100);
+  // experience-level fit: junior/~1-year roles boost, senior roles down-rank
+  // (Karachi software houses ke speculative leads me JD nahi hota -> senior nahi lagte)
+  if (isJuniorFriendly(t)) score += 15;
+  if (isSeniorRole(t)) score -= 30;
+
+  return Math.max(0, Math.min(score, 100));
 }
 
 /**
