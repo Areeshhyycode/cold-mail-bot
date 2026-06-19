@@ -1,44 +1,44 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-18T16:08:04.944Z_
+_Last updated: 2026-06-19T10:01:13.606Z_
 
 ## Summary
 
 | Metric | Value |
 |---|---|
-| Total leads | 174 |
-| Emails sent (unique leads) | 52 |
-| Sent today | 42 |
-| Replies | 0 |
-| Reply rate | 0.0% |
+| Total leads | 201 |
+| Emails sent (unique leads) | 92 |
+| Sent today | 43 |
+| Replies | 1 |
+| Reply rate | 1.1% |
 
 ## Leads by status
 
 | Status | Count |
 |---|---|
-| new | 88 |
-| sent | 40 |
-| ready | 29 |
+| ready | 101 |
+| sent | 79 |
 | done | 12 |
-| bounced | 4 |
+| bounced | 7 |
 | unsubscribed | 1 |
+| replied | 1 |
 
 ## Recent activity (last 15)
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
-| Pelotech | henry.anderson@pelo.tech | sent | 1 | 2026-06-18 16:07 |
-| Estuary | careers@estuary.dev | sent | 1 | 2026-06-18 16:06 |
-| Hatchet | alexander@hatchet.run | sent | 1 | 2026-06-18 16:05 |
-| SEEKING WORK | dmitriy.finswim@gmail.com | sent | 1 | 2026-06-18 16:05 |
-| Servicing Copilot | info@readifinancial.com | sent | 1 | 2026-06-18 16:03 |
-| Fusionbox | info@fusionbox.com | sent | 1 | 2026-06-18 16:02 |
-| Ohr | ai@ohr.xyz | sent | 1 | 2026-06-18 16:00 |
-| Senior Python Backend Engineer | hiring@reef.pl | sent | 1 | 2026-06-18 15:58 |
-| Bit Technologies - Website development Company / Software House Karachi | contact@bittechnologies.co | sent | 1 | 2026-06-18 15:57 |
-| MongoDB | hani.benhabiles+hn@mongodb.com | sent | 1 | 2026-06-18 15:56 |
-| Hotwash | hiring@hotwash.com | sent | 1 | 2026-06-18 15:55 |
-| Coder | careers@coder.com | sent | 1 | 2026-06-18 15:53 |
-| Storetasker | experts@storetasker.com | sent | 1 | 2026-06-18 15:52 |
-| SEO Lahore (SEO Services In Lahore, Web Development Company In Lahore) | 9343393info@seolahore.com | sent | 1 | 2026-06-18 15:51 |
-| Website & Mobile App Development Company | Software Development Company Karachi | High On Cyber | info@highoncyber.com | sent | 1 | 2026-06-18 15:49 |
+| BrightCore | frankie@brightcore.ie | sent | 1 | 2026-06-19 10:01 |
+| Viam | amanda@viam.com | sent | 1 | 2026-06-19 10:00 |
+| Monk | george@monk.com | sent | 1 | 2026-06-19 09:59 |
+| Modal | can@modal.com | sent | 1 | 2026-06-19 09:59 |
+| z0.ai | join@z0.ai | sent | 1 | 2026-06-19 09:57 |
+| Northstar Security | alex@northstar.security | sent | 1 | 2026-06-19 09:57 |
+| Uber | bert@segments.ai | sent | 1 | 2026-06-19 09:56 |
+| Strobe Power | keeley@strobepower.com | sent | 1 | 2026-06-19 09:55 |
+| Authorium | jay@authorium.com | sent | 1 | 2026-06-19 09:55 |
+| Kepler | eddie.hammond@kepler.ai | sent | 1 | 2026-06-19 09:54 |
+| Bucket Robotics (YC S24) | ben@bucket.bot | sent | 1 | 2026-06-19 09:52 |
+| Guac (YC S23) | jack@guac-ai.com | sent | 1 | 2026-06-19 09:51 |
+| Stpkr Technologies | arnav@stpkr.in | sent | 1 | 2026-06-19 09:49 |
+| Opaxa | colton@opaxa.ai | sent | 1 | 2026-06-19 09:48 |
+|  | lazarbukejlovic@icloud.com | sent | 1 | 2026-06-19 09:47 |
