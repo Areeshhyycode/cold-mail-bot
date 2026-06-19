@@ -1,28 +1,28 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-19T12:42:43.791Z_
+_Last updated: 2026-06-19T20:47:15.951Z_
 
 ## Summary
 
 | Metric | Value |
 |---|---|
-| Total leads | 201 |
+| Total leads | 211 |
 | Emails sent (unique leads) | 93 |
 | Sent today | 44 |
-| Replies | 1 |
-| Reply rate | 1.1% |
+| Replies | 2 |
+| Reply rate | 2.2% |
 
 ## Leads by status
 
 | Status | Count |
 |---|---|
-| sent | 80 |
-| ready | 76 |
+| ready | 86 |
+| sent | 79 |
 | skipped | 24 |
 | done | 12 |
 | bounced | 7 |
+| replied | 2 |
 | unsubscribed | 1 |
-| replied | 1 |
 
 ## Recent activity (last 15)
 
