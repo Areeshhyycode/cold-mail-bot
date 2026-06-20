@@ -1,45 +1,45 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-19T21:55:47.780Z_
+_Last updated: 2026-06-20T08:36:48.928Z_
 
 ## Summary
 
 | Metric | Value |
 |---|---|
-| Total leads | 211 |
-| Emails sent (unique leads) | 93 |
-| Sent today | 44 |
+| Total leads | 218 |
+| Emails sent (unique leads) | 139 |
+| Sent today | 47 |
 | Replies | 2 |
-| Reply rate | 2.2% |
+| Reply rate | 1.4% |
 
 ## Leads by status
 
 | Status | Count |
 |---|---|
-| ready | 86 |
-| sent | 79 |
+| sent | 125 |
+| ready | 46 |
 | skipped | 24 |
 | done | 12 |
 | bounced | 7 |
+| unsubscribed | 2 |
 | replied | 2 |
-| unsubscribed | 1 |
 
 ## Recent activity (last 15)
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
-| Everflow | everflow-hn@everflow.io | sent | 1 | 2026-06-19 10:02 |
-| Kepler | eddie.hammond@kepler.ai | sent | 1 | 2026-06-19 10:01 |
-| BrightCore | frankie@brightcore.ie | sent | 1 | 2026-06-19 10:01 |
-| Viam | amanda@viam.com | sent | 1 | 2026-06-19 10:00 |
-| Monk | george@monk.com | sent | 1 | 2026-06-19 09:59 |
-| Modal | can@modal.com | sent | 1 | 2026-06-19 09:59 |
-| z0.ai | join@z0.ai | sent | 1 | 2026-06-19 09:57 |
-| Northstar Security | alex@northstar.security | sent | 1 | 2026-06-19 09:57 |
-| Uber | bert@segments.ai | sent | 1 | 2026-06-19 09:56 |
-| Strobe Power | keeley@strobepower.com | sent | 1 | 2026-06-19 09:55 |
-| Authorium | jay@authorium.com | sent | 1 | 2026-06-19 09:55 |
-| Bucket Robotics (YC S24) | ben@bucket.bot | sent | 1 | 2026-06-19 09:52 |
-| Guac (YC S23) | jack@guac-ai.com | sent | 1 | 2026-06-19 09:51 |
-| Stpkr Technologies | arnav@stpkr.in | sent | 1 | 2026-06-19 09:49 |
-| Opaxa | colton@opaxa.ai | sent | 1 | 2026-06-19 09:48 |
+| ICT Systems PVT Ltd. | info@ictsystems.com.pk | sent | 1 | 2026-06-20 08:36 |
+| Creative Souls (Software house in Karachi) | info@creativesouls.net | sent | 1 | 2026-06-20 08:36 |
+| Arpatech (Pvt) Ltd. | info@arpatech.com | sent | 1 | 2026-06-20 08:35 |
+| Genetech Solutions | info@genetech.co | sent | 1 | 2026-06-20 08:34 |
+| 10Pearls | info@10pearls.com | sent | 1 | 2026-06-20 08:33 |
+| Advertlance - Digital Marketing Agency | hello@advertlance.pk | sent | 1 | 2026-06-20 08:32 |
+| Cloud Lab Pvt Ltd | brunn@select-themes.com | sent | 1 | 2026-06-20 08:32 |
+| CIS PVT LTD | info@cispl.com | sent | 1 | 2026-06-20 08:30 |
+| Technomide Software House & Freelancing Academy | info@technomide.com | sent | 1 | 2026-06-20 08:29 |
+| AalaWeb Development, Design and Marketing Service | aalawebdesign@gmail.com | sent | 1 | 2026-06-20 08:29 |
+| Software Channel (Pvt.) Ltd. | info@softchan.com | sent | 1 | 2026-06-20 08:28 |
+| Tafsol Technologies (Private) Limited | info@tafsol.com | sent | 1 | 2026-06-20 08:27 |
+| Aymeetech Software House | info@aymeetech.com | sent | 1 | 2026-06-20 08:27 |
+| Sands Tech | info@sandstech.org | sent | 1 | 2026-06-20 08:26 |
+| Reliable Technologies | info@reliabletech.pk | sent | 1 | 2026-06-20 08:25 |
