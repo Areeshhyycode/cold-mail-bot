@@ -58,15 +58,28 @@ jobs:
         continue-on-error: true
         run: npm run daily
 
+      # Report commit/push. continue-on-error: true taaki agar 5 schedules ek saath
+      # chalein aur push race (non-fast-forward) ho to poori run "failed" na dikhe —
+      # emails to ja chuki hoti hain. Push se pehle rebase + 3 retries.
       - name: Commit & push report
         if: always()
+        continue-on-error: true
         run: |
           git config user.name "cold-mail-bot"
           git config user.email "bot@users.noreply.github.com"
           git add logs/report.md
           if git diff --staged --quiet; then
             echo "No changes to report"
-          else
-            git commit -m "📊 Daily report: $(date -u +'%Y-%m-%d %H:%M UTC')"
-            git push
+            exit 0
           fi
+          git commit -m "📊 Daily report: $(date -u +'%Y-%m-%d %H:%M UTC')"
+          for i in 1 2 3; do
+            git pull --rebase --autostash origin main || true
+            if git push origin HEAD:main; then
+              echo "✅ report pushed"
+              exit 0
+            fi
+            echo "push race (try $i) — retrying..."
+            sleep 5
+          done
+          echo "⚠️ report push skipped (push race) — emails already sent, ignoring"
