@@ -1,33 +1,38 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-20T11:10:01.409Z_
+_Last updated: 2026-06-20T20:29:54.105Z_
 
 ## Summary
 
 | Metric | Value |
 |---|---|
-| Total leads | 218 |
-| Emails sent (unique leads) | 137 |
-| Sent today | 47 |
+| Total leads | 221 |
+| Emails sent (unique leads) | 141 |
+| Sent today | 52 |
 | Replies | 2 |
-| Reply rate | 1.5% |
+| Reply rate | 1.4% |
 
 ## Leads by status
 
 | Status | Count |
 |---|---|
-| sent | 123 |
-| ready | 46 |
+| sent | 127 |
+| ready | 44 |
 | skipped | 24 |
 | done | 12 |
 | bounced | 9 |
-| unsubscribed | 2 |
+| unsubscribed | 3 |
 | replied | 2 |
 
 ## Recent activity (last 15)
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
+| DigiTrends | info@digitrends.co | sent | 1 | 2026-06-20 20:14 |
+| Web Innovation | info@webinnovation.net | unsubscribed | 1 | 2026-06-20 20:13 |
+| Webnet Pakistan Pvt Ltd | info@webnetpk.com | sent | 1 | 2026-06-20 20:11 |
+| Salsoft Technologies | connecthr@salsoft.net | sent | 1 | 2026-06-20 20:10 |
+| Top SEO | info@topseo.com.pk | sent | 1 | 2026-06-20 20:09 |
 | Best Software Company in Karachi Pakistan | hello@itechavengers.com | sent | 1 | 2026-06-20 08:39 |
 | Arpatech (Pvt) Ltd. | info@arpatech.com | sent | 1 | 2026-06-20 08:37 |
 | ICT Systems PVT Ltd. | info@ictsystems.com.pk | sent | 1 | 2026-06-20 08:36 |
@@ -38,8 +43,3 @@ _Last updated: 2026-06-20T11:10:01.409Z_
 | Cloud Lab Pvt Ltd | brunn@select-themes.com | bounced | 1 | 2026-06-20 08:32 |
 | CIS PVT LTD | info@cispl.com | sent | 1 | 2026-06-20 08:30 |
 | Technomide Software House & Freelancing Academy | info@technomide.com | sent | 1 | 2026-06-20 08:29 |
-| AalaWeb Development, Design and Marketing Service | aalawebdesign@gmail.com | sent | 1 | 2026-06-20 08:29 |
-| Software Channel (Pvt.) Ltd. | info@softchan.com | sent | 1 | 2026-06-20 08:28 |
-| Tafsol Technologies (Private) Limited | info@tafsol.com | sent | 1 | 2026-06-20 08:27 |
-| Aymeetech Software House | info@aymeetech.com | sent | 1 | 2026-06-20 08:27 |
-| Sands Tech | info@sandstech.org | sent | 1 | 2026-06-20 08:26 |
