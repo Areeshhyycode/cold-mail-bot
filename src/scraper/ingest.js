@@ -6,7 +6,7 @@
  * agar duplicate ho to create() E11000 throw karta hai jise hum "dup" gin lete hain.
  */
 import { Lead } from "../db/Lead.js";
-import { classify } from "../ai/intent.js";
+import { classify, isRelevantDevRole } from "../ai/intent.js";
 import { normalizeEmail, isJobSeekerPost } from "./targetFilter.js";
 
 const CAMPAIGN = process.env.CAMPAIGN || "default";
@@ -43,6 +43,13 @@ export async function saveLead(raw = {}) {
       : intent === "SERVICE"
       ? "SERVICE"
       : undefined; // HYBRID -> router baad me decide karega (default schema: SERVICE)
+
+  // FIELD FILTER: job-board JOB leads jinka title software/web-dev role NAHI hai
+  // (AI engineer, data, devops, designer, assistant, etc.) -> skip. Speculative
+  // software-house leads (koi jobTitle nahi) exempt — woh general application hai.
+  if (leadType === "JOB" && (raw.jobTitle || "").trim() && !isRelevantDevRole(raw.jobTitle)) {
+    return "skipped";
+  }
 
   const doc = {
     leadType, // undefined ho to schema default (SERVICE) lag jata hai; router phir bhi re-resolve karta hai

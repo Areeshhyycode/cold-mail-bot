@@ -153,6 +153,43 @@ export function isJuniorFriendly(text = "") {
   return anyHit(normalize(text), JUNIOR_KEYWORDS);
 }
 
+// CORE software/web development role keywords — job TITLE me inme se ek hona chahiye
+const DEV_ROLE_TITLE = [
+  "full stack", "full-stack", "fullstack", "front end", "front-end", "frontend",
+  "back end", "back-end", "backend", "mern", "mean", "react", "next.js", "nextjs",
+  "node.js", "nodejs", "node developer", "vue", "angular", "javascript", "typescript",
+  "web developer", "web development", "web app", "software engineer",
+  "software developer", "wordpress developer", "shopify developer", "react native",
+  "mobile app developer", "mobile developer", "app developer", ".net developer",
+];
+
+// OFF-FIELD roles — chahe JD me thodi web tech mile, ye hum target NAHI karte
+// (user MERN/full-stack developer hai — AI/ML, data, devops, design, non-tech skip)
+const OFF_FIELD_ROLE = [
+  "ai engineer", "ml engineer", "machine learning", "data scientist", "data engineer",
+  "data analyst", "devops", "sre", "site reliability", "security engineer", "cybersecurity",
+  "blockchain", "solidity", "designer", "ui/ux", "ux/ui", "assistant", "planner",
+  "recruiter", "marketing", " sales", "accountant", "bookkeep", "copywriter", "writer",
+  "content ", "customer success", "qa engineer", "sdet", "tester", "product manager",
+  "project manager", "scrum master", "business analyst", "human resource", "virtual assistant",
+  "solutions architect", "cloud architect", "game developer", "unity", "unreal",
+  "embedded", "firmware", "hardware",
+];
+
+/**
+ * Job TITLE software/web-development role hai? (user ki field).
+ * Off-field (AI/ML, data, devops, design, non-tech) ko reject karta hai.
+ * Speculative software-house leads ka koi title nahi hota — unpe ye lagao mat.
+ * @param {string} title
+ * @returns {boolean}
+ */
+export function isRelevantDevRole(title = "") {
+  const t = normalize(title);
+  if (!t) return false; // khali/junk title -> skip
+  if (anyHit(t, OFF_FIELD_ROLE)) return false; // off-field -> skip
+  return anyHit(t, DEV_ROLE_TITLE); // core dev role title -> keep
+}
+
 /**
  * @param {string} text
  * @returns {"JOB"|"SERVICE"|"HYBRID"}

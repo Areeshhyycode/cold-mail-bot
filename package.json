@@ -19,6 +19,7 @@
     "send": "node src/sender/run.js",
     "test-send": "node src/sender/testSend.js",
     "clean-emails": "node src/db/cleanBadEmails.js",
+    "clean-offfield": "node src/db/cleanOffField.js",
     "fix-greetings": "node src/db/fixGreetings.js",
     "followup": "node src/sender/followup.js",
     "warm": "node src/warm.js",
