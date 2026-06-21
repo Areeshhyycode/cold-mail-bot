@@ -1,6 +1,6 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-21T09:15:33.404Z_
+_Last updated: 2026-06-21T10:04:52.873Z_
 
 ## Summary
 
@@ -8,7 +8,7 @@ _Last updated: 2026-06-21T09:15:33.404Z_
 |---|---|
 | Total leads | 252 |
 | Emails sent (unique leads) | 168 |
-| Sent today | 43 |
+| Sent today | 48 |
 | Replies | 2 |
 | Reply rate | 1.2% |
 
@@ -16,10 +16,10 @@ _Last updated: 2026-06-21T09:15:33.404Z_
 
 | Status | Count |
 |---|---|
-| sent | 140 |
+| sent | 135 |
 | ready | 46 |
 | skipped | 24 |
-| followup_1 | 14 |
+| followup_1 | 19 |
 | done | 12 |
 | bounced | 11 |
 | unsubscribed | 3 |
@@ -29,6 +29,11 @@ _Last updated: 2026-06-21T09:15:33.404Z_
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
+| VirtualReality - Professional Web Services & Digital Marketing Agency | info@virtualreality.com.pk | followup_1 | 2 | 2026-06-21 10:03 |
+| Digiown Agency - Best SEO Services In Karachi, Pakistan | support@digiown.agency | followup_1 | 2 | 2026-06-21 10:01 |
+| Monarch Seo Agency | Professional SEO Company in Karachi, Pakistan | contact@seomyagency.com | followup_1 | 2 | 2026-06-21 10:01 |
+| Bali Enterprises Builders And Developers | info@thebalibuilders.com | followup_1 | 2 | 2026-06-21 10:00 |
+| Property Point - Estate & Builders | info@propertypoint.com.pk | followup_1 | 2 | 2026-06-21 09:58 |
 | Aish Tycoons (Web Development Company) | info@aishtycoons.com | followup_1 | 2 | 2026-06-21 09:14 |
 | Web Developers Academy | info@webdevelopersacademy.com | followup_1 | 2 | 2026-06-21 09:13 |
 | Website Design & eCommerce Development Company In Pakistan | sales@webtors.com | followup_1 | 2 | 2026-06-21 09:13 |
@@ -39,8 +44,3 @@ _Last updated: 2026-06-21T09:15:33.404Z_
 | Swiftwave Digital - Digital Marketing Agency in Bahria Town, Phase 4, Rawalpindi | info@swiftwavedigital.com | followup_1 | 2 | 2026-06-21 09:06 |
 | Operations PRO Digital Marketing Agency | info@operationspro.pk | followup_1 | 2 | 2026-06-21 09:04 |
 | ZNWebPro - Best SEO Company Pakistan | Top SEO Agency | #1 SEO Services in Pakistan | SEO Marketing Agency | SEO Expert | info@znwebpro.com | followup_1 | 2 | 2026-06-21 09:03 |
-| Boundless Technologies - Web Design & Website Development - Digital Marketing - Graphic Design - Web Hosting | career@boundlesstech.net | followup_1 | 2 | 2026-06-21 09:01 |
-| Kamil Riaz Kara - Karachi Based SEO Specialist | Digital Marketing Consultant & Trainer in Pakistan | info@kamilriazkara.com | followup_1 | 2 | 2026-06-21 09:00 |
-| Hamza and Hamza Law Associates (Corporate Office) | info@hamzaandhamza.com | sent | 1 | 2026-06-21 08:59 |
-| Olive Digital | info@olivedigital.com | followup_1 | 2 | 2026-06-21 08:58 |
-| Interior Decor Islamabad | info@interiordecor.com.pk | sent | 1 | 2026-06-21 08:58 |
