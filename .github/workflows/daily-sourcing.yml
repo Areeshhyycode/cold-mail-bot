@@ -6,7 +6,8 @@ name: Daily Lead Sourcing
 # in leads ko personalize karke bhej deta hai.
 on:
   schedule:
-    - cron: "30 3 * * *" # 8:30 AM PKT (send runs se thoda pehle)
+    - cron: "30 3 * * *"  # 8:30 AM PKT (subah ka send run se thoda pehle)
+    - cron: "30 13 * * *" # 6:30 PM PKT (shaam ko dobara fresh leads)
   workflow_dispatch:
     inputs:
       mode:
