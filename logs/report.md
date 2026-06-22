@@ -1,6 +1,6 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-22T10:57:14.185Z_
+_Last updated: 2026-06-22T12:27:53.876Z_
 
 ## Summary
 
@@ -8,7 +8,7 @@ _Last updated: 2026-06-22T10:57:14.185Z_
 |---|---|
 | Total leads | 264 |
 | Emails sent (unique leads) | 193 |
-| Sent today | 64 |
+| Sent today | 90 |
 | Replies | 3 |
 | Reply rate | 1.6% |
 
@@ -16,11 +16,11 @@ _Last updated: 2026-06-22T10:57:14.185Z_
 
 | Status | Count |
 |---|---|
-| sent | 125 |
-| followup_1 | 53 |
+| sent | 100 |
+| followup_1 | 78 |
 | skipped | 29 |
-| ready | 23 |
-| bounced | 16 |
+| ready | 22 |
+| bounced | 17 |
 | done | 12 |
 | unsubscribed | 3 |
 | replied | 3 |
@@ -29,18 +29,18 @@ _Last updated: 2026-06-22T10:57:14.185Z_
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
-| Branch3D | dcascaval@branch3d.com | followup_1 | 2 | 2026-06-22 10:57 |
-| Radar Labs | tim@radar.com | followup_1 | 2 | 2026-06-22 10:55 |
-| Mitre Media | jobs@mitremedia.com | followup_1 | 2 | 2026-06-22 10:55 |
-| Everflow | everflow-hn@everflow.io | followup_1 | 2 | 2026-06-22 10:54 |
-| SEEKING WORK | dmitriy.finswim@gmail.com | followup_1 | 2 | 2026-06-22 10:54 |
-| ShiftForce LLC | justinb@shiftforce.com | followup_1 | 2 | 2026-06-22 10:53 |
-| Upwave (YC S12) | jason.kelly@upwave.com | followup_1 | 2 | 2026-06-22 10:52 |
-| Babou | careers@babou.ai | followup_1 | 2 | 2026-06-22 10:50 |
-| Karhuno Group &#x2F; https:&#x2F;&#x2F;DearHiringManager.io | lars@dearhiringmanager.io | followup_1 | 2 | 2026-06-22 10:48 |
-| Estuary | careers@estuary.dev | followup_1 | 2 | 2026-06-22 10:47 |
-| Sequent Tech | team@sequentech.io | followup_1 | 2 | 2026-06-22 10:46 |
-| CO-Ver | recruiting@co-ver.com | followup_1 | 2 | 2026-06-22 10:44 |
-| Deep Core Technology | jeff@deepcoretech.com | followup_1 | 2 | 2026-06-22 10:42 |
-|  | lazarbukejlovic@icloud.com | followup_1 | 2 | 2026-06-22 10:41 |
-| 1969 Restaurant | admin@1969restaurant.com | sent | 1 | 2026-06-22 10:40 |
+| Kilobytes Solutions - Premier Web Design, Development, SEO & Social Media Marketing in Karachi, Pakistan | ah@kilobytessolutions.com | followup_1 | 2 | 2026-06-22 12:26 |
+| TechIn Solution | Website Development - Graphic Designing - Digital Marketing Agency | info@techinsolution.com | followup_1 | 2 | 2026-06-22 12:25 |
+| ShehzadOnline | Website Design, Development, Domain, Hosting & SEO Company, Lahore Pakistan. | info@shehzadonline.com | followup_1 | 2 | 2026-06-22 12:23 |
+| Webtrica | Web Designing | Wordpress Designing | SEO | Mobile App Development | Digital Marketing | info@webtrica.com | followup_1 | 2 | 2026-06-22 12:22 |
+| Xperlet | Shopify Store Development | WordPress Website Development Company In Karachi, Pakistan | info@xperlet.com | followup_1 | 2 | 2026-06-22 12:21 |
+| Best Web Development & Digital Marketing Company In Karachi Pakistan - Siwtech SMC-Private Limited. | info@siwtech.com | followup_1 | 2 | 2026-06-22 12:19 |
+| AppsNation Karachi | (Mobile Apps | Games | VR /AR | Metaverse | Web & Software Development Company) | info@appsnation.co | followup_1 | 2 | 2026-06-22 12:18 |
+| Bit Technologies - Website development Company / Software House Karachi | contact@bittechnologies.co | followup_1 | 2 | 2026-06-22 12:17 |
+| Storetasker | experts@storetasker.com | followup_1 | 2 | 2026-06-22 12:15 |
+| Techstack Digital | info@techstackdigital.com | sent | 1 | 2026-06-22 12:15 |
+| Quin | quin@iamquin.ai | followup_1 | 2 | 2026-06-22 11:18 |
+| Ohr | ai@ohr.xyz | followup_1 | 2 | 2026-06-22 11:16 |
+| Aquabyte | gem.openreq@aquabyte.ai | followup_1 | 2 | 2026-06-22 11:16 |
+| Pelotech | henry.anderson@pelo.tech | followup_1 | 2 | 2026-06-22 11:15 |
+| Senior Python Backend Engineer | hiring@reef.pl | followup_1 | 2 | 2026-06-22 11:14 |
