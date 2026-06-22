@@ -1,46 +1,46 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-21T11:40:35.965Z_
+_Last updated: 2026-06-22T10:57:14.185Z_
 
 ## Summary
 
 | Metric | Value |
 |---|---|
-| Total leads | 252 |
-| Emails sent (unique leads) | 168 |
-| Sent today | 48 |
-| Replies | 2 |
-| Reply rate | 1.2% |
+| Total leads | 264 |
+| Emails sent (unique leads) | 193 |
+| Sent today | 64 |
+| Replies | 3 |
+| Reply rate | 1.6% |
 
 ## Leads by status
 
 | Status | Count |
 |---|---|
-| sent | 135 |
-| ready | 46 |
-| skipped | 24 |
-| followup_1 | 19 |
+| sent | 125 |
+| followup_1 | 53 |
+| skipped | 29 |
+| ready | 23 |
+| bounced | 16 |
 | done | 12 |
-| bounced | 11 |
 | unsubscribed | 3 |
-| replied | 2 |
+| replied | 3 |
 
 ## Recent activity (last 15)
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
-| VirtualReality - Professional Web Services & Digital Marketing Agency | info@virtualreality.com.pk | followup_1 | 2 | 2026-06-21 10:03 |
-| Digiown Agency - Best SEO Services In Karachi, Pakistan | support@digiown.agency | followup_1 | 2 | 2026-06-21 10:01 |
-| Monarch Seo Agency | Professional SEO Company in Karachi, Pakistan | contact@seomyagency.com | followup_1 | 2 | 2026-06-21 10:01 |
-| Bali Enterprises Builders And Developers | info@thebalibuilders.com | followup_1 | 2 | 2026-06-21 10:00 |
-| Property Point - Estate & Builders | info@propertypoint.com.pk | followup_1 | 2 | 2026-06-21 09:58 |
-| Aish Tycoons (Web Development Company) | info@aishtycoons.com | followup_1 | 2 | 2026-06-21 09:14 |
-| Web Developers Academy | info@webdevelopersacademy.com | followup_1 | 2 | 2026-06-21 09:13 |
-| Website Design & eCommerce Development Company In Pakistan | sales@webtors.com | followup_1 | 2 | 2026-06-21 09:13 |
-| Expertizo | info@expertizo.pk | followup_1 | 2 | 2026-06-21 09:11 |
-| Global Dezigns - Website development Company | info@globaldezigns.com | followup_1 | 2 | 2026-06-21 09:10 |
-| Jahan Numa Estate | jahan.numa.estate@gmail.com | followup_1 | 2 | 2026-06-21 09:08 |
-| Crezy No | Digital Marketing Agency Pakistan | info@crezyno.com | followup_1 | 2 | 2026-06-21 09:07 |
-| Swiftwave Digital - Digital Marketing Agency in Bahria Town, Phase 4, Rawalpindi | info@swiftwavedigital.com | followup_1 | 2 | 2026-06-21 09:06 |
-| Operations PRO Digital Marketing Agency | info@operationspro.pk | followup_1 | 2 | 2026-06-21 09:04 |
-| ZNWebPro - Best SEO Company Pakistan | Top SEO Agency | #1 SEO Services in Pakistan | SEO Marketing Agency | SEO Expert | info@znwebpro.com | followup_1 | 2 | 2026-06-21 09:03 |
+| Branch3D | dcascaval@branch3d.com | followup_1 | 2 | 2026-06-22 10:57 |
+| Radar Labs | tim@radar.com | followup_1 | 2 | 2026-06-22 10:55 |
+| Mitre Media | jobs@mitremedia.com | followup_1 | 2 | 2026-06-22 10:55 |
+| Everflow | everflow-hn@everflow.io | followup_1 | 2 | 2026-06-22 10:54 |
+| SEEKING WORK | dmitriy.finswim@gmail.com | followup_1 | 2 | 2026-06-22 10:54 |
+| ShiftForce LLC | justinb@shiftforce.com | followup_1 | 2 | 2026-06-22 10:53 |
+| Upwave (YC S12) | jason.kelly@upwave.com | followup_1 | 2 | 2026-06-22 10:52 |
+| Babou | careers@babou.ai | followup_1 | 2 | 2026-06-22 10:50 |
+| Karhuno Group &#x2F; https:&#x2F;&#x2F;DearHiringManager.io | lars@dearhiringmanager.io | followup_1 | 2 | 2026-06-22 10:48 |
+| Estuary | careers@estuary.dev | followup_1 | 2 | 2026-06-22 10:47 |
+| Sequent Tech | team@sequentech.io | followup_1 | 2 | 2026-06-22 10:46 |
+| CO-Ver | recruiting@co-ver.com | followup_1 | 2 | 2026-06-22 10:44 |
+| Deep Core Technology | jeff@deepcoretech.com | followup_1 | 2 | 2026-06-22 10:42 |
+|  | lazarbukejlovic@icloud.com | followup_1 | 2 | 2026-06-22 10:41 |
+| 1969 Restaurant | admin@1969restaurant.com | sent | 1 | 2026-06-22 10:40 |
