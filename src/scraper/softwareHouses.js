@@ -25,11 +25,28 @@ dotenv.config();
 
 // default queries — Karachi ki software houses / IT companies
 const DEFAULT_QUERIES = [
+  // Karachi (onsite target) — alag-alag terms se zyada companies milti hain
   "software house in karachi",
   "software company in karachi",
   "software development company karachi",
   "IT company in karachi",
   "web development company karachi",
+  "web design agency karachi",
+  "mobile app development company karachi",
+  "tech startup karachi",
+  "IT services company karachi",
+  "software house in karachi shahrah e faisal",
+  "software house in karachi gulshan",
+  "software house in clifton karachi",
+  "ecommerce development company karachi",
+  "fintech company karachi",
+  // Lahore + Islamabad (in me se bohat remote/hybrid friendly hoti hain)
+  "software house in lahore",
+  "software company in lahore",
+  "web development company lahore",
+  "software house in islamabad",
+  "software company in islamabad",
+  "IT company rawalpindi",
 ];
 
 /**
