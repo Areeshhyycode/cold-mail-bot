@@ -1,28 +1,28 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-22T21:52:36.964Z_
+_Last updated: 2026-06-23T08:57:59.473Z_
 
 ## Summary
 
 | Metric | Value |
 |---|---|
-| Total leads | 400 |
-| Emails sent (unique leads) | 191 |
-| Sent today | 90 |
+| Total leads | 420 |
+| Emails sent (unique leads) | 217 |
+| Sent today | 62 |
 | Replies | 3 |
-| Reply rate | 1.6% |
+| Reply rate | 1.4% |
 
 ## Leads by status
 
 | Status | Count |
 |---|---|
-| sent | 100 |
-| new | 85 |
-| followup_1 | 76 |
-| ready | 73 |
+| ready | 139 |
+| followup_1 | 112 |
+| sent | 89 |
 | skipped | 29 |
-| bounced | 17 |
-| done | 12 |
+| bounced | 18 |
+| done | 13 |
+| new | 12 |
 | unsubscribed | 5 |
 | replied | 3 |
 
@@ -30,18 +30,18 @@ _Last updated: 2026-06-22T21:52:36.964Z_
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
-| Kilobytes Solutions - Premier Web Design, Development, SEO & Social Media Marketing in Karachi, Pakistan | ah@kilobytessolutions.com | followup_1 | 2 | 2026-06-22 12:26 |
-| TechIn Solution | Website Development - Graphic Designing - Digital Marketing Agency | info@techinsolution.com | followup_1 | 2 | 2026-06-22 12:25 |
-| ShehzadOnline | Website Design, Development, Domain, Hosting & SEO Company, Lahore Pakistan. | info@shehzadonline.com | followup_1 | 2 | 2026-06-22 12:23 |
-| Webtrica | Web Designing | Wordpress Designing | SEO | Mobile App Development | Digital Marketing | info@webtrica.com | followup_1 | 2 | 2026-06-22 12:22 |
-| Xperlet | Shopify Store Development | WordPress Website Development Company In Karachi, Pakistan | info@xperlet.com | followup_1 | 2 | 2026-06-22 12:21 |
-| Best Web Development & Digital Marketing Company In Karachi Pakistan - Siwtech SMC-Private Limited. | info@siwtech.com | followup_1 | 2 | 2026-06-22 12:19 |
-| AppsNation Karachi | (Mobile Apps | Games | VR /AR | Metaverse | Web & Software Development Company) | info@appsnation.co | followup_1 | 2 | 2026-06-22 12:18 |
-| Bit Technologies - Website development Company / Software House Karachi | contact@bittechnologies.co | followup_1 | 2 | 2026-06-22 12:17 |
-| Storetasker | experts@storetasker.com | followup_1 | 2 | 2026-06-22 12:15 |
-| Techstack Digital | info@techstackdigital.com | sent | 1 | 2026-06-22 12:15 |
-| Quin | quin@iamquin.ai | followup_1 | 2 | 2026-06-22 11:18 |
-| Ohr | ai@ohr.xyz | followup_1 | 2 | 2026-06-22 11:16 |
-| Aquabyte | gem.openreq@aquabyte.ai | followup_1 | 2 | 2026-06-22 11:16 |
-| Pelotech | henry.anderson@pelo.tech | followup_1 | 2 | 2026-06-22 11:15 |
-| Senior Python Backend Engineer | hiring@reef.pl | followup_1 | 2 | 2026-06-22 11:14 |
+| Taimour Shah SEO & Digital Marketing Agency Islamabad | info@taimourshah.com | followup_1 | 2 | 2026-06-23 08:57 |
+| Vertex Web Solution I Web Design Karachi - Web Hosting Karachi - SEO Pakistan | info@vertex.net.pk | followup_1 | 2 | 2026-06-23 08:56 |
+| Software Channel (Pvt.) Ltd. | info@softchan.com | followup_1 | 2 | 2026-06-23 08:55 |
+| SingleWebSolution - Web Design & Development and Web Hosting Services in Pakistan | admin@singlewebsolution.com | followup_1 | 2 | 2026-06-23 08:55 |
+| Aymeetech Software House | info@aymeetech.com | followup_1 | 2 | 2026-06-23 08:55 |
+| SEO Accelerators | SEO Company in Lahore, Pakistan | seoaccelerators.com@gmail.com | followup_1 | 2 | 2026-06-23 08:54 |
+| Swismax Solutions - Website Designing & Development, SEO & Graphic Expert Company | info@swismax.com | followup_1 | 2 | 2026-06-23 08:53 |
+| AalaWeb Development, Design and Marketing Service | aalawebdesign@gmail.com | followup_1 | 2 | 2026-06-23 08:53 |
+| Webseo Pakistan | webseo.com.pk1@gmail.com | followup_1 | 2 | 2026-06-23 08:52 |
+| Local seo services | moneyspider077@gmail.com | followup_1 | 2 | 2026-06-23 08:52 |
+| Crawlbytes Pvt Ltd. Website Development Services - SEO Company - Google Ads Expert -Digital Marketing Agency in Islamabad | info@crawlbytes.com | followup_1 | 2 | 2026-06-23 08:51 |
+| SEO Company Pakistan - SEO.com.pk | info@seo.com.pk | followup_1 | 2 | 2026-06-23 08:51 |
+| NestedKode – Web Development Services Pakistan | info@nestedkode.com | followup_1 | 2 | 2026-06-23 08:50 |
+| Ecommerce Gateway Pakistan (Pvt) Ltd. | info@ecgateway.net | followup_1 | 2 | 2026-06-23 08:50 |
+| Digital Marketing Agency in Lahore | info@digitalmarketingagencyinlahore.com | followup_1 | 2 | 2026-06-23 08:48 |
