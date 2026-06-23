@@ -1,6 +1,6 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-23T08:57:59.473Z_
+_Last updated: 2026-06-23T10:04:55.797Z_
 
 ## Summary
 
@@ -8,7 +8,7 @@ _Last updated: 2026-06-23T08:57:59.473Z_
 |---|---|
 | Total leads | 420 |
 | Emails sent (unique leads) | 217 |
-| Sent today | 62 |
+| Sent today | 71 |
 | Replies | 3 |
 | Reply rate | 1.4% |
 
@@ -16,32 +16,32 @@ _Last updated: 2026-06-23T08:57:59.473Z_
 
 | Status | Count |
 |---|---|
-| ready | 139 |
-| followup_1 | 112 |
-| sent | 89 |
+| ready | 145 |
+| followup_1 | 120 |
+| sent | 81 |
 | skipped | 29 |
-| bounced | 18 |
+| bounced | 19 |
 | done | 13 |
-| new | 12 |
 | unsubscribed | 5 |
+| new | 5 |
 | replied | 3 |
 
 ## Recent activity (last 15)
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
-| Taimour Shah SEO & Digital Marketing Agency Islamabad | info@taimourshah.com | followup_1 | 2 | 2026-06-23 08:57 |
-| Vertex Web Solution I Web Design Karachi - Web Hosting Karachi - SEO Pakistan | info@vertex.net.pk | followup_1 | 2 | 2026-06-23 08:56 |
-| Software Channel (Pvt.) Ltd. | info@softchan.com | followup_1 | 2 | 2026-06-23 08:55 |
-| SingleWebSolution - Web Design & Development and Web Hosting Services in Pakistan | admin@singlewebsolution.com | followup_1 | 2 | 2026-06-23 08:55 |
-| Aymeetech Software House | info@aymeetech.com | followup_1 | 2 | 2026-06-23 08:55 |
-| SEO Accelerators | SEO Company in Lahore, Pakistan | seoaccelerators.com@gmail.com | followup_1 | 2 | 2026-06-23 08:54 |
-| Swismax Solutions - Website Designing & Development, SEO & Graphic Expert Company | info@swismax.com | followup_1 | 2 | 2026-06-23 08:53 |
-| AalaWeb Development, Design and Marketing Service | aalawebdesign@gmail.com | followup_1 | 2 | 2026-06-23 08:53 |
-| Webseo Pakistan | webseo.com.pk1@gmail.com | followup_1 | 2 | 2026-06-23 08:52 |
-| Local seo services | moneyspider077@gmail.com | followup_1 | 2 | 2026-06-23 08:52 |
-| Crawlbytes Pvt Ltd. Website Development Services - SEO Company - Google Ads Expert -Digital Marketing Agency in Islamabad | info@crawlbytes.com | followup_1 | 2 | 2026-06-23 08:51 |
-| SEO Company Pakistan - SEO.com.pk | info@seo.com.pk | followup_1 | 2 | 2026-06-23 08:51 |
-| NestedKode – Web Development Services Pakistan | info@nestedkode.com | followup_1 | 2 | 2026-06-23 08:50 |
-| Ecommerce Gateway Pakistan (Pvt) Ltd. | info@ecgateway.net | followup_1 | 2 | 2026-06-23 08:50 |
-| Digital Marketing Agency in Lahore | info@digitalmarketingagencyinlahore.com | followup_1 | 2 | 2026-06-23 08:48 |
+| Creative Souls (Software house in Karachi) | info@creativesouls.net | followup_1 | 2 | 2026-06-23 10:03 |
+| Genetech Solutions | info@genetech.co | followup_1 | 2 | 2026-06-23 10:02 |
+| Advertlance - Digital Marketing Agency | hello@advertlance.pk | followup_1 | 2 | 2026-06-23 10:01 |
+| CIS PVT LTD | info@cispl.com | followup_1 | 2 | 2026-06-23 09:59 |
+| ICT Systems PVT Ltd. | info@ictsystems.com.pk | followup_1 | 2 | 2026-06-23 09:59 |
+| 10Pearls | info@10pearls.com | followup_1 | 2 | 2026-06-23 09:57 |
+| Arpatech (Pvt) Ltd. | info@arpatech.com | followup_1 | 2 | 2026-06-23 09:56 |
+| Best Software Company in Karachi Pakistan | hello@itechavengers.com | followup_1 | 2 | 2026-06-23 09:54 |
+| Hyperdata Computing Pvt. Ltd | admin@hyperdatacomputing.com | sent | 1 | 2026-06-23 09:54 |
+| Vertex Web Solution I Web Design Karachi - Web Hosting Karachi - SEO Pakistan | info@vertex.net.pk | followup_1 | 2 | 2026-06-23 09:10 |
+| SingleWebSolution - Web Design & Development and Web Hosting Services in Pakistan | admin@singlewebsolution.com | followup_1 | 2 | 2026-06-23 09:08 |
+| Swismax Solutions - Website Designing & Development, SEO & Graphic Expert Company | info@swismax.com | followup_1 | 2 | 2026-06-23 09:07 |
+| Local seo services | moneyspider077@gmail.com | followup_1 | 2 | 2026-06-23 09:06 |
+| SEO Company Pakistan - SEO.com.pk | info@seo.com.pk | followup_1 | 2 | 2026-06-23 09:04 |
+| Ecommerce Gateway Pakistan (Pvt) Ltd. | info@ecgateway.net | followup_1 | 2 | 2026-06-23 09:02 |
