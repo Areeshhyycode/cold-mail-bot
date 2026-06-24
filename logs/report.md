@@ -1,46 +1,46 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-23T11:54:48.850Z_
+_Last updated: 2026-06-24T08:19:25.932Z_
 
 ## Summary
 
 | Metric | Value |
 |---|---|
-| Total leads | 420 |
-| Emails sent (unique leads) | 217 |
-| Sent today | 72 |
-| Replies | 3 |
-| Reply rate | 1.4% |
+| Total leads | 444 |
+| Emails sent (unique leads) | 242 |
+| Sent today | 28 |
+| Replies | 4 |
+| Reply rate | 1.7% |
 
 ## Leads by status
 
 | Status | Count |
 |---|---|
-| ready | 149 |
-| followup_1 | 120 |
-| sent | 81 |
+| ready | 148 |
+| followup_1 | 123 |
+| sent | 101 |
 | skipped | 29 |
 | bounced | 20 |
-| done | 13 |
+| done | 14 |
 | unsubscribed | 5 |
-| replied | 3 |
+| replied | 4 |
 
 ## Recent activity (last 15)
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
-| Solutions Player | business@solutionsplayer.com | sent | 1 | 2026-06-23 10:31 |
-| Creative Souls (Software house in Karachi) | info@creativesouls.net | followup_1 | 2 | 2026-06-23 10:03 |
-| Genetech Solutions | info@genetech.co | followup_1 | 2 | 2026-06-23 10:02 |
-| Advertlance - Digital Marketing Agency | hello@advertlance.pk | followup_1 | 2 | 2026-06-23 10:01 |
-| CIS PVT LTD | info@cispl.com | followup_1 | 2 | 2026-06-23 09:59 |
-| ICT Systems PVT Ltd. | info@ictsystems.com.pk | followup_1 | 2 | 2026-06-23 09:59 |
-| 10Pearls | info@10pearls.com | followup_1 | 2 | 2026-06-23 09:57 |
-| Arpatech (Pvt) Ltd. | info@arpatech.com | followup_1 | 2 | 2026-06-23 09:56 |
-| Best Software Company in Karachi Pakistan | hello@itechavengers.com | followup_1 | 2 | 2026-06-23 09:54 |
-| Hyperdata Computing Pvt. Ltd | admin@hyperdatacomputing.com | bounced | 1 | 2026-06-23 09:54 |
-| Vertex Web Solution I Web Design Karachi - Web Hosting Karachi - SEO Pakistan | info@vertex.net.pk | followup_1 | 2 | 2026-06-23 09:10 |
-| SingleWebSolution - Web Design & Development and Web Hosting Services in Pakistan | admin@singlewebsolution.com | followup_1 | 2 | 2026-06-23 09:08 |
-| Swismax Solutions - Website Designing & Development, SEO & Graphic Expert Company | info@swismax.com | followup_1 | 2 | 2026-06-23 09:07 |
-| Local seo services | moneyspider077@gmail.com | followup_1 | 2 | 2026-06-23 09:06 |
-| SEO Company Pakistan - SEO.com.pk | info@seo.com.pk | followup_1 | 2 | 2026-06-23 09:04 |
+| Salsoft Technologies | connecthr@salsoft.net | followup_1 | 2 | 2026-06-24 08:17 |
+| DigiTrends | info@digitrends.co | followup_1 | 2 | 2026-06-24 08:16 |
+| Webnet Pakistan Pvt Ltd | info@webnetpk.com | followup_1 | 2 | 2026-06-24 08:14 |
+| Top SEO | info@topseo.com.pk | followup_1 | 2 | 2026-06-24 08:13 |
+| ITS - Intellexal Solutions | contact@its.com.pk | sent | 1 | 2026-06-24 08:11 |
+| Informia Tech Pvt. Ltd. | contact@informiatech.com | sent | 1 | 2026-06-24 08:09 |
+| Technexia | hello@technexia.com | sent | 1 | 2026-06-24 08:09 |
+| AlfaOrigin - Software Development Company Rawalpindi/Islamabad | hello@alfaorigin.com | sent | 1 | 2026-06-24 08:07 |
+| SOFIT Consultancy (Pvt.) Ltd. | hello@sofit.ltd | sent | 1 | 2026-06-24 08:05 |
+| Ace Marketing Services | info@acemarketingservices.org | sent | 1 | 2026-06-24 08:03 |
+| Hash Ecommerce | hashecommerce@gmail.com | sent | 1 | 2026-06-24 08:02 |
+| WMWEBS Solutions | Software House in Islamabad | hello@wmwebs.com | sent | 1 | 2026-06-24 08:00 |
+| Social & Digital Marketing Agency| S&D Marketing | hello@socialanddigitalmarketing.com | sent | 1 | 2026-06-24 07:58 |
+| Switcher Techno | info.switchertechno@gmail.com | sent | 1 | 2026-06-24 07:56 |
+| Sofcom Private Limited | contact@sofcom.net | sent | 1 | 2026-06-24 07:55 |
