@@ -26,30 +26,23 @@ async function main() {
   await connectDB();
   const now = Date.now();
 
-  // step 0 -> followup 1 (3 din baad)
+  // SIRF EK reminder (repetitive nahi). step 0 -> followup 1 (3 din baad)
   const stage1 = await Lead.find({
     status: "sent",
     lastSentAt: { $lte: new Date(now - 3 * DAY) },
   }).limit(30);
 
-  // step 1 -> followup 2 (3 din baad)
-  const stage2 = await Lead.find({
-    status: "followup_1",
-    lastSentAt: { $lte: new Date(now - 3 * DAY) },
-  }).limit(30);
-
-  // step 2 -> done (4 din baad, koi reply nahi)
+  // followup_1 ho chuke + 4 din -> bas "done" mark karo (DOOSRA reminder NAHI bhejte)
   const stage3 = await Lead.find({
-    status: "followup_2",
+    status: "followup_1",
     lastSentAt: { $lte: new Date(now - 4 * DAY) },
   }).limit(50);
 
-  console.log(`📨 followup_1: ${stage1.length}, followup_2: ${stage2.length}, close: ${stage3.length}`);
+  console.log(`📨 followup_1 (1 reminder): ${stage1.length}, close: ${stage3.length}`);
 
   await sendBatch(stage1, 1, "followup_1");
-  await sendBatch(stage2, 2, "followup_2");
 
-  // stage3 ko bas done mark karo
+  // ab koi aur reminder nahi — close kar do
   for (const lead of stage3) {
     lead.status = "done";
     await lead.save();
