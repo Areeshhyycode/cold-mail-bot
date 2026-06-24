@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cold-Mail Bot — Lead Dashboard</title>
+<style>
+  :root{--bg:#0d1117;--card:#161b22;--border:#27303b;--txt:#e6edf3;--mut:#8b949e;--accent:#2f81f7;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--txt);padding:24px;max-width:1200px;margin:0 auto}
+  h1{font-size:22px;margin-bottom:4px}
+  .sub{color:var(--mut);font-size:13px;margin-bottom:20px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px}
+  .card .v{font-size:26px;font-weight:700}
+  .card .l{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+  .card.green .v{color:#3fb950}.card.blue .v{color:var(--accent)}.card.red .v{color:#f85149}.card.purple .v{color:#bc8cff}
+  .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .bar input{background:var(--card);border:1px solid var(--border);color:var(--txt);padding:8px 12px;border-radius:8px;flex:1;min-width:180px}
+  .chip{background:var(--card);border:1px solid var(--border);color:var(--mut);padding:6px 12px;border-radius:20px;cursor:pointer;font-size:13px}
+  .chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+  th,td{text-align:left;padding:10px 12px;font-size:13px;border-bottom:1px solid var(--border)}
+  th{color:var(--mut);font-weight:600;text-transform:uppercase;font-size:11px;letter-spacing:.5px}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:#1c2330}
+  .badge{padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap}
+  .b-JOB{background:#1f6feb33;color:#79c0ff}.b-SERVICE{background:#bc8cff33;color:#d2a8ff}
+  .s-new{color:#8b949e}.s-ready{color:#d29922}.s-sent{color:#58a6ff}.s-replied{color:#3fb950;font-weight:700}
+  .s-bounced{color:#f85149}.s-followup_1{color:#a371f7}.s-done{color:#6e7681}.s-skipped{color:#6e7681}
+  .mut{color:var(--mut)}.refresh{cursor:pointer;color:var(--accent);font-size:13px}
+  .truncate{max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+</style>
+</head>
+<body>
+  <h1>📊 Cold-Mail Bot — Lead Dashboard</h1>
+  <div class="sub">Live data from MongoDB · <span class="refresh" onclick="load()">↻ refresh</span> · <span id="ts" class="mut"></span></div>
+
+  <div class="cards" id="cards"></div>
+
+  <div class="bar">
+    <input id="search" placeholder="🔍 search company / email / title..." oninput="render()" />
+    <span class="chip on" data-f="all" onclick="setF(this)">All</span>
+    <span class="chip" data-f="JOB" onclick="setF(this)">JOB</span>
+    <span class="chip" data-f="SERVICE" onclick="setF(this)">SERVICE</span>
+    <span class="chip" data-f="replied" onclick="setF(this)">Replied</span>
+    <span class="chip" data-f="ready" onclick="setF(this)">Ready</span>
+    <span class="chip" data-f="bounced" onclick="setF(this)">Bounced</span>
+  </div>
+
+  <table>
+    <thead><tr><th>Company</th><th>Type</th><th>Status</th><th>Score</th><th>Source</th><th>Role / Subject</th><th>Last sent</th></tr></thead>
+    <tbody id="rows"><tr><td colspan="7" class="mut">Loading…</td></tr></tbody>
+  </table>
+
+<script>
+let DATA = { leads: [] };
+let filter = "all";
+
+function setF(el){
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on'); filter = el.dataset.f; render();
+}
+
+function card(v,l,cls){ return `<div class="card ${cls||''}"><div class="v">${v}</div><div class="l">${l}</div></div>`; }
+
+function renderCards(){
+  const s = DATA.statusCounts||{}, t = DATA.typeCounts||{};
+  document.getElementById('cards').innerHTML =
+    card(DATA.total||0,'Total leads') +
+    card(DATA.sentToday||0,'Sent today','blue') +
+    card(DATA.replies||0,'Replies','green') +
+    card((s.ready||0),'Ready to send','purple') +
+    card((t.JOB||0),'JOB leads') +
+    card((t.SERVICE||0),'SERVICE leads') +
+    card((s.bounced||0),'Bounced','red');
+}
+
+function fmtDate(d){ if(!d) return '—'; const x=new Date(d); return x.toLocaleDateString()+' '+x.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}); }
+
+function render(){
+  const q = (document.getElementById('search').value||'').toLowerCase();
+  let rows = DATA.leads||[];
+  if(filter==='JOB'||filter==='SERVICE') rows = rows.filter(r=>r.leadType===filter);
+  else if(filter!=='all') rows = rows.filter(r=>r.status===filter);
+  if(q) rows = rows.filter(r=>(r.name+' '+r.email+' '+r.title).toLowerCase().includes(q));
+
+  document.getElementById('rows').innerHTML = rows.length ? rows.map(r=>`
+    <tr>
+      <td>${esc(r.name)}<br><span class="mut" style="font-size:11px">${esc(r.email)}</span></td>
+      <td>${r.leadType?`<span class="badge b-${r.leadType}">${r.leadType}</span>`:'—'}</td>
+      <td class="s-${r.status}">${r.status||'—'}</td>
+      <td>${r.score||0}</td>
+      <td class="mut">${esc(r.source||'—')}</td>
+      <td class="truncate" title="${esc(r.title)}">${esc(r.title||'—')}</td>
+      <td class="mut">${fmtDate(r.lastSentAt)}</td>
+    </tr>`).join('') : '<tr><td colspan="7" class="mut">No leads match.</td></tr>';
+}
+
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+async function load(){
+  try{
+    const r = await fetch('/api/data'); DATA = await r.json();
+    document.getElementById('ts').textContent = 'updated ' + new Date().toLocaleTimeString();
+    renderCards(); render();
+  }catch(e){ document.getElementById('rows').innerHTML='<tr><td colspan="7" class="s-bounced">Error: '+e.message+'</td></tr>'; }
+}
+load();
+setInterval(load, 30000); // har 30s auto-refresh
+</script>
+</body>
+</html>
