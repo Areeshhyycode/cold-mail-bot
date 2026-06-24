@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "Job Apply Assistant",
+  "version": "1.0.0",
+  "description": "Job listings + company info ek page se collect karo (Indeed/LinkedIn/Rozee), CSV export karo, aur quick cover-letter banao. Human-in-the-loop: aap khud apply karti ho.",
+  "permissions": ["activeTab", "scripting", "storage", "downloads"],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_title": "Job Apply Assistant",
+    "default_popup": "popup.html"
+  }
+}
