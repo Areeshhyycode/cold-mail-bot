@@ -176,6 +176,69 @@ export async function scrapeWWR(keyword = "") {
   return out;
 }
 
+/* -------------------------------- Arbeitnow ------------------------------- */
+// free public API, no key — remote jobs (fresh roz update hoti hain)
+export async function scrapeArbeitnow(keyword = "") {
+  const res = await fetch("https://www.arbeitnow.com/api/job-board-api", {
+    headers: { "User-Agent": "lead-bot/1.0" },
+    signal: AbortSignal.timeout(15000),
+  });
+  if (!res.ok) throw new Error(`Arbeitnow HTTP ${res.status}`);
+  const jobs = (await res.json()).data || [];
+
+  return jobs
+    .filter((j) => j && j.title)
+    .filter((j) => matchesKeyword(`${j.title} ${(j.tags || []).join(" ")} ${j.description || ""}`, keyword))
+    .slice(0, 60)
+    .map((j) => {
+      const desc = strip(j.description || "");
+      const email = findEmail(desc);
+      return {
+        source: "arbeitnow",
+        leadType: "JOB",
+        company: j.company_name || "",
+        jobTitle: j.title || "",
+        jobUrl: j.url || "",
+        jobDescription: desc.slice(0, 4000),
+        email,
+        location: j.remote ? "remote" : (j.location || ""),
+        datePosted: j.created_at ? new Date(j.created_at * 1000) : undefined,
+        hasEmail: Boolean(email),
+      };
+    });
+}
+
+/* --------------------------------- Jobicy --------------------------------- */
+// free public API, no key — remote jobs across categories
+export async function scrapeJobicy(keyword = "") {
+  const res = await fetch("https://jobicy.com/api/v2/remote-jobs?count=50", {
+    headers: { "User-Agent": "lead-bot/1.0" },
+    signal: AbortSignal.timeout(15000),
+  });
+  if (!res.ok) throw new Error(`Jobicy HTTP ${res.status}`);
+  const jobs = (await res.json()).jobs || [];
+
+  return jobs
+    .filter((j) => j && j.jobTitle)
+    .filter((j) => matchesKeyword(`${j.jobTitle} ${j.jobExcerpt || ""} ${j.jobDescription || ""}`, keyword))
+    .map((j) => {
+      const desc = strip(j.jobDescription || j.jobExcerpt || "");
+      const email = findEmail(desc);
+      return {
+        source: "jobicy",
+        leadType: "JOB",
+        company: j.companyName || "",
+        jobTitle: j.jobTitle || "",
+        jobUrl: j.url || "",
+        jobDescription: desc.slice(0, 4000),
+        email,
+        location: j.jobGeo || "remote",
+        datePosted: j.pubDate ? new Date(j.pubDate) : undefined,
+        hasEmail: Boolean(email),
+      };
+    });
+}
+
 /**
  * Saare job sources chalata hai aur leads ka flat array return karta hai.
  * (DB save NAHI karta — caller decide kare. main() neeche save karta hai.)
@@ -186,10 +249,12 @@ export async function scrapeAllJobBoards(keyword = "") {
     scrapeRemoteOK(keyword),
     scrapeRemotive(keyword),
     scrapeWWR(keyword),
+    scrapeArbeitnow(keyword),
+    scrapeJobicy(keyword),
   ]);
 
   const leads = [];
-  const names = ["hn", "remoteok", "remotive", "wwr"];
+  const names = ["hn", "remoteok", "remotive", "wwr", "arbeitnow", "jobicy"];
   settled.forEach((r, i) => {
     if (r.status === "fulfilled") {
       leads.push(...r.value);
