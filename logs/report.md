@@ -1,6 +1,6 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-25T10:41:48.718Z_
+_Last updated: 2026-06-25T11:39:38.642Z_
 
 ## Summary
 
@@ -8,7 +8,7 @@ _Last updated: 2026-06-25T10:41:48.718Z_
 |---|---|
 | Total leads | 455 |
 | Emails sent (unique leads) | 267 |
-| Sent today | 48 |
+| Sent today | 52 |
 | Replies | 4 |
 | Reply rate | 1.5% |
 
@@ -16,9 +16,9 @@ _Last updated: 2026-06-25T10:41:48.718Z_
 
 | Status | Count |
 |---|---|
-| followup_1 | 150 |
+| followup_1 | 154 |
 | ready | 126 |
-| sent | 80 |
+| sent | 76 |
 | skipped | 29 |
 | bounced | 28 |
 | followup_2 | 19 |
@@ -30,6 +30,10 @@ _Last updated: 2026-06-25T10:41:48.718Z_
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
+| Spice Bazaar | ecm@yumpakistan.pk | followup_1 | 2 | 2026-06-25 11:38 |
+| TAB ON TECH (PRIVATE) LIMITED | info@tabontech.com | followup_1 | 2 | 2026-06-25 11:37 |
+| Studio Seven | info@studio7-seven.com | followup_1 | 2 | 2026-06-25 11:36 |
+| 1969 Restaurant | admin@1969restaurant.com | followup_1 | 2 | 2026-06-25 11:34 |
 | Alina Dental clinics, Orthodontics and Implantology center | admin@alinadentalclinic.com | followup_1 | 2 | 2026-06-25 10:39 |
 | IntelTrix - Web Designing Development | SEO Company in Lahore Pakistan | info@inteltrix.com | followup_1 | 2 | 2026-06-25 10:38 |
 | OzairWebs (WEB Development Company & SEO Agency) | info@ozairwebs.com | followup_1 | 2 | 2026-06-25 10:37 |
@@ -41,7 +45,3 @@ _Last updated: 2026-06-25T10:41:48.718Z_
 | Designing Hub | info@designinghub.net | followup_1 | 2 | 2026-06-25 10:29 |
 | LalQila Restaurant Karachi | info@lalqila.com | followup_1 | 2 | 2026-06-25 10:28 |
 | Dental Wellness Clinic By Dr. Alina | info@dentalwellness.com.pk | followup_1 | 2 | 2026-06-25 10:26 |
-| dSMART SOLUTIONS - The Leading App Development Services Company In Pakistan | info@dsmartsolutions.com | followup_1 | 2 | 2026-06-25 10:25 |
-| Hamza Real Estate | info@hamzarealestate.com.pk | followup_1 | 2 | 2026-06-25 10:24 |
-| Dental Works and Aesthetics | info@dwalahore.com | followup_1 | 2 | 2026-06-25 10:23 |
-| Akhzir Tech | info@akhzir.com | followup_1 | 2 | 2026-06-25 10:21 |
