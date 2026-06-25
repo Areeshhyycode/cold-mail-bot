@@ -1,6 +1,6 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-25T08:21:09.963Z_
+_Last updated: 2026-06-25T09:34:29.930Z_
 
 ## Summary
 
@@ -8,7 +8,7 @@ _Last updated: 2026-06-25T08:21:09.963Z_
 |---|---|
 | Total leads | 455 |
 | Emails sent (unique leads) | 267 |
-| Sent today | 27 |
+| Sent today | 28 |
 | Replies | 4 |
 | Reply rate | 1.5% |
 
@@ -17,13 +17,12 @@ _Last updated: 2026-06-25T08:21:09.963Z_
 | Status | Count |
 |---|---|
 | followup_1 | 130 |
-| ready | 120 |
+| ready | 126 |
 | sent | 100 |
 | skipped | 29 |
-| bounced | 27 |
+| bounced | 28 |
 | followup_2 | 19 |
 | done | 14 |
-| new | 7 |
 | unsubscribed | 5 |
 | replied | 4 |
 
@@ -31,11 +30,12 @@ _Last updated: 2026-06-25T08:21:09.963Z_
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
+| D Technologies - Web Development and Digital Marketing Agency in Rawalpindi, Pakistan | info@dtechnologies.com.pk | sent | 1 | 2026-06-25 09:34 |
 | IKONIC DEV PVT LTD | info@ikonicsolution.com | sent | 1 | 2026-06-25 08:21 |
 | Inertiasoft Private Limited | info@inertiasoft.net | sent | 1 | 2026-06-25 08:19 |
 | Antech Software Solution | antech_ss@hotmail.com | sent | 1 | 2026-06-25 08:08 |
 | Arez Tech Global | info@arez-tech.com | sent | 1 | 2026-06-25 08:07 |
-| Haball Private Limited | info@haball.pk | sent | 1 | 2026-06-25 08:05 |
+| Haball Private Limited | info@haball.pk | bounced | 1 | 2026-06-25 08:05 |
 | Hintsol - Web Design and Development Agency | info@hintsol.com | sent | 1 | 2026-06-25 08:03 |
 | House of Smart Services | info@hosservices.com | sent | 1 | 2026-06-25 08:02 |
 | Amigoz Tech | info@amigoztech.org | bounced | 1 | 2026-06-25 08:01 |
@@ -45,4 +45,3 @@ _Last updated: 2026-06-25T08:21:09.963Z_
 | Airtech Solutions Pakistan | info@airtechsolutions.me | sent | 1 | 2026-06-25 07:56 |
 | Getweys Ltd | info@getweys.com | sent | 1 | 2026-06-25 07:55 |
 | DatumSquare IT Services Pvt. Ltd. | info@datumsquare.com | sent | 1 | 2026-06-25 07:54 |
-| DARUL SOLUTIONS | info@darulsolutions.com | sent | 1 | 2026-06-25 07:53 |
