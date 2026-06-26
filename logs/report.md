@@ -1,6 +1,6 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-26T08:34:57.570Z_
+_Last updated: 2026-06-26T09:40:45.866Z_
 
 ## Summary
 
@@ -8,7 +8,7 @@ _Last updated: 2026-06-26T08:34:57.570Z_
 |---|---|
 | Total leads | 471 |
 | Emails sent (unique leads) | 292 |
-| Sent today | 47 |
+| Sent today | 52 |
 | Replies | 5 |
 | Reply rate | 1.7% |
 
@@ -16,10 +16,10 @@ _Last updated: 2026-06-26T08:34:57.570Z_
 
 | Status | Count |
 |---|---|
-| followup_1 | 175 |
-| ready | 115 |
-| sent | 79 |
-| bounced | 30 |
+| followup_1 | 179 |
+| ready | 114 |
+| sent | 75 |
+| bounced | 31 |
 | skipped | 29 |
 | followup_2 | 19 |
 | done | 14 |
@@ -30,6 +30,11 @@ _Last updated: 2026-06-26T08:34:57.570Z_
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
+| Arban Tech Software House (pvt) Ltd. | %20info@arbantech.com | followup_1 | 2 | 2026-06-26 09:38 |
+| United Software - IT Company, Software Solutions | info@theunitedsoftware.com | sent | 1 | 2026-06-26 09:38 |
+| LetRank SEO Marketing Services Mobile Application Development Agency in Pakistan | letrank69@gmail.com | followup_1 | 2 | 2026-06-26 08:38 |
+| Web Design Company Islamabad-Web Matrix | admin@webdesignislamabad.com.pk | followup_1 | 2 | 2026-06-26 08:37 |
+| SoftWorld International (Pvt) Ltd. | sales@softworld.com.pk | followup_1 | 2 | 2026-06-26 08:35 |
 | Softvira (SMC-Private) Limited | contact@softvira.com | followup_1 | 2 | 2026-06-26 08:34 |
 | Web Development Company in Lahore | info@infotech4it.com | followup_1 | 2 | 2026-06-26 08:33 |
 | Viremp Technologies International Pvt. Ltd. | info@viremp.com | followup_1 | 2 | 2026-06-26 08:33 |
@@ -40,8 +45,3 @@ _Last updated: 2026-06-26T08:34:57.570Z_
 | HumanTek | info@thehumantek.com | sent | 1 | 2026-06-26 08:27 |
 | #1 Web Designing Company in Pakistan | Webo.pk | sales@webo.pk | followup_1 | 2 | 2026-06-26 08:27 |
 | Einnovention Web Design Company | info@einnovention.us | followup_1 | 2 | 2026-06-26 08:26 |
-| Web Development Company in Lahore | Digital iBex | info@digitalibex.com | followup_1 | 2 | 2026-06-26 08:25 |
-| SN Tech Sol Web Development company | info@sntechsol.com | followup_1 | 2 | 2026-06-26 08:24 |
-| IRG Global - Web & Mobile App Development - Software Solutions - BPO Services - ERP - CRM - POS - Networking & VOIP Solutions | info@irgglobal.co | followup_1 | 2 | 2026-06-26 08:22 |
-| Rana Technologies. Web Development Lahore | Software House | sales@ranatechnologies.com | followup_1 | 2 | 2026-06-26 08:21 |
-| AFAICON - #1 Web Design & Website Development Services | eCommerce Solution | SEO Company Pakistan | contact@afaicon.com | followup_1 | 2 | 2026-06-26 08:20 |
