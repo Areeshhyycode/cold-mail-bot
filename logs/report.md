@@ -1,47 +1,47 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-25T11:39:38.642Z_
+_Last updated: 2026-06-26T08:34:57.570Z_
 
 ## Summary
 
 | Metric | Value |
 |---|---|
-| Total leads | 455 |
-| Emails sent (unique leads) | 267 |
-| Sent today | 52 |
-| Replies | 4 |
-| Reply rate | 1.5% |
+| Total leads | 471 |
+| Emails sent (unique leads) | 292 |
+| Sent today | 47 |
+| Replies | 5 |
+| Reply rate | 1.7% |
 
 ## Leads by status
 
 | Status | Count |
 |---|---|
-| followup_1 | 154 |
-| ready | 126 |
-| sent | 76 |
+| followup_1 | 175 |
+| ready | 115 |
+| sent | 79 |
+| bounced | 30 |
 | skipped | 29 |
-| bounced | 28 |
 | followup_2 | 19 |
 | done | 14 |
+| replied | 5 |
 | unsubscribed | 5 |
-| replied | 4 |
 
 ## Recent activity (last 15)
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
-| Spice Bazaar | ecm@yumpakistan.pk | followup_1 | 2 | 2026-06-25 11:38 |
-| TAB ON TECH (PRIVATE) LIMITED | info@tabontech.com | followup_1 | 2 | 2026-06-25 11:37 |
-| Studio Seven | info@studio7-seven.com | followup_1 | 2 | 2026-06-25 11:36 |
-| 1969 Restaurant | admin@1969restaurant.com | followup_1 | 2 | 2026-06-25 11:34 |
-| Alina Dental clinics, Orthodontics and Implantology center | admin@alinadentalclinic.com | followup_1 | 2 | 2026-06-25 10:39 |
-| IntelTrix - Web Designing Development | SEO Company in Lahore Pakistan | info@inteltrix.com | followup_1 | 2 | 2026-06-25 10:38 |
-| OzairWebs (WEB Development Company & SEO Agency) | info@ozairwebs.com | followup_1 | 2 | 2026-06-25 10:37 |
-| WebSool Web Solutions | Digital Transformation | Cloud Computing | eCommerce Development Agency in Lahore | info@websool.com | followup_1 | 2 | 2026-06-25 10:36 |
-| Baranh | info@baranh.pk | followup_1 | 2 | 2026-06-25 10:35 |
-| Buqayvia Restaurant | buqayvia.restaurant@gmail.com | followup_1 | 2 | 2026-06-25 10:33 |
-| LEX | Legally-Ethically-Expertly | info@lex.com.pk | followup_1 | 2 | 2026-06-25 10:32 |
-| LawBridge LLP - Best Law Firm In Pakistan | info@lawbridgechambers.com | followup_1 | 2 | 2026-06-25 10:31 |
-| Designing Hub | info@designinghub.net | followup_1 | 2 | 2026-06-25 10:29 |
-| LalQila Restaurant Karachi | info@lalqila.com | followup_1 | 2 | 2026-06-25 10:28 |
-| Dental Wellness Clinic By Dr. Alina | info@dentalwellness.com.pk | followup_1 | 2 | 2026-06-25 10:26 |
+| Softvira (SMC-Private) Limited | contact@softvira.com | followup_1 | 2 | 2026-06-26 08:34 |
+| Web Development Company in Lahore | info@infotech4it.com | followup_1 | 2 | 2026-06-26 08:33 |
+| Viremp Technologies International Pvt. Ltd. | info@viremp.com | followup_1 | 2 | 2026-06-26 08:33 |
+| Majid Masood. Web Designer/Developer Lahore | info@majidmasood.com | followup_1 | 2 | 2026-06-26 08:32 |
+| Webfoxs | Best Digital Marketing and Web development Company In Lahore | info@webfoxs.com | followup_1 | 2 | 2026-06-26 08:30 |
+| Terrasoft IT Solutions | info@terrasoftsystems.com | sent | 1 | 2026-06-26 08:29 |
+| Webzeto – Web Design & Development Company in Lahore, Pakistan | sales@webzeto.com | followup_1 | 2 | 2026-06-26 08:28 |
+| HumanTek | info@thehumantek.com | sent | 1 | 2026-06-26 08:27 |
+| #1 Web Designing Company in Pakistan | Webo.pk | sales@webo.pk | followup_1 | 2 | 2026-06-26 08:27 |
+| Einnovention Web Design Company | info@einnovention.us | followup_1 | 2 | 2026-06-26 08:26 |
+| Web Development Company in Lahore | Digital iBex | info@digitalibex.com | followup_1 | 2 | 2026-06-26 08:25 |
+| SN Tech Sol Web Development company | info@sntechsol.com | followup_1 | 2 | 2026-06-26 08:24 |
+| IRG Global - Web & Mobile App Development - Software Solutions - BPO Services - ERP - CRM - POS - Networking & VOIP Solutions | info@irgglobal.co | followup_1 | 2 | 2026-06-26 08:22 |
+| Rana Technologies. Web Development Lahore | Software House | sales@ranatechnologies.com | followup_1 | 2 | 2026-06-26 08:21 |
+| AFAICON - #1 Web Design & Website Development Services | eCommerce Solution | SEO Company Pakistan | contact@afaicon.com | followup_1 | 2 | 2026-06-26 08:20 |
