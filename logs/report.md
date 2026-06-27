@@ -1,6 +1,6 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-27T07:59:38.014Z_
+_Last updated: 2026-06-27T09:08:43.820Z_
 
 ## Summary
 
@@ -8,7 +8,7 @@ _Last updated: 2026-06-27T07:59:38.014Z_
 |---|---|
 | Total leads | 492 |
 | Emails sent (unique leads) | 322 |
-| Sent today | 35 |
+| Sent today | 52 |
 | Replies | 5 |
 | Reply rate | 1.6% |
 
@@ -16,10 +16,10 @@ _Last updated: 2026-06-27T07:59:38.014Z_
 
 | Status | Count |
 |---|---|
-| followup_1 | 131 |
+| followup_1 | 132 |
 | ready | 99 |
-| sent | 97 |
-| done | 70 |
+| done | 86 |
+| sent | 80 |
 | bounced | 34 |
 | skipped | 29 |
 | followup_2 | 19 |
@@ -31,18 +31,18 @@ _Last updated: 2026-06-27T07:59:38.014Z_
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
-| Centric Technologies Pakistan - Mobile App Development Company | info@centrictech.com | followup_1 | 2 | 2026-06-27 07:57 |
-| Chicago Website Design SEO Company | info@chicagowebsitedesignseocompany.com | followup_1 | 2 | 2026-06-27 07:55 |
-| Lahore Graphic Design | Branding | Web Design Company | info@lahoregraphicdesign.com | followup_1 | 2 | 2026-06-27 07:54 |
-| Devlopd Technologies | hi@ariesspring.dev | followup_1 | 2 | 2026-06-27 07:53 |
-| Impetus Systems | hr@impetussys.com | followup_1 | 2 | 2026-06-27 07:52 |
-| Arbisoft | contact@arbisoft.com | followup_1 | 2 | 2026-06-27 07:50 |
-| Techoid | ibad@techoid.co | followup_1 | 2 | 2026-06-27 07:48 |
-| Softnet Systems (An IT Company) | adnan@softnet-systems.com | sent | 1 | 2026-06-27 07:48 |
-| IT Doyens - Website Design & Development – Ecommerce Website - Website Maintenance - Website Hosting - SEO in Karachi | info@itdoyens.com | sent | 1 | 2026-06-27 07:47 |
-| The SAK (Pvt.) Ltd. - Web Design Agency & Digital Marketing Agency | info@thesak.ltd | sent | 1 | 2026-06-27 07:46 |
-| Wallsoft Technologies | info@wallsofttech.com | sent | 1 | 2026-06-27 07:25 |
-| codeup solutions | rockstaralpha00@gmail.com | sent | 1 | 2026-06-27 07:23 |
-| CodesOrbit | sales@codesorbit.com | sent | 1 | 2026-06-27 07:23 |
-| TRAFiX | sales@trafix.com | sent | 1 | 2026-06-27 07:21 |
-| UrApp Technologies | sales@urapptech.com | sent | 1 | 2026-06-27 07:19 |
+| Social & Digital Marketing Agency| S&D Marketing | hello@socialanddigitalmarketing.com | followup_1 | 2 | 2026-06-27 09:07 |
+| Lunakware | contact@lunakware.com | followup_1 | 2 | 2026-06-27 09:05 |
+| 5CUBE | hello@5cube.io | followup_1 | 2 | 2026-06-27 09:04 |
+| Agilosoft | info@agilosoft.com | followup_1 | 2 | 2026-06-27 09:03 |
+| Sofcom Private Limited | contact@sofcom.net | followup_1 | 2 | 2026-06-27 09:02 |
+| Technexia | hello@technexia.com | followup_1 | 2 | 2026-06-27 09:00 |
+| Ace Marketing Services | info@acemarketingservices.org | followup_1 | 2 | 2026-06-27 08:59 |
+| Switcher Techno | info.switchertechno@gmail.com | followup_1 | 2 | 2026-06-27 08:57 |
+| Knots Solutions | contact@knotssolutions.com | followup_1 | 2 | 2026-06-27 08:56 |
+| Informia Tech Pvt. Ltd. | contact@informiatech.com | followup_1 | 2 | 2026-06-27 08:54 |
+| Intelvue | hello@intelvue.com | followup_1 | 2 | 2026-06-27 08:54 |
+| Hash Ecommerce | hashecommerce@gmail.com | followup_1 | 2 | 2026-06-27 08:52 |
+| Alright Tech Private Limited | hr@alrighttech.com | followup_1 | 2 | 2026-06-27 08:50 |
+| SOFIT Consultancy (Pvt.) Ltd. | hello@sofit.ltd | followup_1 | 2 | 2026-06-27 08:49 |
+| Circular Byte Private Limited | info.circularbyte@gmail.com | followup_1 | 2 | 2026-06-27 08:48 |
