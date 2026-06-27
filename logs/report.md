@@ -1,47 +1,48 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-26T11:42:11.272Z_
+_Last updated: 2026-06-27T07:25:41.022Z_
 
 ## Summary
 
 | Metric | Value |
 |---|---|
-| Total leads | 471 |
-| Emails sent (unique leads) | 292 |
-| Sent today | 53 |
+| Total leads | 492 |
+| Emails sent (unique leads) | 322 |
+| Sent today | 25 |
 | Replies | 5 |
-| Reply rate | 1.7% |
+| Reply rate | 1.6% |
 
 ## Leads by status
 
 | Status | Count |
 |---|---|
-| followup_1 | 133 |
-| ready | 114 |
-| sent | 74 |
-| done | 61 |
+| followup_1 | 124 |
+| sent | 104 |
+| ready | 98 |
+| done | 70 |
 | bounced | 31 |
 | skipped | 29 |
 | followup_2 | 19 |
-| replied | 5 |
+| new | 7 |
 | unsubscribed | 5 |
+| replied | 5 |
 
 ## Recent activity (last 15)
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
-| Solutions Player | business@solutionsplayer.com | followup_1 | 2 | 2026-06-26 11:41 |
-| Arban Tech Software House (pvt) Ltd. | %20info@arbantech.com | followup_1 | 2 | 2026-06-26 09:38 |
-| United Software - IT Company, Software Solutions | info@theunitedsoftware.com | sent | 1 | 2026-06-26 09:38 |
-| LetRank SEO Marketing Services Mobile Application Development Agency in Pakistan | letrank69@gmail.com | followup_1 | 2 | 2026-06-26 08:38 |
-| Web Design Company Islamabad-Web Matrix | admin@webdesignislamabad.com.pk | followup_1 | 2 | 2026-06-26 08:37 |
-| SoftWorld International (Pvt) Ltd. | sales@softworld.com.pk | followup_1 | 2 | 2026-06-26 08:35 |
-| Softvira (SMC-Private) Limited | contact@softvira.com | followup_1 | 2 | 2026-06-26 08:34 |
-| Web Development Company in Lahore | info@infotech4it.com | followup_1 | 2 | 2026-06-26 08:33 |
-| Viremp Technologies International Pvt. Ltd. | info@viremp.com | followup_1 | 2 | 2026-06-26 08:33 |
-| Majid Masood. Web Designer/Developer Lahore | info@majidmasood.com | followup_1 | 2 | 2026-06-26 08:32 |
-| Webfoxs | Best Digital Marketing and Web development Company In Lahore | info@webfoxs.com | followup_1 | 2 | 2026-06-26 08:30 |
-| Terrasoft IT Solutions | info@terrasoftsystems.com | sent | 1 | 2026-06-26 08:29 |
-| Webzeto – Web Design & Development Company in Lahore, Pakistan | sales@webzeto.com | followup_1 | 2 | 2026-06-26 08:28 |
-| HumanTek | info@thehumantek.com | sent | 1 | 2026-06-26 08:27 |
-| #1 Web Designing Company in Pakistan | Webo.pk | sales@webo.pk | followup_1 | 2 | 2026-06-26 08:27 |
+| Wallsoft Technologies | info@wallsofttech.com | sent | 1 | 2026-06-27 07:25 |
+| codeup solutions | rockstaralpha00@gmail.com | sent | 1 | 2026-06-27 07:23 |
+| CodesOrbit | sales@codesorbit.com | sent | 1 | 2026-06-27 07:23 |
+| TRAFiX | sales@trafix.com | sent | 1 | 2026-06-27 07:21 |
+| UrApp Technologies | sales@urapptech.com | sent | 1 | 2026-06-27 07:19 |
+| Finosys (Private) Limited | saleem@finosys.com | sent | 1 | 2026-06-27 07:18 |
+| Tech Ventures Global | sales@techventuresglobal.com | sent | 1 | 2026-06-27 07:16 |
+| Xtecsoft Pvt ltd | info@xtecsoft.com | sent | 1 | 2026-06-27 07:15 |
+| Devsinc (Islamabad) | sales@devsinc.com | sent | 1 | 2026-06-27 07:13 |
+| Inconnect Solutions Digital Marketing Agency | malik3340513093@gmail.com | sent | 1 | 2026-06-27 07:12 |
+| Linora SA Tech Solution | sales@linorasatech.com | sent | 1 | 2026-06-27 07:10 |
+| Toheed Soft - Software House | info@toheedsoft.com | sent | 1 | 2026-06-27 07:08 |
+| KNYSYS | sales@knysys.com | sent | 1 | 2026-06-27 07:07 |
+| Web Technology Pvt Ltd. | info@wt-it.com.pk | sent | 1 | 2026-06-27 07:05 |
+| IT Zone Pakistan | sales@itzonepakistan.com | sent | 1 | 2026-06-27 07:04 |
