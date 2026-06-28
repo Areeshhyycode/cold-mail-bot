@@ -1,6 +1,6 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-28T08:54:15.035Z_
+_Last updated: 2026-06-28T09:20:58.497Z_
 
 ## Summary
 
@@ -16,8 +16,8 @@ _Last updated: 2026-06-28T08:54:15.035Z_
 
 | Status | Count |
 |---|---|
-| followup_1 | 123 |
-| done | 119 |
+| done | 121 |
+| followup_1 | 121 |
 | sent | 81 |
 | ready | 73 |
 | bounced | 36 |
@@ -31,8 +31,8 @@ _Last updated: 2026-06-28T08:54:15.035Z_
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
+| Kodexo Labs Pakistan – AI, Custom Software & Mobile App Development Company | contact@kodexolabs.com | followup_1 | 2 | 2026-06-28 08:54 |
 | Decojent - Top UI UX design agency 2025 | B2B SaaS | Website designer | hello@decojent.com | followup_1 | 2 | 2026-06-28 08:53 |
-| Kodexo Labs Pakistan – AI, Custom Software & Mobile App Development Company | contact@kodexolabs.com | followup_1 | 2 | 2026-06-28 08:52 |
 | Antech Software Solution | antech_ss@hotmail.com | followup_1 | 2 | 2026-06-28 08:51 |
 | DARUL SOLUTIONS | info@darulsolutions.com | followup_1 | 2 | 2026-06-28 08:50 |
 | Enterprise IT Solutions | info@entitsol.com | followup_1 | 2 | 2026-06-28 08:49 |
