@@ -1,6 +1,6 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-28T09:20:58.497Z_
+_Last updated: 2026-06-28T09:58:42.669Z_
 
 ## Summary
 
@@ -8,7 +8,7 @@ _Last updated: 2026-06-28T09:20:58.497Z_
 |---|---|
 | Total leads | 503 |
 | Emails sent (unique leads) | 347 |
-| Sent today | 51 |
+| Sent today | 52 |
 | Replies | 5 |
 | Reply rate | 1.4% |
 
@@ -16,9 +16,9 @@ _Last updated: 2026-06-28T09:20:58.497Z_
 
 | Status | Count |
 |---|---|
-| done | 121 |
-| followup_1 | 121 |
-| sent | 81 |
+| done | 133 |
+| followup_1 | 110 |
+| sent | 80 |
 | ready | 73 |
 | bounced | 36 |
 | skipped | 29 |
@@ -31,6 +31,7 @@ _Last updated: 2026-06-28T09:20:58.497Z_
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
+| D Technologies - Web Development and Digital Marketing Agency in Rawalpindi, Pakistan | info@dtechnologies.com.pk | followup_1 | 2 | 2026-06-28 09:56 |
 | Kodexo Labs Pakistan – AI, Custom Software & Mobile App Development Company | contact@kodexolabs.com | followup_1 | 2 | 2026-06-28 08:54 |
 | Decojent - Top UI UX design agency 2025 | B2B SaaS | Website designer | hello@decojent.com | followup_1 | 2 | 2026-06-28 08:53 |
 | Antech Software Solution | antech_ss@hotmail.com | followup_1 | 2 | 2026-06-28 08:51 |
@@ -45,4 +46,3 @@ _Last updated: 2026-06-28T09:20:58.497Z_
 | Inertiasoft Private Limited | info@inertiasoft.net | followup_1 | 2 | 2026-06-28 08:39 |
 | Getweys Ltd | info@getweys.com | followup_1 | 2 | 2026-06-28 08:38 |
 | Coding Souls | Software Company In Pakistan | info@codingsouls.com | followup_1 | 2 | 2026-06-28 08:37 |
-| DatumSquare IT Services Pvt. Ltd. | info@datumsquare.com | followup_1 | 2 | 2026-06-28 08:35 |
