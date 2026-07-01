@@ -1,48 +1,48 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-30T11:41:51.775Z_
+_Last updated: 2026-07-01T09:16:53.691Z_
 
 ## Summary
 
 | Metric | Value |
 |---|---|
-| Total leads | 516 |
-| Emails sent (unique leads) | 395 |
-| Sent today | 58 |
-| Replies | 5 |
-| Reply rate | 1.3% |
+| Total leads | 522 |
+| Emails sent (unique leads) | 421 |
+| Sent today | 55 |
+| Replies | 6 |
+| Reply rate | 1.4% |
 
 ## Leads by status
 
 | Status | Count |
 |---|---|
-| done | 195 |
-| followup_1 | 101 |
-| sent | 75 |
-| bounced | 44 |
-| ready | 32 |
+| done | 209 |
+| followup_1 | 113 |
+| sent | 74 |
+| bounced | 49 |
 | skipped | 29 |
 | followup_2 | 19 |
+| new | 12 |
 | unsubscribed | 8 |
-| new | 8 |
-| replied | 5 |
+| replied | 6 |
+| ready | 3 |
 
 ## Recent activity (last 15)
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
-| Softnet Systems (An IT Company) | adnan@softnet-systems.com | followup_1 | 2 | 2026-06-30 08:55 |
-| IT Doyens - Website Design & Development – Ecommerce Website - Website Maintenance - Website Hosting - SEO in Karachi | info@itdoyens.com | followup_1 | 2 | 2026-06-30 08:54 |
-| The SAK (Pvt.) Ltd. - Web Design Agency & Digital Marketing Agency | info@thesak.ltd | followup_1 | 2 | 2026-06-30 08:53 |
-| Sasti Dukan | Online Shopping Website In Pakistan | support@sastidukan.com | followup_1 | 2 | 2026-06-30 08:52 |
-| Karachi SEO Services | info@karachiseoservices.com | followup_1 | 2 | 2026-06-30 08:51 |
-| Inconnect Solutions Digital Marketing Agency | malik3340513093@gmail.com | followup_1 | 2 | 2026-06-30 08:50 |
-| Astera Software | sales@astera.com | followup_1 | 2 | 2026-06-30 08:49 |
-| KNYSYS | sales@knysys.com | followup_1 | 2 | 2026-06-30 08:48 |
-| UrApp Technologies | sales@urapptech.com | followup_1 | 2 | 2026-06-30 08:46 |
-| Web Technology Pvt Ltd. | info@wt-it.com.pk | followup_1 | 2 | 2026-06-30 08:45 |
-| Tech Ventures Global | sales@techventuresglobal.com | followup_1 | 2 | 2026-06-30 08:44 |
-| Wallsoft Technologies | info@wallsofttech.com | followup_1 | 2 | 2026-06-30 08:43 |
-| IT Zone Pakistan | sales@itzonepakistan.com | followup_1 | 2 | 2026-06-30 08:41 |
-| Udhaar App | info@udhaar.pk | followup_1 | 2 | 2026-06-30 08:40 |
-| Linora SA Tech Solution | sales@linorasatech.com | followup_1 | 2 | 2026-06-30 08:38 |
+| Digital Ranks360 | Best Digital Agency | support@seorank360.com | followup_1 | 2 | 2026-07-01 09:16 |
+| Chapal | boutique@chapal.fr | followup_1 | 2 | 2026-07-01 09:15 |
+| Mashreq | media@mashreq.com | followup_1 | 2 | 2026-07-01 09:13 |
+| One T Digital | contact@onetdigitals.com | followup_1 | 2 | 2026-07-01 09:12 |
+| limelite entertainment and marketing solutions | bd@limelite.com.pk | followup_1 | 2 | 2026-07-01 09:10 |
+| Kaleidoscope | customerservice@iluvcolors.com | followup_1 | 2 | 2026-07-01 09:09 |
+| Ad Snipper | contact@adsnipper.com | followup_1 | 2 | 2026-07-01 09:07 |
+| Fusion Growth Partners | info@fusionbds.com | followup_1 | 2 | 2026-07-01 09:06 |
+| Solar Sweep Pvt Ltd | hello@solarsweep.pk | followup_1 | 2 | 2026-07-01 09:04 |
+| DigiExpo | business@digiexpo.in | followup_1 | 2 | 2026-07-01 09:03 |
+| Ahmed Chemical Co | zubair@ahmadchm.com | followup_1 | 2 | 2026-07-01 09:02 |
+| Web Design Company - Analogitsolutions | support@analogitsolutions.com | followup_1 | 2 | 2026-07-01 09:00 |
+| Think Software Solutions Pvt Ltd | support@thinksoftwaresolutions.com | followup_1 | 2 | 2026-07-01 08:59 |
+| Splendid Accounts | support@splendidaccounts.com | followup_1 | 2 | 2026-07-01 08:57 |
+| CodingGate - Codinggate | support@codinggate.pk | followup_1 | 2 | 2026-07-01 08:56 |
