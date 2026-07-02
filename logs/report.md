@@ -1,6 +1,6 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-07-02T09:57:30.578Z_
+_Last updated: 2026-07-02T11:31:26.496Z_
 
 ## Summary
 
@@ -8,7 +8,7 @@ _Last updated: 2026-07-02T09:57:30.578Z_
 |---|---|
 | Total leads | 531 |
 | Emails sent (unique leads) | 440 |
-| Sent today | 44 |
+| Sent today | 45 |
 | Replies | 7 |
 | Reply rate | 1.6% |
 
@@ -16,9 +16,9 @@ _Last updated: 2026-07-02T09:57:30.578Z_
 
 | Status | Count |
 |---|---|
-| done | 244 |
+| done | 245 |
 | followup_1 | 101 |
-| sent | 69 |
+| sent | 68 |
 | bounced | 53 |
 | skipped | 29 |
 | followup_2 | 19 |
@@ -29,6 +29,7 @@ _Last updated: 2026-07-02T09:57:30.578Z_
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
+| Legal Law Firm | ceo@legallawfirm.pk | followup_1 | 2 | 2026-07-02 11:29 |
 | Adil Aziz Qazi Law Firm LLP. (AAQ-LLP) | aqattorneys@gmail.com | followup_1 | 2 | 2026-07-02 09:56 |
 | Pakistan Law Bot | info@pakistanlawbot.com | followup_1 | 2 | 2026-07-02 09:50 |
 | Easy Door - Online Shopping in Pakistan | partner@easydoor.pk | followup_1 | 2 | 2026-07-02 09:49 |
@@ -43,4 +44,3 @@ _Last updated: 2026-07-02T09:57:30.578Z_
 | Inner Art Interior Designer Lahore | info@innerart.com.pk | followup_1 | 2 | 2026-07-02 09:34 |
 | QnE - Online Grocery Store | customerservice@qne.com.pk | followup_1 | 2 | 2026-07-02 09:32 |
 | Pak-Lawyer Associates | ask@paklawyer.com | followup_1 | 2 | 2026-07-02 09:31 |
-| Universal Dental (Pvt)Ltd - Pakistan | info@universaldental.com.pk | followup_1 | 2 | 2026-07-02 09:29 |
