@@ -1,14 +1,14 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-07-02T11:31:26.496Z_
+_Last updated: 2026-07-03T07:01:07.697Z_
 
 ## Summary
 
 | Metric | Value |
 |---|---|
-| Total leads | 531 |
-| Emails sent (unique leads) | 440 |
-| Sent today | 45 |
+| Total leads | 535 |
+| Emails sent (unique leads) | 444 |
+| Sent today | 4 |
 | Replies | 7 |
 | Reply rate | 1.6% |
 
@@ -18,7 +18,7 @@ _Last updated: 2026-07-02T11:31:26.496Z_
 |---|---|
 | done | 245 |
 | followup_1 | 101 |
-| sent | 68 |
+| sent | 72 |
 | bounced | 53 |
 | skipped | 29 |
 | followup_2 | 19 |
@@ -29,6 +29,10 @@ _Last updated: 2026-07-02T11:31:26.496Z_
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
+| Big Techies - Digital Agency | contact@bigtechies.com | sent | 1 | 2026-07-03 07:00 |
+| Ecommerce with Awais | info@edura.com | sent | 1 | 2026-07-03 07:00 |
+| NexiaTech | hello@nexiatech.org | sent | 1 | 2026-07-03 06:58 |
+| iCreatixPRO - Best SEO Company Pakistan | Top SEO Agency | SEO Services in Pakistan | SEO Marketing Agency | SEO Expert | icreatixpro@gmail.com | sent | 1 | 2026-07-03 06:57 |
 | Legal Law Firm | ceo@legallawfirm.pk | followup_1 | 2 | 2026-07-02 11:29 |
 | Adil Aziz Qazi Law Firm LLP. (AAQ-LLP) | aqattorneys@gmail.com | followup_1 | 2 | 2026-07-02 09:56 |
 | Pakistan Law Bot | info@pakistanlawbot.com | followup_1 | 2 | 2026-07-02 09:50 |
@@ -40,7 +44,3 @@ _Last updated: 2026-07-02T11:31:26.496Z_
 | Elegant Properties | DHA Property Dealer & Real Estate Lahore | info@elegantdha.com | followup_1 | 2 | 2026-07-02 09:41 |
 | 24Justice Online Lawyers in Pakistan | bilal@24justice.pk | followup_1 | 2 | 2026-07-02 09:39 |
 | Zabar Law Associates | info@zabar.com.pk | followup_1 | 2 | 2026-07-02 09:38 |
-| AskWakeel: Law Consultancy Firm in Pakistan | support@askwakeel.pk | followup_1 | 2 | 2026-07-02 09:36 |
-| Inner Art Interior Designer Lahore | info@innerart.com.pk | followup_1 | 2 | 2026-07-02 09:34 |
-| QnE - Online Grocery Store | customerservice@qne.com.pk | followup_1 | 2 | 2026-07-02 09:32 |
-| Pak-Lawyer Associates | ask@paklawyer.com | followup_1 | 2 | 2026-07-02 09:31 |
