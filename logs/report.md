@@ -1,6 +1,6 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-07-04T09:24:33.173Z_
+_Last updated: 2026-07-04T10:53:17.611Z_
 
 ## Summary
 
@@ -8,7 +8,7 @@ _Last updated: 2026-07-04T09:24:33.173Z_
 |---|---|
 | Total leads | 543 |
 | Emails sent (unique leads) | 449 |
-| Sent today | 27 |
+| Sent today | 28 |
 | Replies | 7 |
 | Reply rate | 1.6% |
 
@@ -17,10 +17,10 @@ _Last updated: 2026-07-04T09:24:33.173Z_
 | Status | Count |
 |---|---|
 | done | 299 |
-| followup_1 | 94 |
+| followup_1 | 95 |
 | bounced | 56 |
-| sent | 30 |
 | skipped | 29 |
+| sent | 29 |
 | followup_2 | 19 |
 | unsubscribed | 9 |
 | replied | 7 |
@@ -29,6 +29,7 @@ _Last updated: 2026-07-04T09:24:33.173Z_
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
+| MB Group Head office | info@mbgroup.pk | followup_1 | 2 | 2026-07-04 10:51 |
 | The M Square - Architect in multan | Interior designer in multan | Construction Company in Multan | dmsquare@hotmail.com | followup_1 | 2 | 2026-07-04 09:22 |
 | HILINE Architects and Interior Designers | contact@hiline.pk | followup_1 | 2 | 2026-07-04 09:21 |
 | Archi Cubes Architects & Interior Designer | info@archi-cubes.com | followup_1 | 2 | 2026-07-04 09:19 |
@@ -43,4 +44,3 @@ _Last updated: 2026-07-04T09:24:33.173Z_
 | Shophive | jobs@shophive.com | followup_1 | 2 | 2026-07-04 09:01 |
 | GoDesign Technologies | sales@godesign.pk | followup_1 | 2 | 2026-07-04 09:00 |
 | Khatri Estate | khatri.estate@yahoo.com | followup_1 | 2 | 2026-07-04 08:58 |
-| Vellani and Vellani | khi@vellani.com | followup_1 | 2 | 2026-07-04 08:57 |
