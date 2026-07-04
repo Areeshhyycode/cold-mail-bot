@@ -1,6 +1,6 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-07-04T07:40:30.538Z_
+_Last updated: 2026-07-04T09:11:09.943Z_
 
 ## Summary
 
@@ -8,7 +8,7 @@ _Last updated: 2026-07-04T07:40:30.538Z_
 |---|---|
 | Total leads | 543 |
 | Emails sent (unique leads) | 449 |
-| Sent today | 4 |
+| Sent today | 22 |
 | Replies | 7 |
 | Reply rate | 1.6% |
 
@@ -16,10 +16,10 @@ _Last updated: 2026-07-04T07:40:30.538Z_
 
 | Status | Count |
 |---|---|
-| done | 269 |
-| followup_1 | 101 |
+| done | 290 |
+| followup_1 | 98 |
 | bounced | 56 |
-| sent | 53 |
+| sent | 35 |
 | skipped | 29 |
 | followup_2 | 19 |
 | unsubscribed | 9 |
@@ -29,18 +29,18 @@ _Last updated: 2026-07-04T07:40:30.538Z_
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
-| Digital Web Shark | mamoor.khan@digitalwebshark.com | sent | 1 | 2026-07-04 07:40 |
-| Elegant Interiors & Construction | info@elegantinteriors.com.pk | bounced | 1 | 2026-07-04 06:44 |
-| Malik Sana Ullah Awan | High Court Lawyer Pakistan | MALIXSANA Legal Consultants | FIA Cybercrime, Criminal & Family Lawyer | info@malixlawoffice.com | bounced | 1 | 2026-07-04 06:43 |
-| GMB Local SEO Expert in Islamabad | Ubaid Ur Rehman | ubaidurrehman272696@gmail.com | sent | 1 | 2026-07-04 06:42 |
-| Hanif Rajput Rooftop Grill | info@hanifrajput.pk | followup_1 | 2 | 2026-07-03 09:43 |
-| Ninja Softs Pvt. Ltd. | info@ninjasofts.com | followup_1 | 2 | 2026-07-03 09:41 |
-| AZshopping.pk | info@azshopping.pk | followup_1 | 2 | 2026-07-03 09:40 |
-| Maxobiz | info@maxobiz.com | followup_1 | 2 | 2026-07-03 09:39 |
-| Bitlinks Tech | info@bitlinkstech.com | followup_1 | 2 | 2026-07-03 09:37 |
-| RBS Royal Business Solution Real Estate and Builders | info@rbsland.com | followup_1 | 2 | 2026-07-03 09:36 |
-| Patel Dental Clinic | clinicpateldental@gmail.com | followup_1 | 2 | 2026-07-03 09:35 |
-| Design and Depth | info@designanddepth.com | followup_1 | 2 | 2026-07-03 09:33 |
-| Mughal & co | info@mughalco.pk | followup_1 | 2 | 2026-07-03 09:32 |
-| City Chic Interior Design, LLC | info@citychicdesign.com | followup_1 | 2 | 2026-07-03 09:31 |
-| Alvi Dental Hospital — SMCHS | info@alvidental.com | followup_1 | 2 | 2026-07-03 09:30 |
+| Easyfringe | info@easyfringe.com | followup_1 | 2 | 2026-07-04 09:09 |
+| Studio Dental | info@thestudiodental.com | followup_1 | 2 | 2026-07-04 09:07 |
+| RA Real Estate & Developers | raestatee@gmail.com | followup_1 | 2 | 2026-07-04 09:06 |
+| Advocate Bilal & Co. (ABC Law Firm) | support@advocatebilal.com | followup_1 | 2 | 2026-07-04 09:05 |
+| New Kabul Restaurant | kabul.restaurant@hotmail.com | followup_1 | 2 | 2026-07-04 09:04 |
+| ZEEFAH.NET | info@zeefah.net | followup_1 | 2 | 2026-07-04 09:02 |
+| Shophive | jobs@shophive.com | followup_1 | 2 | 2026-07-04 09:01 |
+| GoDesign Technologies | sales@godesign.pk | followup_1 | 2 | 2026-07-04 09:00 |
+| Khatri Estate | khatri.estate@yahoo.com | followup_1 | 2 | 2026-07-04 08:58 |
+| Vellani and Vellani | khi@vellani.com | followup_1 | 2 | 2026-07-04 08:57 |
+| Javed Qazi & Co. Law Firm | jahangir_105@hotmail.com | followup_1 | 2 | 2026-07-04 08:56 |
+| Salt'n Pepper Restaurant Liberty | snpfood@brain.net.pk | followup_1 | 2 | 2026-07-04 08:55 |
+| Voom.pk Online Shopping | voom.pk@gmail.com | followup_1 | 2 | 2026-07-04 08:53 |
+| NorthWestern Dental Clinic | rashidburhan12@gmail.com | followup_1 | 2 | 2026-07-04 08:51 |
+| Shakrial & Co. Estate and Builders | shakrialco@gmail.com | followup_1 | 2 | 2026-07-04 08:49 |
