@@ -1,6 +1,6 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-07-04T09:11:09.943Z_
+_Last updated: 2026-07-04T09:24:33.173Z_
 
 ## Summary
 
@@ -8,7 +8,7 @@ _Last updated: 2026-07-04T09:11:09.943Z_
 |---|---|
 | Total leads | 543 |
 | Emails sent (unique leads) | 449 |
-| Sent today | 22 |
+| Sent today | 27 |
 | Replies | 7 |
 | Reply rate | 1.6% |
 
@@ -16,10 +16,10 @@ _Last updated: 2026-07-04T09:11:09.943Z_
 
 | Status | Count |
 |---|---|
-| done | 290 |
-| followup_1 | 98 |
+| done | 299 |
+| followup_1 | 94 |
 | bounced | 56 |
-| sent | 35 |
+| sent | 30 |
 | skipped | 29 |
 | followup_2 | 19 |
 | unsubscribed | 9 |
@@ -29,6 +29,11 @@ _Last updated: 2026-07-04T09:11:09.943Z_
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
+| The M Square - Architect in multan | Interior designer in multan | Construction Company in Multan | dmsquare@hotmail.com | followup_1 | 2 | 2026-07-04 09:22 |
+| HILINE Architects and Interior Designers | contact@hiline.pk | followup_1 | 2 | 2026-07-04 09:21 |
+| Archi Cubes Architects & Interior Designer | info@archi-cubes.com | followup_1 | 2 | 2026-07-04 09:19 |
+| ArcoDesk | Architectural Design Services | Best Architects in Islamabad | ceo@arcodesk.com | followup_1 | 2 | 2026-07-04 09:17 |
+| Primarc Studio - Architects In Islamabad & Interior Design Firm | contact@primarcstudio.com | followup_1 | 2 | 2026-07-04 09:16 |
 | Easyfringe | info@easyfringe.com | followup_1 | 2 | 2026-07-04 09:09 |
 | Studio Dental | info@thestudiodental.com | followup_1 | 2 | 2026-07-04 09:07 |
 | RA Real Estate & Developers | raestatee@gmail.com | followup_1 | 2 | 2026-07-04 09:06 |
@@ -39,8 +44,3 @@ _Last updated: 2026-07-04T09:11:09.943Z_
 | GoDesign Technologies | sales@godesign.pk | followup_1 | 2 | 2026-07-04 09:00 |
 | Khatri Estate | khatri.estate@yahoo.com | followup_1 | 2 | 2026-07-04 08:58 |
 | Vellani and Vellani | khi@vellani.com | followup_1 | 2 | 2026-07-04 08:57 |
-| Javed Qazi & Co. Law Firm | jahangir_105@hotmail.com | followup_1 | 2 | 2026-07-04 08:56 |
-| Salt'n Pepper Restaurant Liberty | snpfood@brain.net.pk | followup_1 | 2 | 2026-07-04 08:55 |
-| Voom.pk Online Shopping | voom.pk@gmail.com | followup_1 | 2 | 2026-07-04 08:53 |
-| NorthWestern Dental Clinic | rashidburhan12@gmail.com | followup_1 | 2 | 2026-07-04 08:51 |
-| Shakrial & Co. Estate and Builders | shakrialco@gmail.com | followup_1 | 2 | 2026-07-04 08:49 |
