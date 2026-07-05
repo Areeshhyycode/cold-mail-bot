@@ -1,14 +1,14 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-07-05T07:25:45.567Z_
+_Last updated: 2026-07-05T08:21:15.415Z_
 
 ## Summary
 
 | Metric | Value |
 |---|---|
 | Total leads | 552 |
-| Emails sent (unique leads) | 454 |
-| Sent today | 5 |
+| Emails sent (unique leads) | 458 |
+| Sent today | 25 |
 | Replies | 7 |
 | Reply rate | 1.5% |
 
@@ -17,31 +17,30 @@ _Last updated: 2026-07-05T07:25:45.567Z_
 | Status | Count |
 |---|---|
 | done | 299 |
-| followup_1 | 95 |
+| followup_1 | 111 |
 | bounced | 56 |
-| sent | 34 |
 | skipped | 29 |
+| sent | 22 |
 | followup_2 | 19 |
 | unsubscribed | 9 |
 | replied | 7 |
-| new | 4 |
 
 ## Recent activity (last 15)
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
-| Coalesce Design Studio | info@coalesce.pk | sent | 1 | 2026-07-05 07:25 |
-| Idea catcher interior designers | ideacatcher82@gmail.com | sent | 1 | 2026-07-05 07:24 |
-| Amaanullah Khan - Software Developer | info@amaanullah.com | sent | 1 | 2026-07-05 07:22 |
-| Digital Minds Pakistan | info@digitalminds.pk | sent | 1 | 2026-07-05 07:21 |
-| Devbrid Solutions | contact@devbrid.com | sent | 1 | 2026-07-05 07:19 |
-| MB Group Head office | info@mbgroup.pk | followup_1 | 2 | 2026-07-04 10:51 |
-| The M Square - Architect in multan | Interior designer in multan | Construction Company in Multan | dmsquare@hotmail.com | followup_1 | 2 | 2026-07-04 09:22 |
-| HILINE Architects and Interior Designers | contact@hiline.pk | followup_1 | 2 | 2026-07-04 09:21 |
-| Archi Cubes Architects & Interior Designer | info@archi-cubes.com | followup_1 | 2 | 2026-07-04 09:19 |
-| ArcoDesk | Architectural Design Services | Best Architects in Islamabad | ceo@arcodesk.com | followup_1 | 2 | 2026-07-04 09:17 |
-| Primarc Studio - Architects In Islamabad & Interior Design Firm | contact@primarcstudio.com | followup_1 | 2 | 2026-07-04 09:16 |
-| Easyfringe | info@easyfringe.com | followup_1 | 2 | 2026-07-04 09:09 |
-| Studio Dental | info@thestudiodental.com | followup_1 | 2 | 2026-07-04 09:07 |
-| RA Real Estate & Developers | raestatee@gmail.com | followup_1 | 2 | 2026-07-04 09:06 |
-| Advocate Bilal & Co. (ABC Law Firm) | support@advocatebilal.com | followup_1 | 2 | 2026-07-04 09:05 |
+| ProxyBase ( https:&#x2F;&#x2F;proxybase.xyz ) | jobs@proxybase.xyz | followup_1 | 2 | 2026-07-05 08:19 |
+| Walmart Global Tech (International Digital Experiences) | gaurav.sharma0@walmart.com | followup_1 | 2 | 2026-07-05 08:17 |
+| ArtCraft | brandon@storyteller.ai | followup_1 | 2 | 2026-07-05 08:15 |
+| Jimmy's and sons LLC | jimmyandsonsfoodsllp@gmail.com | followup_1 | 2 | 2026-07-05 08:14 |
+| Kamran sheikh interior design- hospitality consultancy | info@kamransheikh.com | followup_1 | 2 | 2026-07-05 08:14 |
+| Amer Adnan Associates | info@ameradnan.com | followup_1 | 2 | 2026-07-05 08:12 |
+| FAMILY DENTAL CLINIC | haroonrao@hotmail.com | followup_1 | 2 | 2026-07-05 08:11 |
+| The Fast Interiors Studio DHA - Interior Designer in Lahore,Wallpapers, Flooring ,Curtains, Artificial Plants | thefastinteriordha@gmail.com | followup_1 | 2 | 2026-07-05 08:09 |
+| Web Technologies Pakistan | info@webtechnologiespak.com | followup_1 | 2 | 2026-07-05 08:07 |
+| YBM intérieurs | info@ybminteriors.com | followup_1 | 2 | 2026-07-05 08:06 |
+| Cheezal Dental Clinic | info@mysite.com | followup_1 | 2 | 2026-07-05 08:05 |
+| NRQ Dental & Medical Center | nrqdental@gmail.com | followup_1 | 2 | 2026-07-05 08:04 |
+| Zess Tech (SEO Services in Islamabad) | info@zesstech.pk | followup_1 | 2 | 2026-07-05 08:02 |
+| myself online shopping mart | support@myself-online.com.pk | followup_1 | 2 | 2026-07-05 08:00 |
+| Webbuggs (Your Cyber Space Existence Managers) | info@webbuggs.com | followup_1 | 2 | 2026-07-05 07:59 |
