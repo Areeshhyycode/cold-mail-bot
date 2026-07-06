@@ -1,6 +1,6 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-07-06T11:25:00.413Z_
+_Last updated: 2026-07-06T12:39:09.357Z_
 
 ## Summary
 
@@ -16,8 +16,8 @@ _Last updated: 2026-07-06T11:25:00.413Z_
 
 | Status | Count |
 |---|---|
-| done | 344 |
-| followup_1 | 77 |
+| done | 345 |
+| followup_1 | 76 |
 | bounced | 59 |
 | skipped | 29 |
 | followup_2 | 19 |
