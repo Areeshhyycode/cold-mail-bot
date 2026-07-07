@@ -1,14 +1,14 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-07-06T12:39:09.357Z_
+_Last updated: 2026-07-07T07:37:16.171Z_
 
 ## Summary
 
 | Metric | Value |
 |---|---|
-| Total leads | 556 |
-| Emails sent (unique leads) | 459 |
-| Sent today | 12 |
+| Total leads | 559 |
+| Emails sent (unique leads) | 462 |
+| Sent today | 3 |
 | Replies | 7 |
 | Reply rate | 1.5% |
 
@@ -16,12 +16,12 @@ _Last updated: 2026-07-06T12:39:09.357Z_
 
 | Status | Count |
 |---|---|
-| done | 345 |
-| followup_1 | 76 |
+| done | 346 |
+| followup_1 | 77 |
 | bounced | 59 |
 | skipped | 29 |
 | followup_2 | 19 |
-| sent | 12 |
+| sent | 13 |
 | unsubscribed | 9 |
 | replied | 7 |
 
@@ -29,6 +29,9 @@ _Last updated: 2026-07-06T12:39:09.357Z_
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
+| GMB Local SEO Expert in Islamabad | Ubaid Ur Rehman | ubaidurrehman272696@gmail.com | followup_1 | 2 | 2026-07-07 07:36 |
+| Imlaak.com: 10X Your Real Estate | info@imlaak.com | sent | 1 | 2026-07-07 07:34 |
+| Web developer- Basil rana | basilrana1@gmail.com | sent | 1 | 2026-07-07 07:32 |
 | JbWebSoft - Web Design & Development | SEO and digital Marketing Sevices Provider | info@jbwebsoft.com | sent | 1 | 2026-07-06 08:57 |
 | Design Norms | info.designnorms@gmail.com | followup_1 | 2 | 2026-07-06 08:27 |
 | AHMED FOODS (Private) Limited - احمد فوڈز (پرائیویٹ) لمیٹڈ | info@ahmedfood.com | followup_1 | 2 | 2026-07-06 08:25 |
@@ -41,6 +44,3 @@ _Last updated: 2026-07-06T12:39:09.357Z_
 | Snapcart | info@fashionshop.com | bounced | 1 | 2026-07-06 08:17 |
 | Byte House | info@bytecloudsolutions.org | bounced | 1 | 2026-07-06 08:15 |
 | DMC Lahore – Digital Marketing & SEO Services | info@dmclahore.com | sent | 1 | 2026-07-06 08:14 |
-| SEO Services in Lahore | SEO Specialist in Pakistan | safdarabbaskot123@gmail.com | followup_1 | 2 | 2026-07-05 09:16 |
-| Alpha Dental Clinic Islamabad | alphadentalclinicislamabad@gmail.com | followup_1 | 2 | 2026-07-05 09:15 |
-| Arsh Arc Associates - Best Architects in Islamabad & Rawalpindi, Pakistan | arsharc@yahoo.com | followup_1 | 2 | 2026-07-05 09:14 |
