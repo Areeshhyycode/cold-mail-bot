@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Outreach Engine</title>
+<style>
+  :root{--bg:#0d1117;--card:#161b22;--border:#27303b;--txt:#e6edf3;--mut:#8b949e;--accent:#2f81f7;--green:#3fb950;--red:#f85149;--amber:#d29922;--purple:#bc8cff;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--txt);padding:24px;max-width:1280px;margin:0 auto}
+  h1{font-size:22px;margin-bottom:4px}
+  .sub{color:var(--mut);font-size:13px;margin-bottom:18px}
+  a{color:var(--accent);text-decoration:none}
+  .tabs{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap}
+  .tab{background:var(--card);border:1px solid var(--border);color:var(--mut);padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px}
+  .tab.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:20px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px}
+  .card .v{font-size:24px;font-weight:700}.card .l{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+  .card.green .v{color:var(--green)}.card.blue .v{color:var(--accent)}.card.amber .v{color:var(--amber)}.card.red .v{color:var(--red)}.card.purple .v{color:var(--purple)}
+  .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  select,input,button{font-family:inherit}
+  select,input{background:var(--card);border:1px solid var(--border);color:var(--txt);padding:8px 12px;border-radius:8px;font-size:13px}
+  .msg{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px}
+  .msg .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:8px}
+  .who{font-weight:600}.who small{color:var(--mut);font-weight:400}
+  .badge{padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;display:inline-block;margin-left:6px}
+  .ch-email{background:#2f81f733;color:#79c0ff}.ch-whatsapp{background:#3fb95033;color:#7ee787}
+  .ch-contact_form{background:#d2992233;color:#e3b341}.ch-linkedin{background:#1f6feb33;color:#79c0ff}
+  .ch-facebook{background:#bc8cff33;color:#d2a8ff}.ch-instagram{background:#f8514933;color:#ffa198}.ch-manual{background:#6e768133;color:#8b949e}
+  .var{background:#21262d;color:var(--mut);border:1px solid var(--border);border-radius:6px;padding:1px 6px;font-size:11px;margin-left:6px}
+  .subj{font-size:14px;font-weight:600;margin:6px 0}
+  .preview{color:var(--mut);font-size:12px;font-style:italic;margin-bottom:8px}
+  pre{background:#0d1117;border:1px solid var(--border);border-radius:8px;padding:12px;font-size:12.5px;white-space:pre-wrap;line-height:1.6;max-height:260px;overflow:auto}
+  .reasons{margin:8px 0;font-size:12px;line-height:1.7;color:var(--mut)}
+  .acts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .btn{border:0;border-radius:8px;padding:7px 14px;font-size:13px;cursor:pointer}
+  .btn.ok{background:var(--green);color:#04260f}.btn.no{background:#21262d;color:var(--txt);border:1px solid var(--border)}
+  .btn.go{background:var(--accent);color:#fff}.btn.wa{background:#25d366;color:#04260f}
+  .btn:disabled{opacity:.5;cursor:default}
+  .empty{color:var(--mut);text-align:center;padding:40px}
+  .cls{padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600}
+  .cls-interested,.cls-meeting_request,.cls-quote_request,.cls-need_info{background:#3fb95033;color:#7ee787}
+  .cls-not_interested,.cls-spam{background:#f8514933;color:#ffa198}
+  .cls-auto_reply,.cls-out_of_office,.cls-unknown{background:#6e768133;color:#8b949e}
+  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-top:8px}
+  th,td{text-align:left;padding:9px 12px;font-size:13px;border-bottom:1px solid var(--border)}
+  th{color:var(--mut);font-size:11px;text-transform:uppercase}
+  .hide{display:none}
+  .hint{color:var(--mut);font-size:12px}
+</style>
+</head>
+<body>
+  <h1>📣 AI Outreach Engine</h1>
+  <div class="sub"><a href="/">← Leads</a> · <a href="/jobs">Jobs</a> · multi-channel · <span id="ts" class="mut"></span></div>
+
+  <div class="cards" id="cards"></div>
+
+  <div class="tabs">
+    <div class="tab on" data-t="queue">📥 Approval Queue</div>
+    <div class="tab" data-t="replies">💬 Replies</div>
+    <div class="tab" data-t="campaigns">🎯 Campaigns</div>
+    <div class="tab" data-t="analytics">📊 Analytics</div>
+  </div>
+
+  <!-- QUEUE -->
+  <div id="tab-queue">
+    <div class="bar">
+      <select id="qChannel"><option value="">All channels</option>
+        <option>email</option><option>whatsapp</option><option>contact_form</option>
+        <option>linkedin</option><option>facebook</option><option>instagram</option><option>manual</option></select>
+      <select id="qStatus"><option value="draft,approved">Draft + Approved</option>
+        <option value="draft">Draft only</option><option value="approved">Approved only</option>
+        <option value="all">All</option></select>
+      <span class="hint">Email auto-sends after approve. WhatsApp / form / social = you send, then “Mark sent”.</span>
+    </div>
+    <div id="queue"></div>
+  </div>
+
+  <!-- REPLIES -->
+  <div id="tab-replies" class="hide">
+    <div class="bar">
+      <select id="rClass"><option value="all">All types</option>
+        <option>interested</option><option>meeting_request</option><option>quote_request</option>
+        <option>need_info</option><option>not_interested</option><option>auto_reply</option>
+        <option>out_of_office</option><option>spam</option></select>
+      <span class="hint">Suggested replies never auto-send — you approve each one.</span>
+    </div>
+    <div id="replies"></div>
+  </div>
+
+  <!-- CAMPAIGNS -->
+  <div id="tab-campaigns" class="hide">
+    <div id="campaigns"></div>
+  </div>
+
+  <!-- ANALYTICS -->
+  <div id="tab-analytics" class="hide">
+    <div class="cards" id="anCards"></div>
+    <h3 style="margin:16px 0 6px;font-size:14px">🏆 Best subject lines</h3>
+    <table id="subjTable"><thead><tr><th>Subject</th><th>Sent</th><th>Opened</th><th>Replied</th><th>Reply %</th></tr></thead><tbody></tbody></table>
+    <h3 style="margin:20px 0 6px;font-size:14px">⏰ Best sending hours</h3>
+    <table id="timeTable"><thead><tr><th>Hour</th><th>Sent</th><th>Replied</th><th>Reply %</th></tr></thead><tbody></tbody></table>
+  </div>
+
+<script>
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let tab = "queue";
+
+async function api(path, opts){
+  const r = await fetch(path, opts);
+  if (!r.ok) { const e = await r.json().catch(()=>({})); throw new Error(e.error || r.status); }
+  return r.json();
+}
+const post = (path, body) => api(path, { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(body||{}) });
+
+/* ------------------------------- tabs -------------------------------- */
+document.querySelector('.tabs').addEventListener('click', e => {
+  const t = e.target.closest('.tab'); if (!t) return;
+  tab = t.dataset.t;
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on', x===t));
+  ['queue','replies','campaigns','analytics'].forEach(n =>
+    document.getElementById('tab-'+n).classList.toggle('hide', n!==tab));
+  loadTab();
+});
+['qChannel','qStatus'].forEach(id=>document.getElementById(id).addEventListener('change',loadQueue));
+document.getElementById('rClass').addEventListener('change',loadReplies);
+
+function card(v,l,cls){ return `<div class="card ${cls||''}"><div class="v">${v}</div><div class="l">${l}</div></div>`; }
+
+async function loadStats(){
+  try{
+    const s = await api('/api/outreach/stats');
+    document.getElementById('cards').innerHTML =
+      card(s.pendingApproval||0,'Await approval','amber') +
+      card(s.readyToSend||0,'Ready to send','blue') +
+      card((s.byStatus&&s.byStatus.sent)||0,'Sent') +
+      card((s.byStatus&&s.byStatus.delivered)||0,'Delivered','green') +
+      card(s.pendingReplies||0,'New replies','purple') +
+      card(s.activeCampaigns||0,'Active campaigns');
+    document.getElementById('ts').textContent = 'updated ' + new Date().toLocaleTimeString();
+  }catch(e){ document.getElementById('cards').innerHTML = `<div class="empty">API error: ${esc(e.message)} — token set hai?</div>`; }
+}
+
+/* ------------------------------- queue ------------------------------- */
+async function loadQueue(){
+  const ch = document.getElementById('qChannel').value;
+  const st = document.getElementById('qStatus').value;
+  const p = new URLSearchParams({ status: st }); if (ch) p.set('channel', ch);
+  try{
+    const d = await api('/api/outreach/queue?'+p);
+    const el = document.getElementById('queue');
+    if (!d.messages.length){ el.innerHTML = '<div class="empty">Queue khali. Run <code>npm run outreach</code> to draft messages.</div>'; return; }
+    el.innerHTML = d.messages.map(m => msgCard(m)).join('');
+  }catch(e){ document.getElementById('queue').innerHTML = `<div class="empty">${esc(e.message)}</div>`; }
+}
+
+function msgCard(m){
+  const lead = m.lead || {};
+  const who = esc(lead.businessName || lead.company || lead.email || 'Unknown');
+  const contact = esc(lead.email || lead.phone || lead.website || '');
+  const reasons = (m.channelReasons||[]).map(r=>esc(r.text)).join('<br>');
+  const isEmail = m.channel === 'email';
+  const isManual = ['whatsapp','contact_form','linkedin','facebook','instagram','manual'].includes(m.channel);
+
+  let linkBtn = '';
+  if (m.channel==='whatsapp' && m.waLink) linkBtn = `<a class="btn wa" href="${esc(m.waLink)}" target="_blank" rel="noopener">Open WhatsApp ↗</a>`;
+  if (m.channel==='contact_form' && m.formFields && m.formFields._url) linkBtn = `<a class="btn go" href="${esc(m.formFields._url)}" target="_blank" rel="noopener">Open form ↗</a>`;
+
+  return `<div class="msg" data-id="${m._id}">
+    <div class="top">
+      <div class="who">${who} <small>${contact}</small>
+        <span class="badge ch-${m.channel}">${m.channel}</span>
+        ${m.variant&&m.channel==='email'?`<span class="var">Variant ${esc(m.variant)}</span>`:''}
+        <span class="var">${esc(m.tone)}</span>
+        <span class="var">${esc(m.status)}</span>
+      </div>
+    </div>
+    ${m.subject?`<div class="subj">${esc(m.subject)}</div>`:''}
+    ${m.previewText?`<div class="preview">${esc(m.previewText)}</div>`:''}
+    <pre>${esc(m.body)}</pre>
+    ${reasons?`<details><summary class="hint">Why this channel?</summary><div class="reasons">${reasons}</div></details>`:''}
+    <div class="acts">
+      ${m.status==='draft'?`<button class="btn ok" onclick="approve('${m._id}')">${isEmail?'✓ Approve & auto-send':'✓ Approve'}</button>`:''}
+      ${linkBtn}
+      ${isManual && m.status==='approved'?`<button class="btn go" onclick="markSent('${m._id}')">Mark sent ✓</button>`:''}
+      ${m.status!=='rejected'?`<button class="btn no" onclick="reject('${m._id}')">Reject</button>`:''}
+    </div>
+  </div>`;
+}
+
+async function approve(id){ try{ await post('/api/outreach/approve',{id}); loadQueue(); loadStats(); }catch(e){ alert(e.message); } }
+async function reject(id){ try{ await post('/api/outreach/reject',{id}); loadQueue(); loadStats(); }catch(e){ alert(e.message); } }
+async function markSent(id){ try{ await post('/api/outreach/mark-sent',{id}); loadQueue(); loadStats(); }catch(e){ alert(e.message); } }
+
+/* ------------------------------ replies ------------------------------ */
+async function loadReplies(){
+  const c = document.getElementById('rClass').value;
+  try{
+    const d = await api('/api/outreach/replies?classification='+encodeURIComponent(c));
+    const el = document.getElementById('replies');
+    if (!d.replies.length){ el.innerHTML = '<div class="empty">No replies classified yet.</div>'; return; }
+    el.innerHTML = d.replies.map(r => replyCard(r)).join('');
+  }catch(e){ document.getElementById('replies').innerHTML = `<div class="empty">${esc(e.message)}</div>`; }
+}
+function replyCard(r){
+  const lead = r.lead || {};
+  const who = esc(lead.businessName || lead.company || r.from || 'Unknown');
+  return `<div class="msg">
+    <div class="top">
+      <div class="who">${who} <small>${esc(r.from||'')}</small>
+        <span class="cls cls-${r.classification}">${esc(r.classification)}</span>
+        <span class="var">${Math.round((r.confidence||0)*100)}%</span>
+        <span class="var">${esc(r.sentiment)}</span>
+      </div>
+    </div>
+    ${r.summary?`<div class="preview">${esc(r.summary)}</div>`:''}
+    <pre>${esc((r.text||'').slice(0,600))}</pre>
+    ${r.suggestedReply?`
+      <div class="hint" style="margin-top:8px">Suggested reply (${esc(r.suggestedSubject||'')}):</div>
+      <pre>${esc(r.suggestedReply)}</pre>
+      <div class="acts">
+        ${r.status==='new'?`<button class="btn ok" onclick="sendReply('${r._id}')">Send this reply</button>`:`<span class="hint">${esc(r.status)}</span>`}
+        <button class="btn no" onclick="dismissReply('${r._id}')">Dismiss</button>
+      </div>`
+    : `<div class="hint" style="margin-top:8px">No reply suggested for this category.</div>
+       <div class="acts"><button class="btn no" onclick="dismissReply('${r._id}')">Dismiss</button></div>`}
+  </div>`;
+}
+async function sendReply(id){ if(!confirm('Send the suggested reply?'))return; try{ await post('/api/outreach/replies/send',{id}); loadReplies(); loadStats(); }catch(e){ alert(e.message); } }
+async function dismissReply(id){ try{ await post('/api/outreach/replies/dismiss',{id}); loadReplies(); }catch(e){ alert(e.message); } }
+
+/* ----------------------------- campaigns ----------------------------- */
+async function loadCampaigns(){
+  try{
+    const d = await api('/api/outreach/campaigns');
+    document.getElementById('campaigns').innerHTML = d.campaigns.map(c=>{
+      const st = c.stats||{};
+      return `<div class="msg">
+        <div class="top">
+          <div class="who">${esc(c.label||c.name)} <small>${esc(c.name)}</small>
+            <span class="var">${esc(c.status)}</span>
+            <span class="var">${esc((c.style&&c.style.tone)||'')}</span>
+            <span class="var">${(c.style&&c.style.variants)||1} variants</span>
+          </div>
+          <div class="acts" style="margin:0">
+            ${c.status==='active'?`<button class="btn no" onclick="setCamp('${esc(c.name)}','paused')">⏸ Pause</button>`
+              :`<button class="btn ok" onclick="setCamp('${esc(c.name)}','active')">▶ Resume</button>`}
+          </div>
+        </div>
+        <div class="hint">${esc(c.goal||'')}</div>
+        <div class="reasons">Audience: ${esc((c.audience&&c.audience.leadType)||'ANY')} · minScore ${((c.audience&&c.audience.minScore)||0)}
+          · channels: ${esc(((c.style&&c.style.channels)||[]).join(', '))}</div>
+        <div class="reasons">Drafted ${st.drafted||0} · Sent ${st.sent||0} · Replies ${st.replies||0}</div>
+      </div>`;
+    }).join('') || '<div class="empty">No campaigns.</div>';
+  }catch(e){ document.getElementById('campaigns').innerHTML = `<div class="empty">${esc(e.message)}</div>`; }
+}
+async function setCamp(name,status){ try{ await post('/api/outreach/campaigns/status',{name,status}); loadCampaigns(); loadStats(); }catch(e){ alert(e.message); } }
+
+/* ----------------------------- analytics ----------------------------- */
+async function loadAnalytics(){
+  try{
+    const a = await api('/api/outreach/analytics');
+    document.getElementById('anCards').innerHTML =
+      card(a.emailsSent||0,'Sent') +
+      card(a.delivered||0,'Delivered','green') +
+      card((a.bounceRate||0)+'%','Bounce rate', a.bounceRate>5?'red':'') +
+      card(a.openRate!=null?a.openRate+'%':'—','Open rate','blue') +
+      card(a.replies||0,'Replies','purple') +
+      card((a.replyRate||0)+'%','Reply rate', a.replyRate>=2?'green':'amber') +
+      card(a.positiveReplies||0,'Positive','green') +
+      card(a.negativeReplies||0,'Negative','red') +
+      card((a.followUpRate||0)+'%','Follow-up rate') +
+      card(a.pendingApproval||0,'Awaiting approval','amber');
+    document.querySelector('#subjTable tbody').innerHTML = (a.bestSubjects||[]).map(s=>
+      `<tr><td>${esc(s.subject)}</td><td>${s.sent}</td><td>${s.opened}</td><td>${s.replied}</td><td>${s.replyRate}%</td></tr>`).join('')
+      || '<tr><td colspan="5" class="hint">Not enough sends yet (need ≥3 per subject).</td></tr>';
+    document.querySelector('#timeTable tbody').innerHTML = (a.sendTimes||[]).map(t=>
+      `<tr><td>${t.hour}:00</td><td>${t.sent}</td><td>${t.replied}</td><td>${t.replyRate}%</td></tr>`).join('')
+      || '<tr><td colspan="4" class="hint">No sends yet.</td></tr>';
+  }catch(e){ document.getElementById('anCards').innerHTML = `<div class="empty">${esc(e.message)}</div>`; }
+}
+
+function loadTab(){ ({queue:loadQueue,replies:loadReplies,campaigns:loadCampaigns,analytics:loadAnalytics}[tab])(); }
+function loadAll(){ loadStats(); loadTab(); }
+loadAll();
+setInterval(loadStats, 30000);
+</script>
+</body>
+</html>

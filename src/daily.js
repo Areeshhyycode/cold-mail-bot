@@ -13,12 +13,29 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // "all"/"software"/"service" ke liye Playwright (chromium) install hona chahiye.
 const SCRAPE_MODE = process.env.SCRAPE_MODE || "jobs";
 
-const STEPS = [
-  { name: "Find fresh leads", file: "scraper/run.js", args: [SCRAPE_MODE] },
+// OUTREACH_V2: naya multi-channel outreach engine (Task 5). Default OFF — purana
+// single-channel email flow (personalize → send) hi chalta hai. "1" karo to v2:
+// research → channel decide → compose drafts → dispatch (email auto, baaki manual).
+// Dono Lead.status likhte hain, isliye replyChecker/report dono cases me chalte hain.
+const OUTREACH_V2 = process.env.OUTREACH_V2 === "1";
+
+const LEGACY_STEPS = [
   { name: "Personalize (route JOB/SERVICE)", file: "ai/run.js" },
-  { name: "Check replies + bounces", file: "tracker/replyChecker.js" },
   { name: "Send first emails", file: "sender/run.js" },
   { name: "Send follow-ups", file: "sender/followup.js" },
+];
+
+const V2_STEPS = [
+  { name: "Outreach: research + channel decide + compose drafts", file: "outreach/run.js" },
+  { name: "Outreach: dispatch approved (email auto, others manual)", file: "outreach/dispatch.js" },
+  { name: "Outreach: classify new replies (Phase 8)", file: "outreach/replyScan.js" },
+];
+
+const STEPS = [
+  { name: "Find fresh leads", file: "scraper/run.js", args: [SCRAPE_MODE] },
+  { name: "Enrich extension companies (website + email)", file: "scraper/enrichCompanies.js" },
+  { name: "Check replies + bounces", file: "tracker/replyChecker.js" },
+  ...(OUTREACH_V2 ? V2_STEPS : LEGACY_STEPS),
   { name: "Generate report", file: "report.js" },
 ];
 

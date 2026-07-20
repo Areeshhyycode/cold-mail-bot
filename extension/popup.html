@@ -3,63 +3,160 @@
 <head>
 <meta charset="UTF-8" />
 <style>
-  :root{--bg:#0d1117;--card:#161b22;--border:#27303b;--txt:#e6edf3;--mut:#8b949e;--accent:#2f81f7;--green:#3fb950;}
+  :root{--bg:#0d1117;--card:#161b22;--border:#27303b;--txt:#e6edf3;--mut:#8b949e;--accent:#2f81f7;--green:#3fb950;--red:#f85149;--amber:#d29922;}
   *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-  body{width:380px;max-height:580px;overflow-y:auto;background:var(--bg);color:var(--txt);padding:12px}
+  body{width:400px;max-height:600px;overflow-y:auto;background:var(--bg);color:var(--txt);padding:12px}
   h1{font-size:15px;margin-bottom:2px}
   .sub{color:var(--mut);font-size:11px;margin-bottom:10px}
   button{background:var(--accent);color:#fff;border:0;border-radius:7px;padding:8px 10px;font-size:13px;cursor:pointer}
   button.ghost{background:var(--card);border:1px solid var(--border);color:var(--txt)}
+  button.mini{padding:2px 7px;font-size:10px;margin-left:6px}
   button:hover{opacity:.9}
   .row{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
   .row button{flex:1;min-width:90px}
   .count{font-size:11px;color:var(--mut);margin:6px 0}
+  select{background:var(--bg);border:1px solid var(--border);color:var(--txt);border-radius:6px;padding:3px 5px;font-size:11px}
+
+  /* sync bar */
+  .syncbar{font-size:11px;color:var(--mut);background:var(--card);border:1px solid var(--border);border-radius:7px;padding:6px 8px;margin-bottom:8px;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+  .syncbar:empty{display:none}
+  .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;flex:0 0 auto}
+  .dot.ok{background:var(--green)}.dot.err{background:var(--red)}.dot.pend{background:var(--amber)}
+
+  /* filter chips */
+  .chips{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap}
+  .chip{background:var(--card);border:1px solid var(--border);color:var(--mut);padding:4px 10px;border-radius:20px;cursor:pointer;font-size:11px;user-select:none}
+  .chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+
+  /* job card */
   .job{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;margin-bottom:6px;font-size:12px}
-  .job .t{font-weight:600;color:#79c0ff}
-  .job .c{color:var(--txt)}.job .m{color:var(--mut);font-size:11px}
-  .job a{color:var(--accent);text-decoration:none;font-size:11px}
-  .job .acts{display:flex;gap:6px;margin-top:5px}
+  .job .t{font-weight:600;color:#79c0ff;line-height:1.5}
+  .job .c{color:var(--txt);display:flex;align-items:center;gap:5px;margin-top:2px}
+  .job .c .logo{width:14px;height:14px;border-radius:3px;object-fit:contain;background:#fff}
+  .job .m{color:var(--mut);font-size:11px;margin-top:3px;line-height:1.7}
+  .job .m.miss{color:#f0a955}
+  .job a{color:var(--accent);text-decoration:none;font-size:11px;display:inline-block;margin-top:4px}
+  .job .acts{display:flex;gap:6px;margin-top:6px;align-items:center}
   .job .acts button{flex:0;padding:3px 8px;font-size:11px}
+  .job.snr{opacity:.6}.job.dead{opacity:.35}
+  .verdict{font-weight:600}
+  .v-apply{color:var(--green)}.v-maybe{color:var(--amber)}.v-skip{color:var(--red)}
+
+  .badge{display:inline-block;font-size:10px;padding:1px 5px;border-radius:4px;margin:0 3px 0 0;vertical-align:middle}
+  .badge.s{background:#3a2a1a;color:#f0a955}.badge.j{background:#16301d;color:var(--green)}
+  .badge.sk{background:#1a2535;color:#79c0ff}
+  .badge.wm{background:#1c2a3a;color:#79c0ff}.badge.et{background:#2a2438;color:#d2a8ff}
+  .badge.sal{background:#16301d;color:var(--green)}.badge.sal.est{background:#2a2a1a;color:var(--amber)}
+  .badge.ez{background:#1a2535;color:#79c0ff}.badge.ap{background:#252b33;color:var(--mut)}
+  .badge.pend{background:#2a2a1a;color:var(--amber)}
+  .badge.v-apply{background:#16301d;color:var(--green)}
+  .badge.v-maybe{background:#2a2a1a;color:var(--amber)}
+  .badge.v-skip{background:#2e1c1c;color:var(--red)}
+
+  .fit{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;margin-left:6px;vertical-align:middle;font-weight:700}
+  .fit.hi{background:#16301d;color:var(--green)}.fit.mid{background:#1a2535;color:#79c0ff}.fit.lo{background:#2a2028;color:var(--mut)}
+
   details{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;margin-bottom:8px}
   summary{cursor:pointer;font-size:13px;font-weight:600}
   label{display:block;font-size:11px;color:var(--mut);margin:6px 0 2px}
   input,textarea{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--txt);border-radius:6px;padding:6px;font-size:12px}
-  textarea{resize:vertical;min-height:120px;font-family:inherit}
+  textarea{resize:vertical;font-family:inherit}
   .empty{color:var(--mut);font-size:12px;text-align:center;padding:14px}
-  .toast{position:sticky;top:0;background:var(--green);color:#06210f;font-size:11px;padding:5px;border-radius:6px;text-align:center;margin-bottom:8px;display:none}
+  .toast{position:sticky;top:0;background:var(--green);color:#06210f;font-size:11px;padding:5px;border-radius:6px;text-align:center;margin-bottom:8px;display:none;z-index:9}
+  .filt{display:flex;align-items:center;gap:6px;font-size:12px;margin:2px 0 6px;cursor:pointer;user-select:none}
+  .filt input{width:auto}
+  .srch{display:flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:5px 7px;margin-bottom:5px;font-size:11px}
+  .srch span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#79c0ff}
+  .srch button{flex:0;padding:2px 7px;font-size:11px}
+  .ans{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:6px;margin-bottom:6px}
+  .ans input,.ans textarea{margin-bottom:4px}
+  .ans .ansdel{padding:2px 8px;font-size:11px}
+
+  /* AI panel */
+  .aitop{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:8px 0}
+  .aisec{font-size:12px;color:var(--txt);margin-top:8px;line-height:1.6}
+  .aisec b{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:3px}
+  .aisec ul{padding-left:16px}
+  .aisec ul.miss li{color:#f0a955}
+  .aisec li{margin-bottom:2px}
+  code{background:var(--bg);padding:1px 4px;border-radius:4px;font-size:11px}
 </style>
 </head>
 <body>
   <div class="toast" id="toast"></div>
-  <h1>🧩 Job Apply Assistant</h1>
-  <div class="sub">Page scan karo → jobs collect → aap khud apply karo</div>
+  <h1>🤖 AI Job Assistant</h1>
+  <div class="sub">Scan → 30+ fields scrape → AI match score → MongoDB sync</div>
 
   <div class="row">
     <button id="scan">🔍 Scan this page</button>
     <button id="export" class="ghost">⬇ CSV</button>
     <button id="clear" class="ghost">🗑 Clear</button>
   </div>
+
+  <div class="syncbar" id="syncBar"></div>
+
+  <div class="chips">
+    <span class="chip on" data-filter="all">All</span>
+    <span class="chip" data-filter="junior">🎯 Junior/Intern</span>
+    <span class="chip" data-filter="strong">🔥 Strong match (70+)</span>
+    <span class="chip" data-filter="applied">✓ Applied</span>
+  </div>
   <div class="count" id="count"></div>
 
+  <details id="autoBox">
+    <summary>🤖 Daily auto-scrape (set &amp; forget)</summary>
+    <label class="filt" style="margin-top:8px"><input type="checkbox" id="autoDaily" /> Chrome khulte hi saved searches khud scrape ho</label>
+    <div class="row">
+      <button id="addSearch">➕ Add current page</button>
+      <button id="scrapeNow" class="ghost">▶ Scrape now</button>
+    </div>
+    <div id="searches"></div>
+    <div class="count" id="autoInfo"></div>
+    <div class="sub">Indeed/LinkedIn pe search kholo → "Add current page". Naye jobs background me enrich + AI-analyze ho jate hain.</div>
+  </details>
+
+  <details id="setBox">
+    <summary>⚙️ Backend settings</summary>
+    <label>Bot URL</label>
+    <input id="s_url" placeholder="http://localhost:4000" />
+    <label>API token <span style="color:var(--amber)">(.env ka API_TOKEN)</span></label>
+    <input id="s_token" type="password" placeholder="paste API_TOKEN here" />
+    <div class="row" style="margin-top:8px"><button id="saveSettings">💾 Save &amp; test connection</button></div>
+    <div class="sub">Token na ho to backend har request 401 karega — jobs sync nahi hongi (local list me mehfooz rahengi). Token <code>npm run dashboard</code> chalane pe console me dikhta hai.</div>
+  </details>
+
   <details>
-    <summary>👤 My profile (cover letter ke liye)</summary>
+    <summary>👤 My profile (autofill ke liye)</summary>
     <label>Name</label><input id="p_name" placeholder="Areesha Rafiq" />
-    <label>Email</label><input id="p_email" placeholder="areeshazv@gmail.com" />
-    <label>Phone</label><input id="p_phone" placeholder="+92 322 3007388" />
-    <label>Portfolio</label><input id="p_portfolio" placeholder="https://portfolio-szj4.vercel.app/" />
-    <label>One-line pitch</label>
-    <input id="p_pitch" placeholder="Full Stack Developer (MERN + Next.js)" />
+    <label>Email</label><input id="p_email" placeholder="you@gmail.com" />
+    <label>Phone</label><input id="p_phone" placeholder="+92 3xx xxxxxxx" />
+    <label>Portfolio</label><input id="p_portfolio" placeholder="https://…" />
+    <label>One-line pitch</label><input id="p_pitch" placeholder="Full Stack Developer (MERN + Next.js)" />
+    <label>Experience — job title</label><input id="p_exptitle" placeholder="MERN Stack Developer" />
+    <label>Experience — company</label><input id="p_expcompany" placeholder="Nexal IT Services" />
+    <label>Interview availability</label><input id="p_interview" placeholder="Any day, 11:00 AM – 6:00 PM" />
+    <label class="filt" style="margin-top:8px"><input type="checkbox" id="autoAdvance" /> ⚡ Indeed apply steps auto-advance (Submit tum dabao)</label>
     <div class="row" style="margin-top:8px"><button id="saveProfile">💾 Save profile</button></div>
+  </details>
+
+  <details id="ansBox">
+    <summary>🧠 Auto-answers — ek baar likho, hamesha khud bhar jaye</summary>
+    <div class="sub" style="margin-top:8px">Apply forms ke common sawaal (salary, notice period, why interested…). Jo tum forms me khud likhti ho wo bhi yahan auto-save ho jata hai.</div>
+    <div id="ansList"></div>
+    <div class="row" style="margin-top:6px">
+      <button id="addAns" class="ghost">➕ Add answer</button>
+      <button id="seedAns" class="ghost">✨ Common sawaal bhar do</button>
+    </div>
   </details>
 
   <div id="list"></div>
 
-  <details id="clBox" style="display:none">
-    <summary>✍️ Cover letter</summary>
-    <textarea id="cl"></textarea>
-    <div class="row" style="margin-top:6px"><button id="copyCl">📋 Copy</button></div>
+  <details id="aiBox" style="display:none">
+    <summary>🤖 AI analysis</summary>
+    <div class="sub" id="aiTitle" style="margin-top:6px"></div>
+    <div id="aiBody"></div>
   </details>
 
-  <script src="popup.js"></script>
+  <script type="module" src="popup.js"></script>
 </body>
 </html>

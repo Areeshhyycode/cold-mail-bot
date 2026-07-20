@@ -1,4 +1,5 @@
 import * as cheerio from "cheerio";
+import { fetchText } from "../core/httpCache.js";
 
 const EMAIL_RE = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
 
@@ -81,12 +82,10 @@ export async function extractEmail(website) {
 
   for (const url of pages) {
     try {
-      const res = await fetch(url, {
-        headers: { "User-Agent": "Mozilla/5.0 (compatible; LeadBot/1.0)" },
-        signal: AbortSignal.timeout(10000),
-      });
+      // shared cache — homepage aksar websiteAudit pehle hi utha chuka hota hai
+      const res = await fetchText(url, { timeoutMs: 10000 });
       if (!res.ok) continue;
-      const html = await res.text();
+      const html = res.html;
 
       // mailto links priority (zyada reliable)
       const $ = cheerio.load(html);

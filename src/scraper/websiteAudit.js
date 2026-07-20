@@ -1,4 +1,5 @@
 import * as cheerio from "cheerio";
+import { fetchText } from "../core/httpCache.js";
 
 /**
  * Website ka "quality" check karta hai taaki pata chale kis business ko
@@ -17,18 +18,18 @@ export async function auditWebsite(website) {
   }
 
   try {
-    const res = await fetch(website, {
-      headers: { "User-Agent": "Mozilla/5.0 (compatible; SiteAudit/1.0)" },
-      redirect: "follow",
-      signal: AbortSignal.timeout(12000),
-    });
+    // shared cache — yehi HTML emailExtractor aur personalizer bhi use karenge
+    const res = await fetchText(website);
 
     if (!res.ok) {
-      return { quality: "none", reasons: [`Website not reachable (HTTP ${res.status})`] };
+      return {
+        quality: "none",
+        reasons: [res.status ? `Website not reachable (HTTP ${res.status})` : "Website not loading / broken"],
+      };
     }
 
-    const finalUrl = res.url || website;
-    const html = await res.text();
+    const finalUrl = res.finalUrl || website;
+    const html = res.html;
     const $ = cheerio.load(html);
     const reasons = [];
 

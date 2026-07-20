@@ -12,8 +12,18 @@ import { scrapeAllJobBoards } from "./jobBoards.js";
 import { scrapeSoftwareHouses } from "./softwareHouses.js";
 import { saveLead, saveLeads } from "./ingest.js";
 import { ROLE_KEYWORDS } from "../ai/intent.js";
+import { alertNoNewLeads } from "../core/alerts.js";
+import { log } from "../core/logger.js";
 
 dotenv.config();
+
+// har source ka natija jama karo — run ke aakhir me batayenge ke KUCH naya mila ya nahi
+const totals = { created: 0, dup: 0, skipped: 0 };
+function tally(r = {}) {
+  totals.created += r.created || 0;
+  totals.dup += r.dup || 0;
+  totals.skipped += r.skipped || 0;
+}
 
 /* =======================
    📊 STATS (service queries ke liye)
@@ -42,7 +52,7 @@ async function runJobBoards() {
   const keyword = ROLE_KEYWORDS.slice(0, 8).join(" ");
   console.log(`\n🧩 JOB BOARDS (filter: roles)`);
   const leads = await scrapeAllJobBoards(keyword);
-  await saveLeads(leads, "job-boards");
+  tally(await saveLeads(leads, "job-boards"));
 }
 
 /* =======================
@@ -52,6 +62,7 @@ async function runSoftwareHouses() {
   console.log(`\n🏢 SOFTWARE HOUSES (speculative job applications)`);
   const r = await scrapeSoftwareHouses();
   console.log(`   📥 software houses → new: ${r.created}, dup: ${r.dup}, no-email: ${r.noEmail}`);
+  tally({ created: r.created, dup: r.dup, skipped: r.noEmail });
 }
 
 /* =======================
@@ -88,9 +99,11 @@ async function processServiceBusinesses(businesses, auditOn) {
     limit(async () => {
       try {
         let quality = "unknown";
+        let auditReasons = [];
         if (auditOn && biz.website) {
           const audit = await auditWebsite(biz.website);
           quality = audit?.quality || "unknown";
+          auditReasons = audit?.reasons || [];
           if (quality === "ok") {
             skipped++;
             return; // accha website hai -> service lead nahi
@@ -117,6 +130,11 @@ async function processServiceBusinesses(businesses, auditOn) {
           location: biz.location || "",
           city: biz.city || "",
           phone: biz.phone || "",
+          // ye do fields schema me MOJOOD thi par kabhi save hi nahi hoti thi —
+          // audit ka natija har baar zaya ho jata tha. Ab persist hota hai, aur
+          // personalizer email me "aapki site ka ye masla hai" mention kar sakta hai.
+          websiteQuality: quality,
+          auditReasons,
         });
         if (r === "created") created++;
         else skipped++;
@@ -128,6 +146,7 @@ async function processServiceBusinesses(businesses, auditOn) {
 
   await Promise.all(tasks);
   console.log(`📊 Service → new: ${created}, skipped: ${skipped}`);
+  tally({ created, skipped });
   return { created, skipped };
 }
 
@@ -144,6 +163,16 @@ async function main() {
   if (mode === "all" || mode === "jobs") await runJobBoards();
   if (mode === "all" || mode === "software") await runSoftwareHouses();
   if (mode === "all" || mode === "service") await runService(max);
+
+  log.info("scraper.done", { mode, ...totals });
+
+  // 0 NAYE LEADS = pipeline sookh gayi. Yehi 7-din wali khamoshi ki jarh thi:
+  // sourcing "success" report karta raha par kuch naya nahi de raha tha, aur
+  // koi alert nahi tha. Ab pata chal jayega.
+  if (totals.created === 0) {
+    log.warn("scraper.no_new_leads", totals);
+    await alertNoNewLeads(mode, totals);
+  }
 
   await disconnectDB();
   console.log("\n✅ Done!");

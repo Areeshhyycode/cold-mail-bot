@@ -6,8 +6,6 @@ data/
 config.bat
 
 # secrets
-.env
-.env.*
 !.env.example
 
 # NOTE: assets/cv.pdf intentionally committed (user chose public) so cloud
