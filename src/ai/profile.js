@@ -13,7 +13,7 @@ import path from "path";
 import fs from "fs";
 
 const links = {
-  Portfolio: process.env.PORTFOLIO_URL || "https://portfolio-szj4.vercel.app/",
+  Portfolio: process.env.PORTFOLIO_URL || "https://portfolio-delta-ruddy-88.vercel.app/",
   GitHub: process.env.GITHUB_URL || "https://github.com/Areeshhyycode",
   LinkedIn: process.env.LINKEDIN_URL || "https://www.linkedin.com/in/areesha-rafiq-net/",
 };
@@ -29,23 +29,23 @@ export const PROFILE = {
     "Full-Stack Developer (MERN) with hands-on experience building scalable web and mobile applications using the MERN stack, Next.js, NestJS, and React Native. Experienced in shipping AI-powered features through Groq and OpenAI integrations, with a strong focus on performance, scalability, and user experience.",
 
   skills: [
-    "JavaScript / React.js / Next.js 14 (App Router)",
-    "Node.js, Express.js, NestJS",
-    "MongoDB / Mongoose / PostgreSQL",
-    "React Native (Expo, iOS & Android)",
-    "Redux Toolkit, Context API, Socket.io",
-    "AI/LLM integration (Groq, OpenAI, LLaMA 3.3 70B)",
+    "JavaScript / React.js / Next.js 14 (App Router) / Vue / Angular / Svelte",
+    "Node.js, Express.js, NestJS, PHP, Laravel, C#, ASP.NET",
+    "MongoDB / Mongoose / PostgreSQL / Firebase Firestore",
+    "React Native (Expo), Flutter — cross-platform mobile",
+    "Redux Toolkit, Context API, Three.js, Tailwind CSS, Framer Motion",
+    "AI/LLM integration (Groq, OpenAI, LLaMA 3.3 70B), prompt engineering",
     "REST APIs, JWT/OAuth, NextAuth.js",
-    "Tailwind CSS, Framer Motion",
-    "Git, GitHub Actions (CI/CD), Vercel",
+    "WordPress (theme customization, plugin integration)",
+    "Git, GitHub Actions (CI/CD), Vercel, Postman",
   ],
 
-  // real, concrete highlights (CV ke experience + projects se)
+  // real, concrete highlights (naye CV ke experience se)
   highlights: [
-    "Built ZVTalent, an AI hiring platform (Next.js + MongoDB + Groq/LLaMA 3.3) that auto-reads resumes and scores candidates against job descriptions",
-    "Built JobGenie AI, an AI job-application tracker with match-scoring, tailored cover letters, and a real-time analytics dashboard",
-    "Full-stack experience at Nexal IT Services & Zero Vertical Labs — React/Next.js/Angular frontends, Node/Express/NestJS APIs, MongoDB, and cross-platform React Native apps",
-    "Designed end-to-end CI/CD automation with GitHub Actions (e.g. a fully automated daily content generator + deploy pipeline)",
+    "Full Stack Developer at Nexal IT Services — scalable web apps with MERN, Next.js, NestJS, Angular & WordPress; RESTful APIs, authentication, and payment integrations",
+    "Junior MERN Stack Developer at Zero Vertical Labs — React/Next.js/React Native apps, Node/Express APIs, Redux Toolkit, Firebase, and OpenAI-powered features",
+    "MERN Stack Developer Intern at Lokhandwala Web Solutions — built 6+ Node/Express REST endpoints with JWT auth, improved React Native performance, wrote Jest tests",
+    "Full Stack Engineer on 3D simulation platforms — PHP, NestJS, Three.js, and MySQL with responsive UIs and optimized databases",
   ],
 
   // ye roles target kar rahe hain (intent.js ke saath align)

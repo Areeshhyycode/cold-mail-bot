@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Command Center</title>
+<style>
+  :root{--bg:#0d1117;--card:#161b22;--border:#27303b;--txt:#e6edf3;--mut:#8b949e;--accent:#2f81f7;--green:#3fb950;--amber:#d29922;--red:#f85149;--purple:#d2a8ff;}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  body{background:var(--bg);color:var(--txt);padding:24px;max-width:1240px;margin:0 auto}
+  a{color:var(--accent);text-decoration:none}
+  nav{display:flex;gap:16px;margin-bottom:20px;font-size:13px;align-items:center;flex-wrap:wrap}
+  nav a{color:var(--mut)} nav a.on{color:var(--txt);font-weight:600}
+  nav .health{margin-left:auto;font-size:12px;display:flex;align-items:center;gap:6px}
+  .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+  .dot.ok{background:var(--green)}.dot.warning{background:var(--amber)}.dot.error{background:var(--red)}
+
+  h1{font-size:22px;margin-bottom:2px}
+  .sub{color:var(--mut);font-size:13px;margin-bottom:18px}
+
+  /* global search */
+  .gsearch{position:relative;margin-bottom:20px}
+  .gsearch input{width:100%;background:var(--card);border:1px solid var(--border);color:var(--txt);padding:12px 16px;border-radius:10px;font-size:14px}
+  .gres{position:absolute;top:52px;left:0;right:0;background:var(--card);border:1px solid var(--border);border-radius:10px;z-index:20;overflow:hidden;display:none}
+  .gres a{display:flex;justify-content:space-between;gap:10px;padding:9px 14px;border-bottom:1px solid var(--border);color:var(--txt);font-size:13px}
+  .gres a:hover{background:#1c2330}
+  .gres .k{font-size:10px;text-transform:uppercase;color:var(--mut);letter-spacing:.05em}
+
+  /* stat cards */
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:22px}
+  .kpi{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:15px}
+  .kpi .n{font-size:28px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+  .kpi .l{color:var(--mut);font-size:12px;margin-top:6px}
+  .kpi.accent .n{color:var(--accent)}.kpi.green .n{color:var(--green)}.kpi.amber .n{color:var(--amber)}.kpi.purple .n{color:var(--purple)}
+
+  .grid2{display:grid;grid-template-columns:1.3fr 1fr;gap:16px}
+  @media(max-width:820px){.grid2{grid-template-columns:1fr}}
+  .panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+  .panel h2{font-size:14px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+  .panel h2 .mut{color:var(--mut);font-size:11px;font-weight:400}
+
+  .feed{display:flex;flex-direction:column;gap:2px;max-height:420px;overflow-y:auto}
+  .fitem{display:flex;gap:10px;padding:8px 4px;border-bottom:1px solid var(--border);font-size:13px;align-items:baseline}
+  .fitem:last-child{border-bottom:0}
+  .fitem .ic{flex:0 0 auto}
+  .fitem .tx{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .fitem .mt{color:var(--mut);font-size:11px;flex:0 0 auto}
+  .fitem .tm{color:var(--mut);font-size:10px;flex:0 0 auto;min-width:52px;text-align:right}
+
+  .ins{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+  .ins:last-child{border-bottom:0}
+  .ins .ic{font-size:18px}
+  .ins .t{color:var(--mut);font-size:11px}
+  .ins .v{font-weight:700;font-size:15px}
+  .ins .note{color:var(--mut);font-size:11px}
+  .tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
+  .tag{background:#1a2535;color:#79c0ff;font-size:11px;padding:2px 8px;border-radius:5px}
+  .empty{color:var(--mut);font-size:12px;text-align:center;padding:16px}
+  .toast{position:fixed;top:14px;right:14px;background:var(--card);border:1px solid var(--border);border-left:3px solid var(--red);padding:10px 14px;border-radius:8px;font-size:13px;display:none}
+</style>
+</head>
+<body>
+  <div class="toast" id="toast"></div>
+  <nav>
+    <a href="/home" class="on">🏠 Home</a>
+    <a href="/">Leads</a>
+    <a href="/jobs">Jobs (AI)</a>
+    <a href="/businesses">Businesses</a>
+    <a href="/outreach">Outreach</a>
+    <span class="health" id="health"></span>
+  </nav>
+
+  <h1>Command Center</h1>
+  <div class="sub" id="stamp">Loading live data across all modules…</div>
+
+  <div class="gsearch">
+    <input id="gs" placeholder="🔍 Search everything — jobs, businesses, leads, replies, phone numbers…" autocomplete="off" />
+    <div class="gres" id="gres"></div>
+  </div>
+
+  <div class="cards" id="cards"></div>
+
+  <div class="grid2">
+    <div class="panel">
+      <h2>Recent activity <span class="mut" id="actCount"></span></h2>
+      <div class="feed" id="feed"><div class="empty">Loading…</div></div>
+    </div>
+    <div class="panel">
+      <h2>🤖 AI insights <span class="mut">auto-computed</span></h2>
+      <div id="insights"><div class="empty">Loading…</div></div>
+      <div id="skills"></div>
+    </div>
+  </div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+function toast(m){const t=$("toast");t.textContent=m;t.style.display="block";clearTimeout(toast._t);toast._t=setTimeout(()=>t.style.display="none",3000);}
+async function api(p){const r=await fetch(p);if(!r.ok)throw new Error((await r.json().catch(()=>({}))).error||r.status);return r.json();}
+function ago(d){const s=(Date.now()-new Date(d))/1000;if(s<60)return"now";if(s<3600)return Math.floor(s/60)+"m";if(s<86400)return Math.floor(s/3600)+"h";return Math.floor(s/86400)+"d";}
+
+const CARD_DEFS = [
+  ["jobsFoundToday","Jobs found today","accent"],
+  ["jobsApplied","Jobs applied","green"],
+  ["businessesFound","Businesses found",""],
+  ["businessesNoWebsite","No website 🔥","green"],
+  ["websiteAuditsCompleted","Website audits",""],
+  ["emailsSent","Emails sent",""],
+  ["whatsappDraftsReady","WhatsApp drafts","green"],
+  ["repliesReceived","Replies","purple"],
+  ["highOpportunityLeads","High-opp leads","amber"],
+  ["avgMatchScore","Avg match score","accent"],
+];
+
+async function loadSummary(){
+  const s = await api("/api/summary");
+  $("stamp").textContent = `Live · updated ${new Date(s.generatedAt).toLocaleTimeString()} · bounce ${s.deliverability.bounceRate}% · reply ${s.deliverability.replyRate}%`;
+  $("cards").innerHTML = CARD_DEFS.map(([k,l,c])=>{
+    const v = s.cards[k]; const disp = v==null?"—":v;
+    return `<div class="kpi ${c}"><div class="n">${disp}</div><div class="l">${l}</div></div>`;
+  }).join("");
+  const h = s.systemHealth;
+  $("health").innerHTML = `<span class="dot ${h.status}"></span>${h.status==="ok"?"All systems OK":h.issues[0]||"warning"}`;
+}
+async function loadActivity(){
+  const {activity} = await api("/api/activity?limit=30");
+  $("actCount").textContent = activity.length+" events";
+  $("feed").innerHTML = activity.length ? activity.map(a=>
+    `<div class="fitem"><span class="ic">${a.icon}</span><span class="tx">${a.text}</span><span class="mt">${a.meta||""}</span><span class="tm">${ago(a.at)}</span></div>`
+  ).join("") : '<div class="empty">No activity yet.</div>';
+}
+async function loadInsights(){
+  const d = await api("/api/insights");
+  $("insights").innerHTML = d.insights.length ? d.insights.map(i=>
+    `<div class="ins"><div class="ic">${i.icon}</div><div><div class="t">${i.title}</div><div class="v">${i.value}</div><div class="note">${i.note}</div></div></div>`
+  ).join("") : '<div class="empty">Not enough data yet — scan areas & send outreach to unlock insights.</div>';
+  $("skills").innerHTML = d.topSkills.length
+    ? `<div class="t" style="color:var(--mut);font-size:11px;margin-top:12px">Top requested skills</div><div class="tags">${d.topSkills.map(s=>`<span class="tag">${s.skill} · ${s.count}</span>`).join("")}</div>`
+    : "";
+}
+
+// global search (debounced)
+let st;
+$("gs").oninput = () => {
+  clearTimeout(st);
+  const q = $("gs").value.trim();
+  if(!q){$("gres").style.display="none";return;}
+  st = setTimeout(async()=>{
+    try{
+      const {results} = await api("/api/search?q="+encodeURIComponent(q));
+      $("gres").innerHTML = results.length ? results.map(r=>
+        `<a href="${r.link}"><span>${r.label}</span><span class="k">${r.kind} · ${r.meta||""}</span></a>`).join("") : '<a><span class="k">No matches</span></a>';
+      $("gres").style.display="block";
+    }catch(e){/* ignore */}
+  },250);
+};
+document.addEventListener("click",(e)=>{if(!e.target.closest(".gsearch"))$("gres").style.display="none";});
+
+async function loadAll(){ try{ await Promise.all([loadSummary(),loadActivity(),loadInsights()]); }catch(e){ toast("Load failed: "+e.message); } }
+loadAll();
+setInterval(()=>{ if(document.visibilityState==="visible") loadAll(); }, 20000);
+</script>
+</body>
+</html>

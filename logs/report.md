@@ -1,47 +1,49 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-06-24T11:40:29.378Z_
+_Last updated: 2026-07-14T16:55:13.468Z_
 
 ## Summary
 
 | Metric | Value |
 |---|---|
-| Total leads | 444 |
-| Emails sent (unique leads) | 242 |
-| Sent today | 79 |
-| Replies | 4 |
-| Reply rate | 1.7% |
+| Total leads | 560 |
+| Emails sent (unique leads) | 462 |
+| Sent today | 0 |
+| Replies | 7 |
+| Reply rate | 1.5% |
+| Bounced | 59 |
+| Bounce rate | 11.3% ⚠️ |
 
 ## Leads by status
 
 | Status | Count |
 |---|---|
-| ready | 143 |
-| followup_1 | 130 |
-| sent | 75 |
+| done | 371 |
+| bounced | 59 |
+| followup_1 | 53 |
 | skipped | 29 |
-| bounced | 25 |
 | followup_2 | 19 |
-| done | 14 |
-| unsubscribed | 5 |
-| replied | 4 |
+| sent | 12 |
+| unsubscribed | 9 |
+| replied | 7 |
+| new | 1 |
 
 ## Recent activity (last 15)
 
 | Business | Email | Status | Sent count | Last sent |
 |---|---|---|---|---|
-| VirtualReality - Professional Web Services & Digital Marketing Agency | info@virtualreality.com.pk | followup_2 | 3 | 2026-06-24 10:40 |
-| Digiown Agency - Best SEO Services In Karachi, Pakistan | support@digiown.agency | followup_2 | 3 | 2026-06-24 10:39 |
-| Monarch Seo Agency | Professional SEO Company in Karachi, Pakistan | contact@seomyagency.com | followup_2 | 3 | 2026-06-24 10:38 |
-| Bali Enterprises Builders And Developers | info@thebalibuilders.com | followup_2 | 3 | 2026-06-24 10:37 |
-| Property Point - Estate & Builders | info@propertypoint.com.pk | followup_2 | 3 | 2026-06-24 10:35 |
-| Web Developers Academy | info@webdevelopersacademy.com | followup_2 | 3 | 2026-06-24 10:34 |
-| Aish Tycoons (Web Development Company) | info@aishtycoons.com | followup_2 | 3 | 2026-06-24 10:32 |
-| Website Design & eCommerce Development Company In Pakistan | sales@webtors.com | followup_2 | 3 | 2026-06-24 10:31 |
-| Expertizo | info@expertizo.pk | followup_2 | 3 | 2026-06-24 10:29 |
-| Global Dezigns - Website development Company | info@globaldezigns.com | followup_2 | 3 | 2026-06-24 10:28 |
-| Jahan Numa Estate | jahan.numa.estate@gmail.com | followup_2 | 3 | 2026-06-24 10:26 |
-| Crezy No | Digital Marketing Agency Pakistan | info@crezyno.com | followup_2 | 3 | 2026-06-24 10:24 |
-| Swiftwave Digital - Digital Marketing Agency in Bahria Town, Phase 4, Rawalpindi | info@swiftwavedigital.com | followup_2 | 3 | 2026-06-24 10:22 |
-| Operations PRO Digital Marketing Agency | info@operationspro.pk | followup_2 | 3 | 2026-06-24 10:21 |
-| ZNWebPro - Best SEO Company Pakistan | Top SEO Agency | #1 SEO Services in Pakistan | SEO Marketing Agency | SEO Expert | info@znwebpro.com | followup_2 | 3 | 2026-06-24 10:20 |
+| Digital Web Shark | mamoor.khan@digitalwebshark.com | followup_1 | 2 | 2026-07-07 08:17 |
+| GMB Local SEO Expert in Islamabad | Ubaid Ur Rehman | ubaidurrehman272696@gmail.com | followup_1 | 2 | 2026-07-07 07:36 |
+| Imlaak.com: 10X Your Real Estate | info@imlaak.com | sent | 1 | 2026-07-07 07:34 |
+| Web developer- Basil rana | basilrana1@gmail.com | sent | 1 | 2026-07-07 07:32 |
+| JbWebSoft - Web Design & Development | SEO and digital Marketing Sevices Provider | info@jbwebsoft.com | sent | 1 | 2026-07-06 08:57 |
+| Design Norms | info.designnorms@gmail.com | followup_1 | 2 | 2026-07-06 08:27 |
+| AHMED FOODS (Private) Limited - احمد فوڈز (پرائیویٹ) لمیٹڈ | info@ahmedfood.com | followup_1 | 2 | 2026-07-06 08:25 |
+| Hassoft Solutions | info@hassoftsolutions.com | followup_1 | 2 | 2026-07-06 08:23 |
+| GenZ Byte | contact@genzbyte.com | followup_1 | 2 | 2026-07-06 08:22 |
+| Big Techies - Digital Agency | contact@bigtechies.com | followup_1 | 2 | 2026-07-06 08:21 |
+| Ecommerce with Awais | info@edura.com | followup_1 | 2 | 2026-07-06 08:20 |
+| NexiaTech | hello@nexiatech.org | followup_1 | 2 | 2026-07-06 08:19 |
+| iCreatixPRO - Best SEO Company Pakistan | Top SEO Agency | SEO Services in Pakistan | SEO Marketing Agency | SEO Expert | icreatixpro@gmail.com | followup_1 | 2 | 2026-07-06 08:17 |
+| Snapcart | info@fashionshop.com | bounced | 1 | 2026-07-06 08:17 |
+| Byte House | info@bytecloudsolutions.org | bounced | 1 | 2026-07-06 08:15 |
