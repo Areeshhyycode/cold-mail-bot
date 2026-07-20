@@ -35,7 +35,7 @@ jobs:
       # CV (assets/cv.pdf) repo me committed hai, isliye checkout ke saath hi aa jati
       # hai — job emails ke saath attach ho jati hai. Koi alag step nahi chahiye.
 
-      - name: Source (job-board APIs only) + personalize + send + follow-ups + report
+      - name: Source (job-board APIs only) + personalize/outreach + send + follow-ups + report
         env:
           CV_FILENAME: Areesha-Rafiq-CV.pdf
           # job boards = public APIs (koi browser nahi). Heavy Google Maps sourcing
@@ -55,6 +55,15 @@ jobs:
           DAILY_SEND_LIMIT: ${{ secrets.DAILY_SEND_LIMIT }}
           MIN_DELAY_SECONDS: ${{ secrets.MIN_DELAY_SECONDS }}
           MAX_DELAY_SECONDS: ${{ secrets.MAX_DELAY_SECONDS }}
+          # AI OUTREACH ENGINE (Task 5) — multi-channel v2 flow.
+          # OUTREACH_V2 secret ko "1" karo to daily.js purane personalize→send ki jagah
+          # outreach engine chalayega (research → channel decide → compose → dispatch →
+          # classify replies). Secret set na ho / khali ho to purana flow (safe default).
+          # Baaki OUTREACH_* / *_LIMIT optional hain — set na ho to code ke defaults chalte hain.
+          OUTREACH_V2: ${{ secrets.OUTREACH_V2 }}
+          OUTREACH_CAMPAIGN: ${{ secrets.OUTREACH_CAMPAIGN }}
+          OUTREACH_AUTOAPPROVE: ${{ secrets.OUTREACH_AUTOAPPROVE }}
+          WHATSAPP_DAILY_LIMIT: ${{ secrets.WHATSAPP_DAILY_LIMIT }}
         continue-on-error: true
         run: npm run daily
 

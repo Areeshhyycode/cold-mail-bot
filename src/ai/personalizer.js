@@ -1,6 +1,7 @@
 import Groq from "groq-sdk";
 import dotenv from "dotenv";
 import * as cheerio from "cheerio";
+import { fetchText } from "../core/httpCache.js";
 
 dotenv.config();
 
@@ -11,13 +12,10 @@ const MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
 async function fetchSiteSummary(website) {
   if (!website) return "";
   try {
-    const res = await fetch(website, {
-      headers: { "User-Agent": "Mozilla/5.0" },
-      signal: AbortSignal.timeout(10000),
-    });
+    // shared cache — ye wahi HTML hai jo audit/extractor pehle utha chuke hain
+    const res = await fetchText(website, { timeoutMs: 10000 });
     if (!res.ok) return "";
-    const html = await res.text();
-    const $ = cheerio.load(html);
+    const $ = cheerio.load(res.html);
     $("script, style, noscript").remove();
     const title = $("title").text();
     const desc = $('meta[name="description"]').attr("content") || "";
