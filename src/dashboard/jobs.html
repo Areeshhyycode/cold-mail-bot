@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Job Assistant — Jobs</title>
+<style>
+  :root{--bg:#0d1117;--card:#161b22;--border:#27303b;--txt:#e6edf3;--mut:#8b949e;--accent:#2f81f7;--green:#3fb950;--red:#f85149;--amber:#d29922;--purple:#bc8cff;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--txt);padding:24px;max-width:1400px;margin:0 auto}
+  h1{font-size:22px;margin-bottom:4px}
+  .sub{color:var(--mut);font-size:13px;margin-bottom:20px}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:22px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px}
+  .card .v{font-size:26px;font-weight:700}
+  .card .l{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+  .card.green .v{color:var(--green)}.card.blue .v{color:var(--accent)}
+  .card.amber .v{color:var(--amber)}.card.purple .v{color:var(--purple)}
+
+  .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+  .bar input,.bar select{background:var(--card);border:1px solid var(--border);color:var(--txt);padding:8px 12px;border-radius:8px;font-size:13px}
+  .bar input.grow{flex:1;min-width:220px}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+  .chip{background:var(--card);border:1px solid var(--border);color:var(--mut);padding:6px 12px;border-radius:20px;cursor:pointer;font-size:12px;user-select:none}
+  .chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+
+  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+  th,td{text-align:left;padding:10px 12px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:top}
+  th{color:var(--mut);font-weight:600;text-transform:uppercase;font-size:11px;letter-spacing:.5px;cursor:pointer;white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:#1c2330}
+  .title{font-weight:600;color:#79c0ff;max-width:340px}
+  .co{display:flex;align-items:center;gap:6px}
+  .co img{width:18px;height:18px;border-radius:4px;object-fit:contain;background:#fff}
+  .mut{color:var(--mut)}
+  .miss{color:#f0a955;font-size:11px;margin-top:3px}
+
+  .score{display:inline-block;font-weight:700;font-size:12px;padding:2px 8px;border-radius:6px;min-width:38px;text-align:center}
+  .score.hi{background:#16301d;color:var(--green)}
+  .score.mid{background:#1a2535;color:#79c0ff}
+  .score.lo{background:#2a2028;color:var(--mut)}
+  .score.na{background:#22262d;color:#5a6270}
+
+  .badge{display:inline-block;font-size:10px;padding:2px 6px;border-radius:4px;margin:1px 3px 1px 0;white-space:nowrap}
+  .b-remote{background:#16301d;color:var(--green)}
+  .b-hybrid{background:#2a2438;color:var(--purple)}
+  .b-onsite{background:#252b33;color:var(--mut)}
+  .b-tech{background:#1a2535;color:#79c0ff}
+  .b-sal{background:#16301d;color:var(--green)}
+  .b-est{background:#2a2a1a;color:var(--amber)}
+
+  select.st{background:var(--bg);border:1px solid var(--border);color:var(--txt);border-radius:6px;padding:4px 6px;font-size:11px}
+  .empty{text-align:center;color:var(--mut);padding:40px}
+  .pager{display:flex;gap:8px;justify-content:center;margin:16px 0}
+  .pager button{background:var(--card);border:1px solid var(--border);color:var(--txt);padding:6px 14px;border-radius:8px;cursor:pointer;font-size:13px}
+  .pager button:disabled{opacity:.4;cursor:default}
+</style>
+</head>
+<body>
+  <h1>🤖 AI Job Assistant — Jobs</h1>
+  <div class="sub">
+    Extension se scrape hui jobs · AI match score + missing skills ·
+    <a href="/">← leads dashboard</a> ·
+    <span id="refresh" style="cursor:pointer;color:var(--accent)">↻ refresh</span>
+    <span id="ts" class="mut"></span>
+  </div>
+
+  <div class="cards" id="cards"></div>
+
+  <div class="bar">
+    <input class="grow" id="q" placeholder="🔍 search title / company / skill / description…" />
+    <input id="company" placeholder="🏢 company" style="width:150px" />
+    <input id="tech" placeholder="⚛️ technology" style="width:150px" />
+    <input id="experience" placeholder="📅 experience" style="width:130px" />
+    <select id="minScore">
+      <option value="">AI score: any</option>
+      <option value="80">80+ (excellent)</option>
+      <option value="70">70+ (strong)</option>
+      <option value="50">50+ (decent)</option>
+    </select>
+    <select id="minSalary">
+      <option value="">Salary: any</option>
+      <option value="1">has salary</option>
+      <option value="50000">50k+</option>
+      <option value="100000">100k+</option>
+    </select>
+    <select id="sort">
+      <option value="score">Sort: AI score</option>
+      <option value="fit">Sort: local fit</option>
+      <option value="recent">Sort: recent</option>
+      <option value="salary">Sort: salary</option>
+    </select>
+  </div>
+
+  <div class="chips" id="statusChips"></div>
+  <div class="chips" id="modeChips"></div>
+  <div class="chips" id="senChips"></div>
+
+  <table>
+    <thead><tr>
+      <th>AI</th><th>Title</th><th>Company</th><th>Location</th>
+      <th>Salary</th><th>Tech</th><th>Exp</th><th>Status</th>
+    </tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <div class="pager">
+    <button id="prev">← prev</button>
+    <span class="mut" id="pageInfo" style="align-self:center"></span>
+    <button id="next">next →</button>
+  </div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const STATUSES = ["new","saved","applied","ignored","archived","rejected","interview","offer","accepted"];
+const MODES = ["remote","hybrid","onsite"];
+const SENIORITY = ["internship","junior","mid","senior"];
+
+let filters = { status:"all", workMode:"all", seniority:"all" };
+let skip = 0;
+const LIMIT = 50;
+let total = 0;
+
+/* chips */
+function chipRow(el, key, values, labels) {
+  el.innerHTML = ['all', ...values].map(v =>
+    `<span class="chip ${filters[key]===v?'on':''}" data-k="${key}" data-v="${v}">${esc(labels?labels[v]||v:v)}</span>`
+  ).join("");
+}
+function renderChips() {
+  chipRow($("statusChips"), "status", STATUSES);
+  chipRow($("modeChips"), "workMode", MODES, {all:"all modes",remote:"🏠 remote",hybrid:"🔀 hybrid",onsite:"🏢 onsite"});
+  chipRow($("senChips"), "seniority", SENIORITY, {all:"all levels",internship:"🎓 intern",junior:"🌱 junior",mid:"⚙️ mid",senior:"🎖 senior"});
+  document.querySelectorAll(".chip").forEach(c => c.onclick = () => {
+    filters[c.dataset.k] = c.dataset.v;
+    skip = 0;
+    renderChips();
+    load();
+  });
+}
+
+/* query builder */
+function qs() {
+  const p = new URLSearchParams();
+  const q = $("q").value.trim();            if (q) p.set("q", q);
+  const co = $("company").value.trim();     if (co) p.set("company", co);
+  const tech = $("tech").value.trim();      if (tech) p.set("tech", tech);
+  const exp = $("experience").value.trim(); if (exp) p.set("experience", exp);
+  const ms = $("minScore").value;           if (ms) p.set("minScore", ms);
+  const sal = $("minSalary").value;
+  if (sal === "1") p.set("hasSalary", "1");
+  else if (sal) p.set("minSalary", sal);
+  for (const [k,v] of Object.entries(filters)) if (v !== "all") p.set(k, v);
+  p.set("sort", $("sort").value);
+  p.set("limit", LIMIT);
+  p.set("skip", skip);
+  return p.toString();
+}
+
+const scoreCls = (s) => s == null ? "na" : s >= 70 ? "hi" : s >= 45 ? "mid" : "lo";
+
+function salaryCell(j) {
+  if (j.salary) return `<span class="badge b-sal">${esc(j.salary.slice(0,30))}</span>`;
+  if (j.ai && j.ai.salaryEstimate) return `<span class="badge b-est" title="AI estimate — posting me salary nahi thi">≈ ${esc(j.ai.salaryEstimate.slice(0,30))}</span>`;
+  return '<span class="mut">—</span>';
+}
+
+async function setStatus(key, status) {
+  await fetch("/api/jobs/status", {
+    method: "POST", headers: {"content-type":"application/json"},
+    body: JSON.stringify({ dedupeKey: key, status }),
+  });
+  load();
+}
+
+function render(jobs) {
+  if (!jobs.length) {
+    $("rows").innerHTML = '<tr><td colspan="8" class="empty">Koi job nahi mili. Extension se scan karo → yahan aa jayengi.</td></tr>';
+    return;
+  }
+  $("rows").innerHTML = jobs.map(j => {
+    const s = j.ai && j.ai.matchScore != null ? j.ai.matchScore : null;
+    const shown = s != null ? s : (j.fit || 0);
+    const tech = (j.skills && j.skills.length ? j.skills : (j.technologies||[])).slice(0,4);
+    const missing = j.ai && j.ai.missingSkills ? j.ai.missingSkills.slice(0,3) : [];
+    return `<tr>
+      <td><span class="score ${scoreCls(s)}" title="${s!=null?'AI match score':'local fit (AI pending)'}">${s!=null?'🤖'+s:shown}</span></td>
+      <td class="title">
+        <a href="${esc(j.url)}" target="_blank" rel="noopener">${esc(j.title)}</a>
+        ${j.easyApply?'<span class="badge b-tech">⚡ easy</span>':''}
+        ${!j.enriched?'<span class="badge b-est">⏳ card only</span>':''}
+        ${missing.length?`<div class="miss">⚠️ missing: ${missing.map(esc).join(", ")}</div>`:''}
+      </td>
+      <td><div class="co">${j.companyLogo?`<img src="${esc(j.companyLogo)}" alt="" onerror="this.remove()"/>`:''}${esc(j.company||"—")}</div></td>
+      <td>${esc(j.location||"—")}${j.workMode?`<br/><span class="badge b-${esc(j.workMode)}">${esc(j.workMode)}</span>`:''}</td>
+      <td>${salaryCell(j)}</td>
+      <td>${tech.map(t=>`<span class="badge b-tech">${esc(t)}</span>`).join("")||'<span class="mut">—</span>'}</td>
+      <td class="mut">${esc(j.experienceRequired||"—")}</td>
+      <td><select class="st" data-k="${esc(j.dedupeKey)}">
+        ${STATUSES.map(st=>`<option value="${st}"${j.status===st?" selected":""}>${st}</option>`).join("")}
+      </select></td>
+    </tr>`;
+  }).join("");
+
+  document.querySelectorAll("select.st").forEach(sel =>
+    sel.onchange = () => setStatus(sel.dataset.k, sel.value));
+}
+
+async function loadStats() {
+  const s = await (await fetch("/api/jobs/stats")).json();
+  $("cards").innerHTML = `
+    <div class="card blue"><div class="v">${s.total}</div><div class="l">Total jobs</div></div>
+    <div class="card green"><div class="v">${s.strong}</div><div class="l">Strong (70+)</div></div>
+    <div class="card purple"><div class="v">${s.avgScore}</div><div class="l">Avg AI score</div></div>
+    <div class="card amber"><div class="v">${s.analyzed}/${s.total}</div><div class="l">AI analyzed</div></div>
+    <div class="card"><div class="v">${s.byStatus.applied||0}</div><div class="l">Applied</div></div>
+    <div class="card"><div class="v">${s.byStatus.interview||0}</div><div class="l">Interviews</div></div>
+    <div class="card"><div class="v">${s.enriched}/${s.total}</div><div class="l">Enriched</div></div>
+    ${s.aiQueue && s.aiQueue.queued ? `<div class="card amber"><div class="v">${s.aiQueue.queued}</div><div class="l">AI queue</div></div>` : ""}`;
+}
+
+async function load() {
+  const d = await (await fetch("/api/jobs?" + qs())).json();
+  total = d.total;
+  render(d.jobs || []);
+  $("pageInfo").textContent = total ? `${skip+1}–${Math.min(skip+LIMIT,total)} of ${total}` : "";
+  $("prev").disabled = skip === 0;
+  $("next").disabled = skip + LIMIT >= total;
+  $("ts").textContent = " · " + new Date().toLocaleTimeString();
+  loadStats();
+}
+
+/* debounce text inputs — har keystroke pe query mat maaro */
+let t;
+const deb = () => { clearTimeout(t); t = setTimeout(() => { skip = 0; load(); }, 300); };
+["q","company","tech","experience"].forEach(id => $(id).oninput = deb);
+["minScore","minSalary","sort"].forEach(id => $(id).onchange = () => { skip = 0; load(); });
+$("prev").onclick = () => { skip = Math.max(0, skip - LIMIT); load(); };
+$("next").onclick = () => { skip += LIMIT; load(); };
+$("refresh").onclick = load;
+
+renderChips();
+load();
+setInterval(loadStats, 15000);   // AI queue live dikhti rahe
+</script>
+</body>
+</html>
