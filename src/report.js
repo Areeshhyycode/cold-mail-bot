@@ -3,8 +3,13 @@ import fs from "fs/promises";
 import path from "path";
 import { connectDB, disconnectDB } from "./db/connect.js";
 import { Lead } from "./db/Lead.js";
+import { alertHighBounce } from "./core/alerts.js";
+import { log } from "./core/logger.js";
 
 dotenv.config();
+
+// 5% se upar bounce -> Gmail sender reputation girana shuru kar deta hai
+const BOUNCE_ALERT_THRESHOLD = 5;
 
 /**
  * DB se stats nikaal ke logs/report.md banata hai.
@@ -35,6 +40,12 @@ async function main() {
     .limit(15)
     .select("businessName email status lastSentAt sentCount");
 
+  // BOUNCE RATE — pehle report me tha hi nahi, isliye 12% bounce chup-chaap
+  // sender reputation kha raha tha aur kisi ko pata nahi tha.
+  const bounced = await Lead.countDocuments({ status: "bounced" });
+  const attempted = sent + bounced;
+  const bounceRate = attempted > 0 ? (bounced / attempted) * 100 : 0;
+
   const stamp = new Date().toISOString();
   const replyRate = sent > 0 ? ((replied / sent) * 100).toFixed(1) : "0.0";
 
@@ -46,7 +57,9 @@ async function main() {
   md += `| Emails sent (unique leads) | ${sent} |\n`;
   md += `| Sent today | ${sentToday} |\n`;
   md += `| Replies | ${replied} |\n`;
-  md += `| Reply rate | ${replyRate}% |\n\n`;
+  md += `| Reply rate | ${replyRate}% |\n`;
+  md += `| Bounced | ${bounced} |\n`;
+  md += `| Bounce rate | ${bounceRate.toFixed(1)}%${bounceRate > BOUNCE_ALERT_THRESHOLD ? " ⚠️" : ""} |\n\n`;
 
   md += `## Leads by status\n\n`;
   md += `| Status | Count |\n|---|---|\n`;
@@ -64,8 +77,20 @@ async function main() {
   await fs.mkdir(logsDir, { recursive: true });
   await fs.writeFile(path.join(logsDir, "report.md"), md, "utf-8");
 
-  console.log(`📊 Report generated: logs/report.md`);
-  console.log(`   Total: ${total} | Sent: ${sent} | Today: ${sentToday} | Replies: ${replied}`);
+  log.info("report.generated", {
+    total,
+    sent,
+    sentToday,
+    replied,
+    replyRate: `${replyRate}%`,
+    bounced,
+    bounceRate: `${bounceRate.toFixed(1)}%`,
+  });
+
+  // deliverability khatre me -> alert
+  if (bounceRate > BOUNCE_ALERT_THRESHOLD) {
+    await alertHighBounce(bounceRate.toFixed(1), bounced, attempted);
+  }
 
   await disconnectDB();
 }

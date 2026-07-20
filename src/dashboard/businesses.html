@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Businesses — Lead Finder</title>
+<style>
+  :root{--bg:#0d1117;--card:#161b22;--border:#27303b;--txt:#e6edf3;--mut:#8b949e;--accent:#2f81f7;--green:#3fb950;--amber:#d29922;--red:#f85149;}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  body{background:var(--bg);color:var(--txt);padding:24px;max-width:1200px;margin:0 auto}
+  a{color:var(--accent);text-decoration:none}
+  h1{font-size:20px;margin-bottom:2px}
+  .sub{color:var(--mut);font-size:13px;margin-bottom:16px}
+  nav{display:flex;gap:14px;margin-bottom:18px;font-size:13px}
+  nav a{color:var(--mut)} nav a.on{color:var(--txt);font-weight:600}
+
+  /* stat widgets */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+  .stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px}
+  .stat .n{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+  .stat .l{color:var(--mut);font-size:12px;margin-top:2px}
+  .stat.hot .n{color:var(--green)}
+
+  /* scan + filter bar */
+  .bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+  .bar input,.bar select{background:var(--card);border:1px solid var(--border);color:var(--txt);padding:8px 12px;border-radius:8px;font-size:13px}
+  .bar input.grow{flex:1;min-width:160px}
+  button{background:var(--accent);color:#fff;border:0;border-radius:8px;padding:8px 14px;font-size:13px;cursor:pointer}
+  button.ghost{background:var(--card);border:1px solid var(--border);color:var(--txt)}
+  button:hover{opacity:.9}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+  .chip{background:var(--card);border:1px solid var(--border);color:var(--mut);padding:6px 12px;border-radius:20px;cursor:pointer;font-size:13px;user-select:none}
+  .chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+
+  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;font-size:13px}
+  th{text-align:left;color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:10px 12px;border-bottom:1px solid var(--border)}
+  td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+  tr:last-child td{border-bottom:0}
+  tr:hover td{background:#1c2330}
+  .score{font-weight:700;font-variant-numeric:tabular-nums}
+  .score.hi{color:var(--green)}.score.mid{color:#79c0ff}.score.lo{color:var(--mut)}
+  .tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:5px;background:#1a2535;color:#79c0ff}
+  .nosite{background:#16301d;color:var(--green)}
+  .wa{color:var(--green);font-weight:600}
+  .muted{color:var(--mut)}
+  .toast{position:fixed;top:14px;right:14px;background:var(--card);border:1px solid var(--border);border-left:3px solid var(--accent);padding:10px 14px;border-radius:8px;font-size:13px;display:none;max-width:320px}
+</style>
+</head>
+<body>
+  <div class="toast" id="toast"></div>
+  <nav>
+    <a href="/">Leads</a>
+    <a href="/jobs">Jobs (AI)</a>
+    <a href="/businesses" class="on">Businesses</a>
+  </nav>
+
+  <h1>🏢 Business Lead Finder</h1>
+  <div class="sub">Area scan → website detect → contact + WhatsApp → AI opportunity score</div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="bar">
+    <input id="scanArea" class="grow" placeholder='Scan an area — e.g. "Clifton", "DHA", "Bahadurabad"' />
+    <input id="scanMax" type="number" value="20" min="1" max="60" style="width:80px" title="max businesses" />
+    <button id="scanBtn">🔍 Scan area</button>
+  </div>
+
+  <div class="chips" id="filters">
+    <span class="chip on" data-f="all">All</span>
+    <span class="chip" data-f="nosite">🔥 No website</span>
+    <span class="chip" data-f="whatsapp">💬 Has WhatsApp</span>
+    <span class="chip" data-f="high">⭐ High score (60+)</span>
+  </div>
+  <div class="bar">
+    <input id="search" class="grow" placeholder="Search business name…" />
+    <select id="areaSel"><option value="">All areas</option></select>
+  </div>
+
+  <table id="tbl">
+    <thead><tr><th>Score</th><th>Business</th><th>Category</th><th>Website</th><th>Contact</th><th>Rating</th></tr></thead>
+    <tbody id="rows"><tr><td colspan="6" class="muted" style="text-align:center;padding:24px">Loading…</td></tr></tbody>
+  </table>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let FILTER = "all";
+
+function toast(msg, ms = 2500) {
+  const t = $("toast"); t.textContent = msg; t.style.display = "block";
+  clearTimeout(toast._t); toast._t = setTimeout(() => (t.style.display = "none"), ms);
+}
+async function api(path, opts) {
+  const r = await fetch(path, opts);
+  if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || `HTTP ${r.status}`);
+  return r.json();
+}
+
+function scoreClass(s) { return s >= 60 ? "hi" : s >= 40 ? "mid" : "lo"; }
+
+function renderStats(s) {
+  const w = [
+    ["total", "Businesses found", ""],
+    ["noWebsite", "Without website", "hot"],
+    ["poorWebsite", "Poor website", ""],
+    ["withWhatsapp", "With WhatsApp", ""],
+    ["withEmail", "With email", ""],
+    ["highOpp", "High opportunity", "hot"],
+  ];
+  $("stats").innerHTML = w.map(([k, l, c]) =>
+    `<div class="stat ${c}"><div class="n">${s[k] ?? 0}</div><div class="l">${l}</div></div>`).join("");
+  // area dropdown
+  const cur = $("areaSel").value;
+  $("areaSel").innerHTML = '<option value="">All areas</option>' +
+    (s.areas || []).map((a) => `<option value="${a.area}"${a.area === cur ? " selected" : ""}>${a.area} (${a.count})</option>`).join("");
+}
+
+function contactCell(b) {
+  const wa = (b.contacts || []).find((c) => c.type === "whatsapp");
+  const ph = (b.contacts || []).find((c) => c.type === "phone");
+  const em = (b.contacts || []).find((c) => c.type === "email");
+  if (wa) return `<a class="wa" href="${wa.value}" target="_blank" rel="noopener">💬 WhatsApp</a>`;
+  if (em) return `<a href="mailto:${em.value}">✉️ ${em.value}</a>`;
+  if (ph) return `<span class="muted">📞 ${ph.value}</span>`;
+  return `<span class="muted">— none</span>`;
+}
+function websiteCell(b) {
+  if (!b.hasWebsite) return `<span class="tag nosite">no website</span>`;
+  const q = b.websiteQuality;
+  const color = q === "ok" ? "muted" : "wa";
+  return `<a href="${b.website}" target="_blank" rel="noopener" class="${color}">${q || "site"} ↗</a>`;
+}
+
+async function load() {
+  const params = new URLSearchParams();
+  if (FILTER === "nosite") params.set("hasWebsite", "false");
+  if (FILTER === "whatsapp") params.set("hasWhatsapp", "true");
+  if (FILTER === "high") params.set("minScore", "60");
+  const area = $("areaSel").value; if (area) params.set("area", area);
+  const q = $("search").value.trim(); if (q) params.set("q", q);
+
+  try {
+    const [stats, data] = await Promise.all([api("/api/businesses/stats"), api("/api/businesses?" + params)]);
+    renderStats(stats);
+    const rows = data.businesses;
+    $("rows").innerHTML = rows.length ? rows.map((b) => `
+      <tr>
+        <td><span class="score ${scoreClass(b.score)}">${b.score}</span></td>
+        <td><b>${b.businessName}</b><div class="muted" style="font-size:11px">${b.address ? b.address.slice(0, 48) : ""}</div></td>
+        <td><span class="tag">${b.ourCategory || "other"}</span></td>
+        <td>${websiteCell(b)}</td>
+        <td>${contactCell(b)}</td>
+        <td>${b.rating != null ? b.rating + "★" : "—"} <span class="muted">${b.reviews != null ? "(" + b.reviews + ")" : ""}</span></td>
+      </tr>`).join("")
+      : `<tr><td colspan="6" class="muted" style="text-align:center;padding:24px">No businesses. Scan an area above.</td></tr>`;
+  } catch (e) { toast("Load failed: " + e.message); }
+}
+
+// filters
+document.querySelectorAll("#filters .chip").forEach((c) =>
+  c.onclick = () => {
+    document.querySelectorAll("#filters .chip").forEach((x) => x.classList.remove("on"));
+    c.classList.add("on"); FILTER = c.dataset.f; load();
+  });
+$("areaSel").onchange = load;
+let st; $("search").oninput = () => { clearTimeout(st); st = setTimeout(load, 300); };
+
+// scan
+$("scanBtn").onclick = async () => {
+  const area = $("scanArea").value.trim();
+  if (!area) return toast("Area likho");
+  const max = parseInt($("scanMax").value, 10) || 20;
+  $("scanBtn").disabled = true; $("scanBtn").textContent = "⏳ Scanning…";
+  try {
+    const { scanId } = await api("/api/scan", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ area, max }) });
+    toast(`Scanning ${area}… (1-2 min, Playwright chal raha hai)`);
+    const poll = setInterval(async () => {
+      const s = await api("/api/scan/" + scanId).catch(() => null);
+      if (!s || s.status === "running") return;
+      clearInterval(poll);
+      $("scanBtn").disabled = false; $("scanBtn").textContent = "🔍 Scan area";
+      if (s.status === "error") return toast("Scan fail: " + s.error, 5000);
+      toast(`✅ ${s.area}: ${s.created} new, ${s.updated} updated (${s.found} found)`, 5000);
+      load();
+    }, 3000);
+  } catch (e) {
+    $("scanBtn").disabled = false; $("scanBtn").textContent = "🔍 Scan area";
+    toast("Scan fail: " + e.message);
+  }
+};
+
+load();
+setInterval(() => { if (document.visibilityState === "visible") load(); }, 15000);
+</script>
+</body>
+</html>

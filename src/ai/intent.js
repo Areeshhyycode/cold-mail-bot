@@ -54,6 +54,7 @@ const JOB_PHRASES = [
   "now hiring",
   "is hiring",
   "hiring",
+  
   "looking for a developer",
   "looking for developer",
   "looking to hire",

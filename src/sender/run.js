@@ -4,8 +4,14 @@ import { Lead } from "../db/Lead.js";
 import { sendEmail, randomDelay, verifyConnection } from "./mailer.js";
 import { getCvAttachment } from "../ai/profile.js";
 import { jobLeadSendable } from "../scraper/targetFilter.js";
+import { verifyEmail } from "../scraper/verifyEmail.js";
+import { withLock } from "../core/lock.js";
+import { alertEmptyQueue, alertSmtpDown } from "../core/alerts.js";
+import { log } from "../core/logger.js";
 
 dotenv.config();
+
+const domainOf = (email = "") => (email.split("@")[1] || "").toLowerCase();
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -45,9 +51,10 @@ async function main() {
   await connectDB();
 
   // preflight: SMTP login/connection sahi hai? warna 40 "sent" log honge par
-  // asal me kuch deliver nahi hoga. Yahan jaldi fail karo.
+  // asal me kuch deliver nahi hoga. Yahan jaldi fail karo — aur ALERT bhejo.
   if (!(await verifyConnection())) {
-    console.log("🛑 SMTP connection/auth fail — Gmail App Password (.env SMTP_PASS) check karo. Kuch nahi bheja.");
+    log.error("sender.smtp_down", { note: "Gmail App Password (.env SMTP_PASS) check karo" });
+    await alertSmtpDown("verifyConnection() fail — App Password reject ya server down.");
     await disconnectDB();
     return;
   }
@@ -79,17 +86,60 @@ async function main() {
   })
     .sort({ score: -1 })
     .limit(remaining);
-  console.log(`📤 ${leads.length} emails bhejne hain (aaj ${sentToday}/${dailyLimit} ho chuke, ${remaining} bacha)...`);
+
+  // QUEUE KHALI? -> yehi 7-din wali khamoshi ki asli wajah thi. Ab ALERT jayega.
+  if (leads.length === 0) {
+    log.warn("sender.queue_empty", { note: "koi 'ready' lead nahi — bhejne ko kuch nahi" });
+    await alertEmptyQueue();
+    await disconnectDB();
+    return;
+  }
+
+  log.info("sender.start", { toSend: leads.length, sentToday, dailyLimit });
+
+  // BOUNCE SUPPRESSION: jin domains pe pehle bounce ho chuka hai, un pe dobara mat
+  // bhejo. Har bounce Gmail ko batata hai ke tum spammer ho -> sender reputation
+  // girta hai -> asli emails bhi spam me. 12% bounce rate isi wajah se tha.
+  const bouncedDomains = new Set(
+    (await Lead.distinct("email", { status: "bounced" }))
+      .map(domainOf)
+      .filter(Boolean)
+  );
 
   // CV attachment ek hi baar resolve karo (job leads ke saath jata hai)
   const cv = getCvAttachment();
-  if (!cv.length) console.log("   ℹ️  CV file nahi mili — job emails bina attachment ke jayengi (portfolio link rahega).");
+  if (!cv.length) log.warn("sender.no_cv", { note: "CV file nahi mili — job emails bina attachment" });
 
   let sent = 0;
   let dupSkipped = 0;
   let lowQuality = 0;
+  let invalidSkipped = 0;
+  let suppressed = 0;
   for (const lead of leads) {
     try {
+      // ── PRE-SEND VERIFICATION ──────────────────────────────────────────────
+      // Pehle koi verification thi hi nahi: jo bhi email milta, bhej dete the.
+      // emailStatus field schema me MOJOOD thi par kabhi likhi hi nahi gayi.
+      // Ab: syntax + MX check (DoH se) -> invalid ho to bhejo hi mat.
+      if (!lead.emailStatus || lead.emailStatus === "unknown") {
+        lead.emailStatus = await verifyEmail(lead.email);
+      }
+      if (lead.emailStatus === "invalid") {
+        lead.status = "skipped";
+        await lead.save();
+        invalidSkipped++;
+        log.info("sender.skip_invalid", { email: lead.email });
+        continue;
+      }
+
+      // is domain pe pehle bounce ho chuka hai -> dobara mat bhejo
+      if (bouncedDomains.has(domainOf(lead.email))) {
+        lead.status = "skipped";
+        await lead.save();
+        suppressed++;
+        log.info("sender.skip_bounced_domain", { email: lead.email });
+        continue;
+      }
       // JOB leads: generic inbox (info@/contact@) ya job-seeker post pe bhejna bekaar
       // hai — ye hi 0% reply-rate ki sabse badi wajah thi. SERVICE leads pe ye filter
       // nahi (woh business ko pitch karte hain, info@ bilkul valid hai).
@@ -152,15 +202,20 @@ async function main() {
     }
   }
 
-  console.log(
-    `\n📊 ${sent} emails bheje gaye` +
-      (dupSkipped ? `, ${dupSkipped} duplicate company skip` : "") +
-      (lowQuality ? `, ${lowQuality} low-quality target skip (generic inbox / job-seeker)` : "")
-  );
+  log.info("sender.done", {
+    sent,
+    dupSkipped,
+    lowQuality,
+    invalidSkipped,
+    bouncedDomainSkipped: suppressed,
+  });
   await disconnectDB();
 }
 
-main().catch((err) => {
-  console.error("❌ Error:", err.message);
+// LOCK: 5 scheduled runs din me chalte hain, aur ek run 80 min tak le sakta hai
+// -> do sender ek saath chal sakte the aur ek hi lead ko do baar email ja sakti thi.
+// Ab ek waqt me sirf EK sender. Doosra chup-chaap skip (exit 0, workflow success).
+withLock("sender", main).catch((err) => {
+  log.error("sender.error", { error: err.message });
   process.exit(1);
 });

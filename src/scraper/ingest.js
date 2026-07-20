@@ -67,6 +67,9 @@ export async function saveLead(raw = {}) {
     city: raw.city || "",
     phone: raw.phone || "",
     datePosted: raw.datePosted,
+    // website audit ka natija (pehle compute hota tha par kabhi save nahi hota tha)
+    websiteQuality: raw.websiteQuality || "unknown",
+    auditReasons: raw.auditReasons || [],
     campaign: CAMPAIGN,
     status: "new",
   };
