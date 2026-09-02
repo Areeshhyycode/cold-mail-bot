@@ -20,6 +20,7 @@
  *   node src/scraper/linkedinLeads.js "shopify expert" 15
  */
 import dotenv from "dotenv";
+import { GROQ_MODEL } from "../ai/model.js";
 import * as cheerio from "cheerio";
 import fs from "fs/promises";
 import path from "path";
@@ -99,7 +100,7 @@ async function aiDrafts(lead, skill) {
   try {
     const { default: Groq } = await import("groq-sdk");
     const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-    const MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+    const MODEL = GROQ_MODEL;
 
     const prompt = `Tum ek B2B outreach copywriter ho. Main (${SENDER}) ek ${skill} subcontractor hoon jo busy freelancers ka OVERFLOW/extra kaam white-label leta hoon.
 

@@ -16,7 +16,7 @@ import { log } from "../core/logger.js";
 
 dotenv.config();
 
-export const MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+export { GROQ_MODEL as MODEL } from "../ai/model.js";
 
 /** Prompt badlo to ye bump karo — analytics tab bata sakti hai naya prompt behtar tha ya nahi */
 export const PROMPT_VERSION = "outreach-v1";

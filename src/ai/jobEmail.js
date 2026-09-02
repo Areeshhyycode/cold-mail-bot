@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-const MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+import { GROQ_MODEL as MODEL } from "./model.js";
 
 /**
  * JOB lead ke liye personalized job-application email banata hai.

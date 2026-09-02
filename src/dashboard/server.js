@@ -20,6 +20,7 @@ import Groq from "groq-sdk";
 import { connectDB } from "../db/connect.js";
 import { Lead } from "../db/Lead.js";
 import { PROFILE } from "../ai/profile.js";
+import { GROQ_MODEL } from "../ai/model.js";
 import {
   API_TOKEN, suggestToken, applyCors, authorize, csvSafe, vStr, vNum,
 } from "../core/httpAuth.js";
@@ -43,7 +44,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = parseInt(process.env.DASHBOARD_PORT || "4000", 10);
 
 const groq = process.env.GROQ_API_KEY ? new Groq({ apiKey: process.env.GROQ_API_KEY }) : null;
-const GROQ_MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+
 
 /* ------------------------------ body reading ----------------------------- */
 const readBody = (req, maxBytes = 5 * 1024 * 1024) =>

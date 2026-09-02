@@ -6,7 +6,7 @@ import { fetchText } from "../core/httpCache.js";
 dotenv.config();
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-const MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+import { GROQ_MODEL as MODEL } from "./model.js";
 
 // website ka thoda text nikalo taaki AI ko context mile
 async function fetchSiteSummary(website) {

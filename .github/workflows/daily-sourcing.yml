@@ -34,6 +34,21 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # PREFLIGHT — Mongo + Groq model actually reachable? Fail loud (no
+      # continue-on-error) taaki toota credential workflow RED kare -> GitHub
+      # failure email. SMTP check yahan bhi chalta hai (alerts uspe depend karte).
+      - name: Preflight health check (fail loud on broken credentials)
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GROQ_MODEL: ${{ secrets.GROQ_MODEL }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          NOTIFY_EMAIL: ${{ secrets.NOTIFY_EMAIL }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: npm run doctor
+
       # Google Maps scraping ke liye Chromium chahiye (software + service modes)
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium

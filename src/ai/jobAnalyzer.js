@@ -20,7 +20,7 @@ import { PROFILE } from "./profile.js";
 
 dotenv.config();
 
-const MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+import { GROQ_MODEL as MODEL } from "./model.js";
 let client = null;
 function groq() {
   if (!process.env.GROQ_API_KEY) throw new Error("GROQ_API_KEY .env me missing hai");
