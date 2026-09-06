@@ -38,7 +38,8 @@
     "test:db": "node src/db/test.js",
     "__t": "node _t.mjs",
     "parse-cv": "node src/parseCv.js",
-    "ats": "node src/ai/atsAnalyzer.js"
+    "ats": "node src/ai/atsAnalyzer.js",
+    "tailor-cv": "node src/tailorCv.js"
   },
   "dependencies": {
     "cheerio": "^1.0.0",
