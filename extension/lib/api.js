@@ -102,3 +102,7 @@ export const noteForUrl = (url) =>
 /** Person ka status set karo (sent/connected…) — panel ke "✓ Sent" button se. */
 export const setLinkedInStatus = (id, status) =>
   request("/api/linkedin/status", { method: "POST", body: { id, status } });
+
+/** Note dobara generate karo (panel ka ♻ button). */
+export const regenNote = (id) =>
+  request("/api/linkedin/note", { method: "POST", body: { id } });

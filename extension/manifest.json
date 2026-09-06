@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "AI Job Assistant",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Jobs scrape karo (30+ fields), AI match-score + missing skills + tailored resume/cover letter lo, sab MongoDB me sync. Human-in-the-loop: apply aap khud karti ho.",
 
   "permissions": [
