@@ -13,8 +13,12 @@ dotenv.config();
 async function main() {
   await connectDB();
 
-  const leads = await Lead.find({ status: "new" }).sort({ score: -1 }).limit(50);
-  console.log(`✍️  ${leads.length} leads ke liye email banani hai...`);
+  // batch limit env se configurable — backlog (jaise 295 stuck leads) clear karne
+  // ke liye barha sakti ho: PERSONALIZE_LIMIT=200 npm run personalize
+  const LIMIT = parseInt(process.env.PERSONALIZE_LIMIT || "60", 10);
+  const totalNew = await Lead.countDocuments({ status: "new" });
+  const leads = await Lead.find({ status: "new" }).sort({ score: -1 }).limit(LIMIT);
+  console.log(`✍️  ${leads.length}/${totalNew} new leads personalize kar rahe (limit ${LIMIT})...`);
 
   let job = 0;
   let service = 0;
