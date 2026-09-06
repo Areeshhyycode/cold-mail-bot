@@ -34,8 +34,13 @@
     return (sp > NOTE_MAX * 0.6 ? cut.slice(0, sp) : cut).trim() + "…";
   };
 
+  const alive = () => { try { return !!(chrome.runtime && chrome.runtime.id); } catch { return false; } };
   const send = (cmd, extra) =>
-    new Promise((r) => chrome.runtime.sendMessage({ cmd, ...extra }, (res) => { void chrome.runtime.lastError; r(res); }));
+    new Promise((r) => {
+      if (!alive()) return r(null);
+      try { chrome.runtime.sendMessage({ cmd, ...extra }, (res) => { void chrome.runtime.lastError; r(res); }); }
+      catch { r(null); }
+    });
 
   /* ---- profile DOM se info nikaalo (content script ke apne page pe) ---- */
   function extractProfile() {
@@ -134,7 +139,9 @@
   }
 
   /* -------------------------------- driver ------------------------------- */
+  let liTimer = null;
   async function check() {
+    if (!alive()) { clearInterval(liTimer); return; }  // extension reloaded → orphan ruk jao
     const u = cleanUrl(location.href);
     if (u !== lastUrl) {
       lastUrl = u;
@@ -168,6 +175,6 @@
     fillConnectNote();
   }
 
-  setInterval(check, 1200);
+  liTimer = setInterval(check, 1200);
   check();
 })();

@@ -58,8 +58,18 @@
     if (ch.applyCoverLetter) coverLetter = ch.applyCoverLetter.newValue || "";
   });
 
-  const send = (cmd, extra) => new Promise((r) =>
-    chrome.runtime.sendMessage({ cmd, ...extra }, (res) => { void chrome.runtime.lastError; r(res); }));
+  const send = (cmd, extra) => new Promise((r) => {
+    if (!alive()) return r(null);
+    try { chrome.runtime.sendMessage({ cmd, ...extra }, (res) => { void chrome.runtime.lastError; r(res); }); }
+    catch { r(null); }
+  });
+
+  /* Extension reload hone pe purane tab ka content script "orphan" ho jata hai —
+     uske chrome.* calls "Extension context invalidated" throw karte hain. alive()
+     check karke purana instance khud ruk jata hai (error spam nahi). */
+  function alive() {
+    try { return !!(chrome.runtime && chrome.runtime.id); } catch { return false; }
+  }
 
   /* ===================== 1. FREE ENRICHMENT (detail page) ================== */
   const isJobDetailPage = () =>
@@ -206,7 +216,10 @@
     }
     if (changed) {
       const j = JSON.stringify(answers);
-      if (j !== lastSavedJSON) { lastSavedJSON = j; chrome.storage.local.set({ answers }); }
+      if (j !== lastSavedJSON && alive()) {
+        lastSavedJSON = j;
+        try { chrome.storage.local.set({ answers }); } catch { /* context invalidated */ }
+      }
     }
   }
 
@@ -267,6 +280,7 @@
   }
 
   function tick() {
+    if (!alive()) { clearInterval(timer); return; }  // orphaned (extension reloaded) → ruk jao
     maybeEnrich();                                   // SPA navigation pe naya job
 
     const applying = isApply();
