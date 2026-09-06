@@ -243,6 +243,19 @@ $("scan").onclick = async () => {
   } catch (e) { toast("Scan fail: " + e.message); }
 };
 
+$("captureLi").onclick = async () => {
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (!tab) return toast("Koi active tab nahi");
+    if (!/linkedin\.com\/in\//i.test(tab.url || "")) {
+      return toast("Pehle LinkedIn pe recruiter/HR ka profile kholo (linkedin.com/in/…)");
+    }
+    toast("🔗 Capturing + AI note bana raha…");
+    const r = await send("captureLinkedIn", { tabId: tab.id, url: tab.url });
+    toast(r && r.ok ? `✅ ${r.person.name || "Person"} captured — dashboard /linkedin pe note ready` : "Capture fail");
+  } catch (e) { toast("Capture fail: " + e.message); }
+};
+
 $("clear").onclick = async () => {
   if (!confirm("Saari jobs local list se hat jayengi (MongoDB me jo sync ho chuki hain wo rahengi). Sure?")) return;
   await send("clearJobs");

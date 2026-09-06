@@ -37,6 +37,9 @@ import {
 import {
   leadAnalytics, listReplies, markReplyHandled, saveDraft,
 } from "../api/analyticsApi.js";
+import {
+  capturePerson, listPeople, regenerateNote, updatePersonStatus,
+} from "../api/linkedinApi.js";
 import { resumePending, queueStats } from "../core/analysisQueue.js";
 import { handleOutreach } from "../api/outreachRoutes.js";
 import { handleAssistant } from "../api/assistantRoutes.js";
@@ -279,6 +282,12 @@ const server = http.createServer(async (req, res) => {
     if (p === "/api/replies/handled" && req.method === "POST") return json(res, 200, await markReplyHandled(await readJson(req)));
     if (p === "/api/replies/draft" && req.method === "POST") return json(res, 200, await saveDraft(await readJson(req)));
 
+    /* ------------------------- linkedin outreach ----------------------- */
+    if (p === "/api/linkedin/capture" && req.method === "POST") return json(res, 200, await capturePerson(await readJson(req)));
+    if (p === "/api/linkedin/people" && req.method === "GET") return json(res, 200, await listPeople(url.searchParams));
+    if (p === "/api/linkedin/note" && req.method === "POST") return json(res, 200, await regenerateNote(await readJson(req)));
+    if (p === "/api/linkedin/status" && req.method === "POST") return json(res, 200, await updatePersonStatus(await readJson(req)));
+
     /* ------------------------------- UI --------------------------------- */
     const file = p.startsWith("/jobs")
       ? "jobs.html"
@@ -290,6 +299,8 @@ const server = http.createServer(async (req, res) => {
             ? "analytics.html"
             : p.startsWith("/replies")
               ? "replies.html"
+              : p.startsWith("/linkedin")
+                ? "linkedin.html"
               : p.startsWith("/assistant") || p.startsWith("/chat")
                 ? "assistant.html"
                 : p.startsWith("/home")

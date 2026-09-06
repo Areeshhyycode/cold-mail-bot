@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LinkedIn Outreach</title>
+<style>
+  :root{--bg:#0d1117;--card:#161b22;--border:#27303b;--txt:#e6edf3;--mut:#8b949e;--accent:#2f81f7;--green:#3fb950;--amber:#d29922;--red:#f85149;--purple:#d2a8ff;}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  body{background:var(--bg);color:var(--txt);padding:24px;max-width:1000px;margin:0 auto}
+  a{color:var(--accent);text-decoration:none}
+  nav{display:flex;gap:16px;margin-bottom:20px;font-size:13px;align-items:center;flex-wrap:wrap}
+  nav a{color:var(--mut)} nav a.on{color:var(--txt);font-weight:600}
+  h1{font-size:22px;margin-bottom:2px}
+  .sub{color:var(--mut);font-size:13px;margin-bottom:16px}
+  .how{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:8px;padding:11px 14px;font-size:12.5px;color:var(--mut);margin-bottom:16px;line-height:1.6}
+  .how b{color:var(--txt)}
+  .row{display:flex;gap:12px;align-items:center;margin-bottom:14px;font-size:13px}
+  .row label{color:var(--mut);display:flex;gap:6px;align-items:center;cursor:pointer}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:15px;margin-bottom:12px}
+  .card.done{opacity:.5}
+  .head{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap;margin-bottom:6px}
+  .who{font-weight:700;font-size:15px}
+  .role{color:var(--mut);font-size:12.5px}
+  .meta{color:var(--mut);font-size:12px;margin-bottom:8px}
+  .pill{display:inline-block;font-size:10px;padding:1px 7px;border-radius:5px;background:#1a2535;color:#79c0ff;margin-left:6px;text-transform:uppercase;letter-spacing:.03em}
+  .pill.p1{background:#16301d;color:#7ee787}
+  .pill.p2{background:#1c2b3a;color:#79c0ff}
+  .lbl{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.04em;margin:8px 0 4px}
+  textarea{width:100%;background:#0d1117;border:1px solid var(--border);color:var(--txt);border-radius:8px;padding:10px;font-size:13px;font-family:inherit;min-height:78px;resize:vertical;line-height:1.5}
+  .cc{font-size:11px;color:var(--mut);text-align:right;margin-top:3px}
+  .cc.over{color:var(--amber)}
+  .actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  button{background:var(--accent);color:#fff;border:0;padding:8px 13px;border-radius:8px;font-size:13px;cursor:pointer}
+  button.ghost{background:transparent;border:1px solid var(--border);color:var(--txt)}
+  button.green{background:var(--green)}
+  a.open{border:1px solid var(--border);color:var(--txt);padding:8px 13px;border-radius:8px;font-size:13px}
+  .empty{color:var(--mut);font-size:13px;text-align:center;padding:36px;line-height:1.6}
+  .toast{position:fixed;top:14px;right:14px;background:var(--card);border:1px solid var(--border);border-left:3px solid var(--green);padding:10px 14px;border-radius:8px;font-size:13px;display:none}
+</style>
+</head>
+<body>
+  <div class="toast" id="toast"></div>
+  <nav>
+    <a href="/home">🏠 Home</a>
+    <a href="/">Leads</a>
+    <a href="/jobs">Jobs (AI)</a>
+    <a href="/businesses">Businesses</a>
+    <a href="/analytics">📊 Analytics</a>
+    <a href="/replies">📨 Replies</a>
+    <a href="/linkedin" class="on">🔗 LinkedIn</a>
+  </nav>
+
+  <h1>🔗 LinkedIn Outreach</h1>
+  <div class="sub">Captured recruiters/HR — AI connection note ke saath. Review karo, copy karo, profile kholo, khud connect bhejo.</div>
+
+  <div class="how">
+    <b>Kaise use karein:</b> LinkedIn pe kisi recruiter/HR ka profile kholo → extension me <b>"Capture recruiter"</b> dabao → wo yahan aa jayega note ke saath. Phir <b>Open profile</b> → <b>Connect</b> → <b>Add a note</b> → yahan se note <b>Copy</b> karke paste karo → Send.
+    <br><span style="color:var(--amber)">Note: extension khud kisi ko message/connect nahi bhejta — sending hamesha tum karti ho (LinkedIn rules).</span>
+  </div>
+
+  <div class="row">
+    <label><input type="checkbox" id="showAll" /> Sab dikhao (sent/connected bhi)</label>
+    <a href="#" id="refresh">↻ Refresh</a>
+  </div>
+
+  <div id="list"></div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+  function toast(m){const t=$("toast");t.textContent=m;t.style.display="block";setTimeout(()=>t.style.display="none",2200);}
+  async function api(path, opts){const r=await fetch(path,opts);if(!r.ok)throw new Error("HTTP "+r.status);return r.json();}
+
+  const P_CLASS = { recruiter:"p1", "talent-acquisition":"p1", hr:"p2" };
+
+  async function load(){
+    const all=$("showAll").checked?"?all=1":"";
+    let d;
+    try{ d=await api("/api/linkedin/people"+all); }
+    catch(e){ $("list").innerHTML=`<div class="empty">Load fail: ${esc(e.message)} — backend chal raha hai? (npm run dashboard)</div>`; return; }
+    const ppl=d.people||[];
+    if(!ppl.length){ $("list").innerHTML=`<div class="empty">Abhi koi captured recruiter nahi 🤷<br>LinkedIn pe recruiter/HR ka profile khol ke extension se <b>"Capture recruiter"</b> dabao.</div>`; return; }
+
+    $("list").innerHTML = ppl.map((x)=>{
+      const when = x.capturedAt ? new Date(x.capturedAt).toLocaleDateString() : "";
+      const pc = P_CLASS[x.priorityLabel] || "";
+      const done = ["connected","replied","skipped"].includes(x.status);
+      return `<div class="card ${done?"done":""}" data-id="${x.id}">
+        <div class="head">
+          <div><span class="who">${esc(x.name||"(name?)")}</span><span class="pill ${pc}">${esc(x.priorityLabel)}</span></div>
+          <div class="meta">${esc(x.status)} · ${when}</div>
+        </div>
+        <div class="role">${esc(x.role||"")}${x.company?` · <b style="color:#adbac7">${esc(x.company)}</b>`:""}</div>
+        ${x.jobTitle?`<div class="meta">For: ${esc(x.jobTitle)}</div>`:""}
+        <div class="lbl">✍️ Connection note (edit / copy)</div>
+        <textarea data-note="${x.id}" maxlength="300">${esc(x.note||"")}</textarea>
+        <div class="cc" data-cc="${x.id}"></div>
+        <div class="actions">
+          <a class="open" href="${esc(x.profileUrl)}" target="_blank" rel="noopener noreferrer">↗ Open profile</a>
+          <button data-copy="${x.id}">📋 Copy note</button>
+          <button class="ghost" data-regen="${x.id}">♻ Regenerate</button>
+          <button class="green" data-status="${x.id}" data-to="connected">✓ Connected</button>
+          <button class="ghost" data-status="${x.id}" data-to="skipped">Skip</button>
+        </div>
+      </div>`;
+    }).join("");
+    ppl.forEach((x)=>updateCC(x.id));
+  }
+
+  function updateCC(id){
+    const ta=document.querySelector(`textarea[data-note="${id}"]`); if(!ta)return;
+    const cc=document.querySelector(`[data-cc="${id}"]`);
+    const n=ta.value.length; cc.textContent=`${n}/300`; cc.className="cc"+(n>300?" over":"");
+  }
+
+  document.addEventListener("input",(e)=>{const id=e.target.getAttribute("data-note");if(id)updateCC(id);});
+
+  document.addEventListener("click", async (e)=>{
+    const copy=e.target.getAttribute("data-copy");
+    const regen=e.target.getAttribute("data-regen");
+    const stId=e.target.getAttribute("data-status");
+    if(copy){
+      const ta=document.querySelector(`textarea[data-note="${copy}"]`);
+      try{ await navigator.clipboard.writeText(ta.value); toast("Note copied — LinkedIn pe paste karo"); }
+      catch{ ta.select(); document.execCommand("copy"); toast("Copied"); }
+    }
+    if(regen){
+      toast("♻ AI naya note bana raha…");
+      try{ const r=await api("/api/linkedin/note",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({id:regen})});
+        const ta=document.querySelector(`textarea[data-note="${regen}"]`); ta.value=r.note; updateCC(regen); toast("Naya note ready"); }
+      catch(err){ toast("Fail: "+err.message); }
+    }
+    if(stId){
+      const to=e.target.getAttribute("data-to");
+      try{ await api("/api/linkedin/status",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({id:stId,status:to})}); toast("Marked "+to); load(); }
+      catch(err){ toast("Fail: "+err.message); }
+    }
+  });
+
+  $("showAll").addEventListener("change",load);
+  $("refresh").addEventListener("click",(e)=>{e.preventDefault();load();});
+  load();
+</script>
+</body>
+</html>

@@ -90,3 +90,7 @@ export const ping = () => request("/api/health");
 /** Form question ka AI jawab (autofill ke liye — pehle se tha, ab auth ke saath). */
 export const answerQuestion = (question, maxLen) =>
   request("/api/answer", { method: "POST", body: { question, maxLen } });
+
+/** LinkedIn recruiter/HR capture (user-initiated) — backend AI note bana deta hai. */
+export const postLinkedInPerson = (person) =>
+  request("/api/linkedin/capture", { method: "POST", body: person });

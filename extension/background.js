@@ -25,7 +25,7 @@ import {
   normalizeJob, dedupeKey, fingerprint, extractAtsId, detectAts,
   classify, fitScore, sleep, DEAD_STATUSES,
 } from "./lib/core.js";
-import { postJobs, patchJobStatus, ping, answerQuestion, ApiError } from "./lib/api.js";
+import { postJobs, patchJobStatus, ping, answerQuestion, postLinkedInPerson, ApiError } from "./lib/api.js";
 
 /* --------------------------------- config -------------------------------- */
 const ALARM_SCRAPE = "daily-scrape";
@@ -488,10 +488,58 @@ chrome.notifications.onClicked.addListener((id) => {
   }
 });
 
+/* ============================ LINKEDIN CAPTURE ========================== */
+/* USER-INITIATED: user LinkedIn pe recruiter ka profile khol ke popup se
+ * "Capture recruiter" dabati hai. Ye us profile ki VISIBLE info nikaal ke
+ * backend ko bhejta hai (jo AI connection-note bana deta hai). Ek waqt me EK
+ * profile. Koi bulk-harvest, koi auto-connect/message NAHI (LinkedIn rules). */
+function extractLinkedInProfile() {
+  const clean = (s) => (s || "").replace(/\s+/g, " ").trim();
+  const url = location.href.split("?")[0];
+  if (!/linkedin\.com\/in\//.test(url)) return { error: "not-profile" };
+
+  let name = clean(document.querySelector("h1")?.textContent);
+  // headline / role — known-ish selector, phir h1 ke aas-paas ka text, phir og meta
+  let role = clean(document.querySelector(".text-body-medium.break-words")?.textContent);
+  if (!role) {
+    const near = [...document.querySelectorAll("h1 ~ div, h1 + div")]
+      .map((d) => clean(d.textContent))
+      .find((t) => t && t.length > 3 && t.length < 220);
+    role = near || "";
+  }
+  const ogt = clean(document.querySelector('meta[property="og:title"]')?.content);
+  if (!name && ogt) name = clean(ogt.split(/[-|]/)[0]);
+  if (!role && ogt.includes("-")) role = clean(ogt.split("-").slice(1).join("-").replace(/\|.*/, ""));
+
+  // company: role me "at X" / "@ X" se
+  let company = "";
+  const m = role.match(/\b(?:at|@)\s+([^|·,]{2,60})/i);
+  if (m) company = clean(m[1]);
+
+  const loc = [...document.querySelectorAll(".text-body-small.inline, .text-body-small")]
+    .map((e) => clean(e.textContent))
+    .find((t) => /pakistan|karachi|lahore|islamabad|remote|,\s*[A-Z]/i.test(t) && t.length < 60) || "";
+
+  return { name, role, company, location: loc, profileUrl: url };
+}
+
+async function captureLinkedIn({ tabId, url, jobTitle, jobUrl }) {
+  if (!tabId || !/linkedin\.com\/in\//i.test(url || "")) {
+    throw new Error("Pehle LinkedIn pe recruiter/HR ka profile kholo (linkedin.com/in/...), phir capture dabao");
+  }
+  const [res] = await chrome.scripting.executeScript({ target: { tabId }, func: extractLinkedInProfile });
+  const data = (res && res.result) || {};
+  if (data.error || !data.profileUrl) throw new Error("Profile parse nahi hua — page poori load hone do");
+  if (jobTitle) data.jobTitle = jobTitle;
+  if (jobUrl) data.jobUrl = jobUrl;
+  return postLinkedInPerson(data); // backend AI note bana deta hai
+}
+
 /* ------------------------------ message bus ------------------------------ */
 /* Popup aur content script SIRF yahan se state badalte hain. */
 const HANDLERS = {
   scanTab: (m) => scanActiveTab(m),
+  captureLinkedIn: (m) => captureLinkedIn(m),
   scrapeNow: () => autoScrape("manual", true).then((added) => ({ added })),
   syncNow: async () => { await runSyncQueue(); return (await get(["syncStatus"])).syncStatus || {}; },
   retryFailed: () => retryFailed().then((n) => ({ retried: n })),
