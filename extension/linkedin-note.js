@@ -14,6 +14,8 @@
 (function () {
   if (window.__jaaLiNote) return;
   window.__jaaLiNote = true;
+  const LOG = (...a) => console.log("[JAA-LI]", ...a);
+  LOG("content script loaded on", location.href);
 
   const PANEL_ID = "jaa-li-note-panel";
   const NOTE_MAX = 200; // LinkedIn free connect-note limit
@@ -108,6 +110,16 @@
 
   function flash(id, text) { const b = document.getElementById(id); if (!b) return; const o = b.textContent; b.textContent = text; setTimeout(() => { if (b) b.textContent = o; }, 1400); }
 
+  function showError(msg) {
+    removePanel();
+    const wrap = document.createElement("div");
+    wrap.id = PANEL_ID;
+    wrap.style.cssText = "position:fixed;bottom:20px;right:20px;z-index:2147483647;width:320px;background:#0d1117;color:#e6edf3;border:1px solid #f85149;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.5);font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-size:12.5px;padding:11px 13px";
+    wrap.innerHTML = '<b style="color:#f85149">🔗 Note nahi bana</b><div style="margin-top:6px;color:#8b949e;line-height:1.5">' + esc(msg) + "</div>";
+    document.body.appendChild(wrap);
+    setTimeout(() => { const el = document.getElementById(PANEL_ID); if (el && el.querySelector('b')?.textContent.includes("nahi bana")) el.remove(); }, 6000);
+  }
+
   /* ---- Connect "Add a note" textarea auto-fill (jab TUM modal kholti ho) ---- */
   function fillConnectNote() {
     if (!currentNote) return;
@@ -128,22 +140,27 @@
       lastUrl = u;
       removePanel();
       currentNote = ""; currentId = null;
-      if (!isProfile(u)) return;
+      if (!isProfile(u)) { LOG("not a profile page (open a recruiter's profile) →", u); return; }
+      LOG("profile page detected, checking note…");
       // pehle dekho note pehle se hai?
       let res = await send("noteForUrl", { url: u });
+      LOG("noteForUrl →", res);
       if (res && res.ok && res.data && res.data.found && res.data.note) {
         showPanel(res.data);
+      } else if (res && !res.ok) {
+        showError("Backend se baat nahi hui: " + (res.error || "?") + ". npm run dashboard chala hai? Token save hai? (⚙️ Backend settings)");
       } else {
         // nahi -> KHUD capture kar ke note bana lo (user is profile pe hai)
         const prof = extractProfile();
-        if (prof.name && prof.profileUrl) {
-          showPanel({ name: prof.name, generating: true });
-          const cap = await send("capturePersonData", { data: prof });
-          if (cap && cap.ok && cap.data) {
-            showPanel({ id: cap.data.id, name: cap.data.person?.name || prof.name, note: cap.data.note, status: cap.data.person?.status });
-          } else {
-            removePanel();
-          }
+        LOG("extracted profile →", prof);
+        if (!prof.name) { showError("Profile ka naam nahi mila — page poora load hone do, phir refresh."); return; }
+        showPanel({ name: prof.name, generating: true });
+        const cap = await send("capturePersonData", { data: prof });
+        LOG("capture →", cap);
+        if (cap && cap.ok && cap.data) {
+          showPanel({ id: cap.data.id, name: cap.data.person?.name || prof.name, note: cap.data.note, status: cap.data.person?.status });
+        } else {
+          showError("Note nahi bana: " + ((cap && cap.error) || "backend offline / token missing") + ". npm run dashboard + ⚙️ Backend settings me token check karo.");
         }
       }
     }
