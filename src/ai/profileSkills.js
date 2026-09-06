@@ -13,16 +13,32 @@ import { CareerProfile } from "../db/CareerProfile.js";
 import { PROFILE } from "./profile.js";
 
 // market me common-demand skills — job me mile par profile me na ho to "missing
-// keyword" (gap) flag hota hai (daily CV advisor + tailoring ke liye signal).
+// keyword" (gap) flag hota hai. Multi-profile matching (MERN vs AI vs HR vs Call
+// Center) sahi ho iske liye SAARE domains ki skills chahiye — sirf tech nahi.
 export const MARKET_SKILLS = [
+  // --- web / software ---
   "react", "next", "node", "express", "nestjs", "mongodb", "typescript", "javascript",
   "redux", "graphql", "postgres", "postgresql", "mysql", "prisma", "tailwind",
   "docker", "kubernetes", "aws", "gcp", "azure", "ci/cd", "github actions", "jenkins",
   "redis", "kafka", "rabbitmq", "microservices", "rest", "grpc", "websocket",
   "react native", "flutter", "vue", "angular", "svelte", "three.js",
-  "jest", "cypress", "playwright", "testing", "python", "django", "fastapi",
+  "jest", "cypress", "playwright", "testing", "django", "fastapi",
   "php", "laravel", "c#", ".net", "java", "spring", "go", "rust",
   "firebase", "supabase", "stripe", "oauth", "jwt", "webpack", "vite",
+  // --- AI / automation ---
+  "openai", "groq", "llama", "llm", "prompt engineering", "ai automation",
+  "langchain", "rag", "hugging face", "gemini", "resume parsing", "chatbot", "python",
+  // --- HR / recruitment ---
+  "recruitment", "candidate sourcing", "candidate screening", "talent acquisition",
+  "interview coordination", "onboarding", "applicant tracking", "hr documentation",
+  "employee relations", "shortlisting", "candidate communication",
+  // --- call center / customer service ---
+  "inbound calls", "outbound calls", "customer service", "customer communication",
+  "customer support", "call center", "active listening", "crm", "client handling",
+  "cold calling", "technical support", "complaint handling", "appointment scheduling",
+  // --- general professional ---
+  "ms office", "google workspace", "communication", "english", "urdu",
+  "problem solving", "time management", "record-keeping",
 ];
 
 let _cache = null; // ek run me baar baar DB hit na ho
@@ -64,6 +80,44 @@ export async function getMatchProfile() {
 /** cache reset (tests / long-running process ke liye) */
 export function _resetProfileCache() {
   _cache = null;
+}
+
+let _allCache = null;
+/** SAARE active CareerProfiles (multi-profile matching ke liye). */
+export async function getAllMatchProfiles() {
+  if (_allCache) return _allCache;
+  try {
+    const ps = await CareerProfile.find({ active: true }).lean();
+    if (ps && ps.length) {
+      _allCache = ps.map((p) => ({
+        name: p.name,
+        slug: p.slug,
+        isDefault: !!p.isDefault,
+        skills: dedupe([...(p.parsed?.skills || []), ...(p.parsed?.technologies || [])]),
+        targetRoles: p.parsed?.targetRoles || [],
+        seniority: p.parsed?.seniority || "junior",
+      }));
+      return _allCache;
+    }
+  } catch {
+    /* DB off -> single fallback */
+  }
+  _allCache = [await getMatchProfile()];
+  return _allCache;
+}
+
+/**
+ * Ek job ko SAARE profiles ke against match karo — best-fit profile nikaalo.
+ * @returns {{ best:{name,matchPct}, scores:Array<{name,slug,matchPct,matched,missing}> }}
+ */
+export function matchJobToProfiles(jobText = "", profiles = []) {
+  const scores = profiles
+    .map((p) => {
+      const m = matchAgainstProfile(jobText, p);
+      return { name: p.name, slug: p.slug, matchPct: m.matchPct, matched: m.matched, missing: m.missing };
+    })
+    .sort((a, b) => b.matchPct - a.matchPct);
+  return { best: scores[0] || null, scores };
 }
 
 // skill aliases -> canonical (taake postgres/postgresql, node/nodejs, next/nextjs

@@ -27,7 +27,7 @@ import { scrapeRozee } from "./scraper/rozeeJobs.js";
 import { evaluateJob } from "./scraper/jobFilter.js";
 import { ROLE_KEYWORDS } from "./ai/intent.js";
 import { connectDB, disconnectDB } from "./db/connect.js";
-import { getMatchProfile } from "./ai/profileSkills.js";
+import { getMatchProfile, getAllMatchProfiles, matchJobToProfiles } from "./ai/profileSkills.js";
 
 dotenv.config();
 
@@ -53,10 +53,12 @@ async function main() {
 
   // tumhari CV (default CareerProfile) load karo — matching iske against hoti hai
   let profile = null;
+  let allProfiles = [];
   try {
     await connectDB();
     profile = await getMatchProfile();
-    console.log(`👤 Matching against: "${profile.name}" (${profile.skills.length} skills · ${profile.source})\n`);
+    allProfiles = await getAllMatchProfiles();
+    console.log(`👤 Default: "${profile.name}" · matching against ${allProfiles.length} profiles: ${allProfiles.map((p) => p.name).join(", ")}\n`);
   } catch (e) {
     console.log(`   ⚠️  profile load fail (${e.message}) — fallback skills use ho rahe\n`);
   }
@@ -114,6 +116,10 @@ async function main() {
       L.push(`- **Location:** ${j.location || "—"}`);
       L.push(`- **✅ Your skills matched:** ${(e.matched && e.matched.length ? e.matched : e.stack).join(", ") || "(title-relevant)"}`);
       if (e.missing && e.missing.length) L.push(`- **⚠️ Missing (in job, not in your CV):** ${e.missing.slice(0, 8).join(", ")}`);
+      if (allProfiles.length > 1) {
+        const mp = matchJobToProfiles(`${j.jobTitle || ""} ${j.jobDescription || ""}`, allProfiles);
+        L.push(`- **🎯 Best profile:** ${mp.best.name} (${mp.best.matchPct}%) · ${mp.scores.slice(0, 4).map((s) => `${s.name.split(" ")[0]} ${s.matchPct}%`).join(" · ")}`);
+      }
       L.push(`- **Apply:** ${j.jobUrl || "—"}`);
       L.push(`- **Source:** ${j.source} · **Posted:** ${fmtDate(j.datePosted) || "—"}`);
       L.push("");
