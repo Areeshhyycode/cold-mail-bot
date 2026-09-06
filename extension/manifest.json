@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "AI Job Assistant",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Jobs scrape karo (30+ fields), AI match-score + missing skills + tailored resume/cover letter lo, sab MongoDB me sync. Human-in-the-loop: apply aap khud karti ho.",
 
   "permissions": [
@@ -48,6 +48,11 @@
       "js": ["autofill-content.js"],
       "run_at": "document_idle",
       "all_frames": true
+    },
+    {
+      "matches": ["https://*.linkedin.com/in/*"],
+      "js": ["linkedin-note.js"],
+      "run_at": "document_idle"
     }
   ],
 

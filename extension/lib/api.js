@@ -94,3 +94,11 @@ export const answerQuestion = (question, maxLen) =>
 /** LinkedIn recruiter/HR capture (user-initiated) — backend AI note bana deta hai. */
 export const postLinkedInPerson = (person) =>
   request("/api/linkedin/capture", { method: "POST", body: person });
+
+/** Is profile URL ka ready note hai? (LinkedIn page floating panel ke liye) */
+export const noteForUrl = (url) =>
+  request("/api/linkedin/note-for?url=" + encodeURIComponent(url));
+
+/** Person ka status set karo (sent/connected…) — panel ke "✓ Sent" button se. */
+export const setLinkedInStatus = (id, status) =>
+  request("/api/linkedin/status", { method: "POST", body: { id, status } });

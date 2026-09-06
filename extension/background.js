@@ -25,7 +25,7 @@ import {
   normalizeJob, dedupeKey, fingerprint, extractAtsId, detectAts,
   classify, fitScore, sleep, DEAD_STATUSES,
 } from "./lib/core.js";
-import { postJobs, patchJobStatus, ping, answerQuestion, postLinkedInPerson, ApiError } from "./lib/api.js";
+import { postJobs, patchJobStatus, ping, answerQuestion, postLinkedInPerson, noteForUrl, setLinkedInStatus, ApiError } from "./lib/api.js";
 
 /* --------------------------------- config -------------------------------- */
 const ALARM_SCRAPE = "daily-scrape";
@@ -540,6 +540,8 @@ async function captureLinkedIn({ tabId, url, jobTitle, jobUrl }) {
 const HANDLERS = {
   scanTab: (m) => scanActiveTab(m),
   captureLinkedIn: (m) => captureLinkedIn(m),
+  noteForUrl: (m) => noteForUrl(m.url),                       // content script: is profile ka note?
+  liStatus: (m) => setLinkedInStatus(m.id, m.status),         // panel ka "✓ Sent"
   scrapeNow: () => autoScrape("manual", true).then((added) => ({ added })),
   syncNow: async () => { await runSyncQueue(); return (await get(["syncStatus"])).syncStatus || {}; },
   retryFailed: () => retryFailed().then((n) => ({ retried: n })),

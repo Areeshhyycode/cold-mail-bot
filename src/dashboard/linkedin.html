@@ -59,6 +59,12 @@
     <br><span style="color:var(--amber)">Note: extension khud kisi ko message/connect nahi bhejta — sending hamesha tum karti ho (LinkedIn rules).</span>
   </div>
 
+  <details id="appliedBox" open style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:16px">
+    <summary style="cursor:pointer;font-weight:600;font-size:14px">🏢 Companies you applied to — auto HR search</summary>
+    <div class="sub" style="margin:8px 0 6px">Tumhari applied companies ke liye system ne LinkedIn HR-search links khud bana diye. "🔍 Find HR" dabao → LinkedIn search khulega → recruiter ka profile kholo → wahan note panel ready milega.</div>
+    <div id="applied"></div>
+  </details>
+
   <div class="row">
     <label><input type="checkbox" id="showAll" /> Sab dikhao (sent/connected bhi)</label>
     <a href="#" id="refresh">↻ Refresh</a>
@@ -138,8 +144,23 @@
     }
   });
 
+  async function loadApplied(){
+    let d;
+    try{ d=await api("/api/linkedin/applied-companies"); }
+    catch{ $("applied").innerHTML=`<div class="sub">Load fail — backend chal raha hai?</div>`; return; }
+    const cos=d.companies||[];
+    if(!cos.length){ $("applied").innerHTML=`<div class="sub">Abhi koi applied company nahi. Jab tum Indeed pe apply karke extension me "Applied" mark karogi, wo yahan aayengi.</div>`; return; }
+    $("applied").innerHTML = cos.map((c)=>
+      `<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border)">
+        <div><b>${esc(c.company)}</b> ${c.captured?`<span class="pill p1">${c.captured} captured</span>`:""}</div>
+        <a class="open" href="${esc(c.searchUrl)}" target="_blank" rel="noopener noreferrer">🔍 Find HR</a>
+      </div>`
+    ).join("");
+  }
+
   $("showAll").addEventListener("change",load);
-  $("refresh").addEventListener("click",(e)=>{e.preventDefault();load();});
+  $("refresh").addEventListener("click",(e)=>{e.preventDefault();load();loadApplied();});
+  loadApplied();
   load();
 </script>
 </body>

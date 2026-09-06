@@ -38,7 +38,7 @@ import {
   leadAnalytics, listReplies, markReplyHandled, saveDraft,
 } from "../api/analyticsApi.js";
 import {
-  capturePerson, listPeople, regenerateNote, updatePersonStatus,
+  capturePerson, listPeople, regenerateNote, updatePersonStatus, noteForUrl, appliedCompanies,
 } from "../api/linkedinApi.js";
 import { resumePending, queueStats } from "../core/analysisQueue.js";
 import { handleOutreach } from "../api/outreachRoutes.js";
@@ -285,6 +285,8 @@ const server = http.createServer(async (req, res) => {
     /* ------------------------- linkedin outreach ----------------------- */
     if (p === "/api/linkedin/capture" && req.method === "POST") return json(res, 200, await capturePerson(await readJson(req)));
     if (p === "/api/linkedin/people" && req.method === "GET") return json(res, 200, await listPeople(url.searchParams));
+    if (p === "/api/linkedin/note-for" && req.method === "GET") return json(res, 200, await noteForUrl(url.searchParams));
+    if (p === "/api/linkedin/applied-companies" && req.method === "GET") return json(res, 200, await appliedCompanies());
     if (p === "/api/linkedin/note" && req.method === "POST") return json(res, 200, await regenerateNote(await readJson(req)));
     if (p === "/api/linkedin/status" && req.method === "POST") return json(res, 200, await updatePersonStatus(await readJson(req)));
 

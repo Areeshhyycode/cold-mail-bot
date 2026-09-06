@@ -8,6 +8,8 @@
  */
 import { Person, rolePriority } from "../db/Person.js";
 import { CareerProfile } from "../db/CareerProfile.js";
+import { Job } from "../db/Job.js";
+import { Lead } from "../db/Lead.js";
 import { getMatchProfile } from "../ai/profileSkills.js";
 import { generateConnectionNote } from "../ai/connectionNote.js";
 import { HttpError } from "./jobsApi.js";
@@ -74,6 +76,50 @@ export async function capturePerson(body) {
   return { ok: true, id: String(doc._id), person: shape(doc), note: doc.note };
 }
 
+/* ================ GET /api/linkedin/applied-companies ================== */
+/**
+ * Jin companies pe tumne apply kiya (Job: applied/interview/offer) + JOB leads
+ * jinhe contact kiya — un sab ke liye ek LinkedIn HR-search link KHUD bana deta
+ * hai. Ye "auto-find" ka SAFE hissa: system companies + searches tayyar karta hai;
+ * browsing + connect tum karti ho (LinkedIn scraping/auto-connect = account ban).
+ */
+export async function appliedCompanies() {
+  const [jobCos, leadCos] = await Promise.all([
+    Job.distinct("company", { status: { $in: ["applied", "interview", "offer"] } }).catch(() => []),
+    Lead.distinct("company", {
+      leadType: "JOB",
+      status: { $in: ["sent", "followup_1", "followup_2", "replied"] },
+    }).catch(() => []),
+  ]);
+
+  // normalize + dedupe (case-insensitive), junk hatao
+  const seen = new Map();
+  for (const c of [...jobCos, ...leadCos]) {
+    const name = String(c || "").trim();
+    if (!name || name.length < 2) continue;
+    const key = name.toLowerCase();
+    if (!seen.has(key)) seen.set(key, name);
+  }
+  const companies = [...seen.values()].sort((a, b) => a.localeCompare(b));
+
+  // har company ke liye captured-count nikaalo
+  const counts = Object.fromEntries(
+    (await Person.aggregate([{ $group: { _id: { $toLower: "$company" }, n: { $sum: 1 } } }]).catch(() => []))
+      .map((x) => [x._id, x.n])
+  );
+
+  return {
+    companies: companies.map((name) => ({
+      company: name,
+      // LinkedIn ka NORMAL people-search (jaise tum khud type karti) — recruiter/HR
+      searchUrl:
+        "https://www.linkedin.com/search/results/people/?keywords=" +
+        encodeURIComponent(`${name} recruiter OR "talent acquisition" OR HR`),
+      captured: counts[name.toLowerCase()] || 0,
+    })),
+  };
+}
+
 /* ======================= GET /api/linkedin/people ====================== */
 export async function listPeople(params) {
   const showDone = params?.get?.("all") === "1";
@@ -83,6 +129,16 @@ export async function listPeople(params) {
     .limit(200)
     .lean();
   return { people: people.map(shape) };
+}
+
+/* ============= GET /api/linkedin/note-for?url= (content script) ========= */
+/** Is profile URL ka note hai? (LinkedIn page pe floating panel ke liye) */
+export async function noteForUrl(params) {
+  const url = cleanUrl(vStr(params?.get?.("url"), 300) || "");
+  if (!url) return { found: false };
+  const p = await Person.findOne({ profileUrl: url }).lean();
+  if (!p) return { found: false };
+  return { found: true, id: String(p._id), name: p.name || "", note: p.note || "", status: p.status };
 }
 
 /* ==================== POST /api/linkedin/note (regen) ================== */
