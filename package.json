@@ -36,7 +36,8 @@
     "doctor": "node src/doctor.js",
     "cron": "node src/cron.js",
     "test:db": "node src/db/test.js",
-    "__t": "node _t.mjs"
+    "__t": "node _t.mjs",
+    "parse-cv": "node src/parseCv.js"
   },
   "dependencies": {
     "cheerio": "^1.0.0",
@@ -47,6 +48,7 @@
     "node-cron": "^4.6.0",
     "nodemailer": "^9.1.1",
     "p-limit": "^6.1.0",
+    "pdf-parse": "^2.4.5",
     "playwright": "^1.47.0"
   }
 }
