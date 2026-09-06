@@ -44,19 +44,22 @@
     }
   })();
 
-  chrome.storage.local.get(["profile", "autoAdvance", "answers", "applyCoverLetter"], (d) => {
-    profile = d.profile || {};
-    autoAdvance = !!d.autoAdvance;
-    answers = d.answers || {};
-    coverLetter = d.applyCoverLetter || "";
-  });
-  chrome.storage.onChanged.addListener((ch, area) => {
-    if (area !== "local") return;
-    if (ch.profile) profile = ch.profile.newValue || {};
-    if (ch.autoAdvance) autoAdvance = !!ch.autoAdvance.newValue;
-    if (ch.answers) answers = ch.answers.newValue || {};
-    if (ch.applyCoverLetter) coverLetter = ch.applyCoverLetter.newValue || "";
-  });
+  try {
+    chrome.storage.local.get(["profile", "autoAdvance", "answers", "applyCoverLetter"], (d) => {
+      if (chrome.runtime.lastError || !d) return;
+      profile = d.profile || {};
+      autoAdvance = !!d.autoAdvance;
+      answers = d.answers || {};
+      coverLetter = d.applyCoverLetter || "";
+    });
+    chrome.storage.onChanged.addListener((ch, area) => {
+      if (area !== "local") return;
+      if (ch.profile) profile = ch.profile.newValue || {};
+      if (ch.autoAdvance) autoAdvance = !!ch.autoAdvance.newValue;
+      if (ch.answers) answers = ch.answers.newValue || {};
+      if (ch.applyCoverLetter) coverLetter = ch.applyCoverLetter.newValue || "";
+    });
+  } catch { /* context invalidated at load — orphan, ignore */ }
 
   const send = (cmd, extra) => new Promise((r) => {
     if (!alive()) return r(null);
