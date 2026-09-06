@@ -26,6 +26,8 @@ import { scrapeAllATS } from "./scraper/atsBoards.js";
 import { scrapeRozee } from "./scraper/rozeeJobs.js";
 import { evaluateJob } from "./scraper/jobFilter.js";
 import { ROLE_KEYWORDS } from "./ai/intent.js";
+import { connectDB, disconnectDB } from "./db/connect.js";
+import { getMatchProfile } from "./ai/profileSkills.js";
 
 dotenv.config();
 
@@ -47,7 +49,17 @@ async function main() {
   const useRozee = !process.argv.includes("--no-rozee");
   const keyword = args.join(" ").trim() || ROLE_KEYWORDS.slice(0, 8).join(" ");
 
-  console.log(`🔎 Finding jobs — PAKISTAN-FIRST (Karachi MERN internships + remote)\n`);
+  console.log(`🔎 Finding jobs — PAKISTAN-FIRST + CV-matched\n`);
+
+  // tumhari CV (default CareerProfile) load karo — matching iske against hoti hai
+  let profile = null;
+  try {
+    await connectDB();
+    profile = await getMatchProfile();
+    console.log(`👤 Matching against: "${profile.name}" (${profile.skills.length} skills · ${profile.source})\n`);
+  } catch (e) {
+    console.log(`   ⚠️  profile load fail (${e.message}) — fallback skills use ho rahe\n`);
+  }
 
   // rozee (Karachi/Pakistan local) + remote boards + ATS — parallel
   const tasks = [
@@ -72,7 +84,7 @@ async function main() {
   });
 
   const ranked = uniq
-    .map((j) => ({ j, e: evaluateJob(j) }))
+    .map((j) => ({ j, e: evaluateJob(j, { profile }) }))
     .filter((o) => o.e.keep)
     .sort((a, b) => b.e.score - a.e.score);
 
@@ -97,10 +109,11 @@ async function main() {
     L.push(`\n## ${TIER_META[tier].label} — ${items.length}\n`);
     items.slice(0, 40).forEach(({ j, e }, i) => {
       const exp = e.minYears != null ? `${e.minYears}+ yr` : (e.isJunior ? "junior" : "?");
-      L.push(`### ${i + 1}. ${j.jobTitle || "(role)"} — ${j.company || "?"}  \`fit ${e.score}\``);
+      L.push(`### ${i + 1}. ${j.jobTitle || "(role)"} — ${j.company || "?"}  \`fit ${e.score}\`${profile ? ` · \`match ${e.matchPct}%\`` : ""}`);
       L.push(`- **Type:** ${e.isIntern ? "🎓 Internship" : "Job"} · **Exp:** ${exp}${j.salary ? ` · **Salary:** ${j.salary}` : ""}`);
       L.push(`- **Location:** ${j.location || "—"}`);
-      L.push(`- **Skills matched:** ${e.stack.join(", ") || "(title-relevant)"}`);
+      L.push(`- **✅ Your skills matched:** ${(e.matched && e.matched.length ? e.matched : e.stack).join(", ") || "(title-relevant)"}`);
+      if (e.missing && e.missing.length) L.push(`- **⚠️ Missing (in job, not in your CV):** ${e.missing.slice(0, 8).join(", ")}`);
       L.push(`- **Apply:** ${j.jobUrl || "—"}`);
       L.push(`- **Source:** ${j.source} · **Posted:** ${fmtDate(j.datePosted) || "—"}`);
       L.push("");
@@ -117,7 +130,7 @@ async function main() {
     if (!items || !items.length) return;
     console.log(`\n${title}:`);
     items.slice(0, 6).forEach(({ j, e }, i) =>
-      console.log(`  ${i + 1}. [fit ${e.score}] ${j.jobTitle} — ${j.company} (${j.location})\n       ${j.jobUrl}`)
+      console.log(`  ${i + 1}. [fit ${e.score}${profile ? ` · match ${e.matchPct}%` : ""}] ${j.jobTitle} — ${j.company} (${j.location})\n       ${j.jobUrl}`)
     );
   };
   showTop("karachi", "🏆 Top Karachi");
@@ -127,6 +140,8 @@ async function main() {
   if (!ranked.length) {
     console.log("\n  (0 match — sources down ho sakte hain ya rozee/Playwright missing. Dobara try karo.)");
   }
+
+  await disconnectDB().catch(() => {});
 }
 
 main().catch((e) => {

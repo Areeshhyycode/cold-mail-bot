@@ -16,8 +16,10 @@
  * (>=4 yr) filter aur junior (<=2 yr) boost karte hain, sirf title/JD text pe nahi.
  */
 import { isSeniorRole, isJuniorFriendly, isRelevantDevRole } from "../ai/intent.js";
+import { matchAgainstProfile } from "../ai/profileSkills.js";
 
-// tumhara core stack — job me inme se jitne zyada, utna behtar fit
+// FALLBACK stack — jab koi CareerProfile pass na ho (purana behaviour). Jab
+// evaluateJob ko { profile } milta hai to tumhari asli CV skills use hoti hain.
 const STACK = [
   "react", "node", "next.js", "nextjs", "nest.js", "nestjs", "express",
   "mongodb", "mongo", "typescript", "javascript", "full stack", "full-stack",
@@ -26,9 +28,9 @@ const STACK = [
 
 const PK_CITIES = ["karachi", "lahore", "islamabad", "rawalpindi", "peshawar", "multan", "faisalabad"];
 
-function stackHits(text = "") {
+function stackHits(text = "", skills = STACK) {
   const t = text.toLowerCase();
-  return [...new Set(STACK.filter((s) => t.includes(s)))];
+  return [...new Set(skills.filter((s) => t.includes(String(s).toLowerCase())))];
 }
 
 /** Pakistan/Karachi location detection (location string + JD text). */
@@ -58,11 +60,16 @@ function remoteInfo(loc = "", desc = "") {
 }
 
 /**
- * Ek job ko evaluate karo (Pakistan-first).
+ * Ek job ko evaluate karo (Pakistan-first + CV-based match).
  * @param {object} lead - { jobTitle, jobDescription, location, source, minYears, salary }
- * @returns {{ keep, score, stack, remote, pakistan, isIntern, isJunior, tier }}
+ * @param {object} [opts] - { profile } — getMatchProfile() ka output (tumhari CV).
+ *   Diya jaye to matching tumhari ASLI CV skills se hoti hai; warna fallback STACK.
+ * @returns {{ keep, score, stack, matched, missing, matchPct, remote, pakistan, isIntern, isJunior, tier }}
  */
-export function evaluateJob(lead = {}) {
+export function evaluateJob(lead = {}, opts = {}) {
+  const profile = opts.profile || null;
+  const skills = profile && profile.skills && profile.skills.length ? profile.skills : STACK;
+
   const title = lead.jobTitle || "";
   const text = `${title} ${lead.jobDescription || ""}`;
   const hasYears = lead.minYears != null && Number.isFinite(lead.minYears);
@@ -72,7 +79,11 @@ export function evaluateJob(lead = {}) {
   // junior: keywords YA minYears <= 2
   const junior = isJuniorFriendly(text) || (hasYears && lead.minYears <= 2);
   const relevant = isRelevantDevRole(title);
-  const hits = stackHits(text);
+  const hits = stackHits(text, skills);
+
+  // CV-based match — matched/missing skills + match % (profile diya ho to)
+  const cv = profile ? matchAgainstProfile(text, profile) : { matched: hits, missing: [], matchPct: 0 };
+
   const rem = remoteInfo(lead.location, lead.jobDescription);
   const pk = pakistanInfo(lead.location, text, lead.source);
   const isIntern = /\bintern(ship)?\b/i.test(title);
@@ -96,7 +107,8 @@ export function evaluateJob(lead = {}) {
   if (junior) score += 18;
   if (hasYears && lead.minYears <= 1) score += 8; // exactly ~fresh/1yr = perfect fit
   if (lead.salary || /salary|compensation|\$|\busd\b|per year|per month|\bpkr\b|\bk\b/i.test(text)) score += 6;
-  score += Math.min(hits.length, 4) * 5; // stack depth
+  score += Math.min(hits.length, 4) * 5; // CV-skill depth (tumhari asli skills)
+  if (profile && cv.matchPct >= 60) score += 8; // strong CV↔job overlap
   if (/mern|next\.?js|nest\.?js/i.test(text)) score += 8; // exact target frameworks
   if (rem.restriction && !pk.inPakistan) score -= 15; // country-lock (PK jobs par lagu nahi)
   if (senior) score -= 20;
@@ -105,6 +117,9 @@ export function evaluateJob(lead = {}) {
     keep,
     score: Math.max(0, Math.min(100, score)),
     stack: hits,
+    matched: cv.matched,       // tumhari CV ki kaunsi skills is job me mili
+    missing: cv.missing,       // job me demand par tumhari CV me nahi (gap)
+    matchPct: cv.matchPct,     // CV ↔ job overlap %
     remote: rem,
     pakistan: pk,
     isIntern,
