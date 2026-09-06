@@ -34,6 +34,9 @@ import {
 import {
   getSummary, getActivity, getInsights, globalSearch,
 } from "../api/dashboardApi.js";
+import {
+  leadAnalytics, listReplies, markReplyHandled, saveDraft,
+} from "../api/analyticsApi.js";
 import { resumePending, queueStats } from "../core/analysisQueue.js";
 import { handleOutreach } from "../api/outreachRoutes.js";
 import { handleAssistant } from "../api/assistantRoutes.js";
@@ -270,6 +273,12 @@ const server = http.createServer(async (req, res) => {
     if (p === "/api/answer" && req.method === "POST") return json(res, 200, await answerQuestion(await readJson(req)));
     if (p === "/api/data") return json(res, 200, await getLeadData());
 
+    /* ---------------------- analytics + replies ------------------------ */
+    if (p === "/api/analytics") return json(res, 200, await leadAnalytics(url.searchParams));
+    if (p === "/api/replies" && req.method === "GET") return json(res, 200, await listReplies(url.searchParams));
+    if (p === "/api/replies/handled" && req.method === "POST") return json(res, 200, await markReplyHandled(await readJson(req)));
+    if (p === "/api/replies/draft" && req.method === "POST") return json(res, 200, await saveDraft(await readJson(req)));
+
     /* ------------------------------- UI --------------------------------- */
     const file = p.startsWith("/jobs")
       ? "jobs.html"
@@ -277,11 +286,15 @@ const server = http.createServer(async (req, res) => {
         ? "businesses.html"
         : p.startsWith("/outreach")
           ? "outreach.html"
-          : p.startsWith("/assistant") || p.startsWith("/chat")
-            ? "assistant.html"
-            : p.startsWith("/home")
-              ? "home.html"
-              : "index.html";
+          : p.startsWith("/analytics")
+            ? "analytics.html"
+            : p.startsWith("/replies")
+              ? "replies.html"
+              : p.startsWith("/assistant") || p.startsWith("/chat")
+                ? "assistant.html"
+                : p.startsWith("/home")
+                  ? "home.html"
+                  : "index.html";
     const html = fs.readFileSync(path.join(__dirname, file), "utf8");
     res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
     res.end(html);

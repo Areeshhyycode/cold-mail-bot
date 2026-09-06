@@ -103,6 +103,13 @@ const leadSchema = new mongoose.Schema(
     firstOpenedAt: { type: Date },
     lastOpenedAt: { type: Date },
 
+    // reply handling (reply auto-draft) — jab koi reply kare
+    replyText: { type: String, default: "" },   // incoming reply ka (cleaned) body
+    repliedAt: { type: Date },                    // reply kab aaya
+    draftReply: { type: String, default: "" },    // AI ka suggested jawab (approve karke bhejo)
+    draftReplyAt: { type: Date },                 // draft kab bana
+    replyHandled: { type: Boolean, default: false }, // tumne jawab bhej diya? (dashboard toggle)
+
     // kis client/campaign ke liye (jab multiple clients honge)
     campaign: { type: String, default: "default" },
   },

@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { connectDB, disconnectDB } from "../db/connect.js";
 import { Lead } from "../db/Lead.js";
 import { notifyWhatsApp } from "../utils/notify.js";
+import { draftReply, cleanReplyText } from "../ai/replyDraft.js";
 
 dotenv.config();
 
@@ -101,18 +102,37 @@ async function main() {
 
       const isUnsub = UNSUB_WORDS.some((w) => body.includes(w));
       lead.status = isUnsub ? "unsubscribed" : "replied";
-      await lead.save();
 
       if (isUnsub) {
+        await lead.save();
         unsubscribed++;
         console.log(`   🚫 Unsubscribed: ${fromEmail}`);
-        await notifyWhatsApp(`🚫 Unsubscribe: ${lead.businessName} (${fromEmail})`);
+        await notifyWhatsApp(`🚫 Unsubscribe: ${lead.businessName || lead.company || fromEmail} (${fromEmail})`);
       } else {
         replied++;
-        console.log(`   💬 Replied: ${fromEmail} (sequence rok di)`);
-        // 🎉 reply aaya — turant batao!
+        // reply ka SAAF text nikaalo (quoted history/signature hata ke)
+        const clean = cleanReplyText(rawBody);
+        lead.replyText = clean;
+        lead.repliedAt = new Date();
+        lead.replyHandled = false;
+
+        // AI se ek ready-to-send jawab draft karwao
+        console.log(`   💬 Replied: ${fromEmail} — AI draft bana raha...`);
+        const draft = await draftReply(lead, clean).catch(() => "");
+        if (draft) {
+          lead.draftReply = draft;
+          lead.draftReplyAt = new Date();
+        }
+        await lead.save();
+
+        const who = lead.businessName || lead.company || fromEmail;
+        // 🎉 reply + AI draft turant bhejo (copy-paste karke jawab do)
+        const draftBlock = draft
+          ? `\n\n✍️ AI ne jawab draft kar diya (dashboard /replies pe edit karo, ya copy-paste):\n\n${draft}`
+          : `\n\nGmail check karo aur jawab do.`;
         await notifyWhatsApp(
-          `🎉 NEW REPLY!\n\n${lead.businessName}\n📧 ${fromEmail}\n\nKisi ne tumhari cold email ka reply diya hai. Gmail check karo!`
+          `🎉 NEW REPLY!\n\n${who}\n📧 ${fromEmail}${draftBlock}`,
+          `🎉 Reply from ${who}`
         );
       }
     }

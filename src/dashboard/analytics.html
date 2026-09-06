@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Analytics</title>
+<style>
+  :root{--bg:#0d1117;--card:#161b22;--border:#27303b;--txt:#e6edf3;--mut:#8b949e;--accent:#2f81f7;--green:#3fb950;--amber:#d29922;--red:#f85149;--purple:#d2a8ff;}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  body{background:var(--bg);color:var(--txt);padding:24px;max-width:1240px;margin:0 auto}
+  a{color:var(--accent);text-decoration:none}
+  nav{display:flex;gap:16px;margin-bottom:20px;font-size:13px;align-items:center;flex-wrap:wrap}
+  nav a{color:var(--mut)} nav a.on{color:var(--txt);font-weight:600}
+  h1{font-size:22px;margin-bottom:2px}
+  .sub{color:var(--mut);font-size:13px;margin-bottom:18px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:22px}
+  .kpi{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:15px}
+  .kpi .n{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+  .kpi .l{color:var(--mut);font-size:12px;margin-top:6px}
+  .kpi .s{color:var(--mut);font-size:11px;margin-top:3px}
+  .kpi.accent .n{color:var(--accent)}.kpi.green .n{color:var(--green)}.kpi.amber .n{color:var(--amber)}.kpi.red .n{color:var(--red)}.kpi.purple .n{color:var(--purple)}
+  .panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px}
+  .panel h2{font-size:14px;margin-bottom:12px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--border)}
+  th{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .subj{max-width:420px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .bar{display:inline-block;height:7px;border-radius:4px;background:var(--accent);vertical-align:middle;margin-right:6px}
+  .spark{display:flex;gap:3px;align-items:flex-end;height:60px}
+  .spark .b{flex:1;background:#1f6feb;border-radius:2px 2px 0 0;min-height:2px;position:relative}
+  .spark .b .o{position:absolute;bottom:0;left:0;right:0;background:var(--green);border-radius:2px 2px 0 0}
+  .spark-lbl{display:flex;gap:3px;margin-top:4px}
+  .spark-lbl span{flex:1;text-align:center;color:var(--mut);font-size:9px;overflow:hidden}
+  .empty{color:var(--mut);font-size:12px;text-align:center;padding:16px}
+  .legend{font-size:11px;color:var(--mut);margin-top:6px}
+  .pill{display:inline-block;font-size:11px;padding:1px 7px;border-radius:5px;background:#1a2535;color:#79c0ff}
+</style>
+</head>
+<body>
+  <nav>
+    <a href="/home">🏠 Home</a>
+    <a href="/">Leads</a>
+    <a href="/jobs">Jobs (AI)</a>
+    <a href="/businesses">Businesses</a>
+    <a href="/outreach">Outreach</a>
+    <a href="/analytics" class="on">📊 Analytics</a>
+    <a href="/replies">📨 Replies</a>
+  </nav>
+
+  <h1>📊 Email Analytics</h1>
+  <div class="sub" id="sub">Loading…</div>
+
+  <div class="cards" id="cards"></div>
+
+  <div class="panel">
+    <h2>Sends — last 14 days <span style="color:var(--mut);font-size:11px;font-weight:400">(bar = sent · green = opened)</span></h2>
+    <div class="spark" id="spark"></div>
+    <div class="spark-lbl" id="sparkLbl"></div>
+    <div class="empty" id="sparkEmpty" style="display:none">No sends in the last 14 days.</div>
+  </div>
+
+  <div class="panel">
+    <h2>🏆 Best subject lines <span style="color:var(--mut);font-size:11px;font-weight:400">(reply-rate first · more sends = more reliable)</span></h2>
+    <table>
+      <thead><tr><th>Subject</th><th class="num">Sent</th><th class="num">Open %</th><th class="num">Reply %</th></tr></thead>
+      <tbody id="subjRows"></tbody>
+    </table>
+    <div class="empty" id="subjEmpty" style="display:none">Koi sent email nahi mila abhi.</div>
+  </div>
+
+  <div class="panel">
+    <h2>By type — JOB vs SERVICE</h2>
+    <table>
+      <thead><tr><th>Type</th><th class="num">Sent</th><th class="num">Open %</th><th class="num">Reply %</th></tr></thead>
+      <tbody id="typeRows"></tbody>
+    </table>
+    <div class="empty" id="typeEmpty" style="display:none">—</div>
+  </div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+
+  function card(n, label, sub, cls) {
+    return `<div class="kpi ${cls||""}"><div class="n">${n}</div><div class="l">${label}</div>${sub?`<div class="s">${sub}</div>`:""}</div>`;
+  }
+
+  async function load() {
+    let d;
+    try {
+      const r = await fetch("/api/analytics");
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      d = await r.json();
+    } catch (e) {
+      $("sub").textContent = "Load fail: " + e.message + " — backend chal raha hai? (npm run dashboard)";
+      return;
+    }
+    const o = d.overview || {};
+    $("sub").textContent = `${o.sent} emails sent · ${o.total} total leads · updated ${new Date(d.generatedAt).toLocaleString()}`;
+
+    $("cards").innerHTML = [
+      card(o.sent ?? 0, "Emails sent", null, "accent"),
+      card((o.openRate ?? 0) + "%", "Open rate", `${o.opened||0} opened`, "green"),
+      card((o.replyRate ?? 0) + "%", "Reply rate", `${o.replied||0} replies`, "purple"),
+      card((o.bounceRate ?? 0) + "%", "Bounce rate", `${o.bounced||0} bounced`, (o.bounceRate>5?"red":"amber")),
+      card((o.unsubRate ?? 0) + "%", "Unsub rate", `${o.unsub||0} unsub`, "amber"),
+    ].join("");
+
+    // timeline sparkline
+    const tl = d.timeline || [];
+    if (!tl.length) { $("spark").style.display="none"; $("sparkEmpty").style.display="block"; }
+    else {
+      const max = Math.max(...tl.map(t => t.sent), 1);
+      $("spark").innerHTML = tl.map(t => {
+        const h = Math.round((t.sent / max) * 100);
+        const oh = t.sent ? Math.round((t.opened / t.sent) * 100) : 0;
+        return `<div class="b" style="height:${Math.max(h,3)}%" title="${t.date}: ${t.sent} sent, ${t.opened} opened, ${t.replied} replied"><div class="o" style="height:${oh}%"></div></div>`;
+      }).join("");
+      $("sparkLbl").innerHTML = tl.map(t => `<span>${(t.date||"").slice(5)}</span>`).join("");
+    }
+
+    // best subjects
+    const bs = d.bestSubjects || [];
+    if (!bs.length) { $("subjEmpty").style.display = "block"; }
+    $("subjRows").innerHTML = bs.map(s =>
+      `<tr><td class="subj" title="${esc(s.subject)}">${esc(s.subject)}</td>`
+      + `<td class="num">${s.sent}</td>`
+      + `<td class="num"><span class="bar" style="width:${Math.round(s.openRate/2)}px"></span>${s.openRate}%</td>`
+      + `<td class="num">${s.replyRate}%</td></tr>`
+    ).join("");
+
+    // by type
+    const bt = d.byType || [];
+    if (!bt.length) { $("typeEmpty").style.display = "block"; }
+    $("typeRows").innerHTML = bt.map(t =>
+      `<tr><td><span class="pill">${esc(t.type)}</span></td><td class="num">${t.sent}</td><td class="num">${t.openRate}%</td><td class="num">${t.replyRate}%</td></tr>`
+    ).join("");
+  }
+  load();
+</script>
+</body>
+</html>

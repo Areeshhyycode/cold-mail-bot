@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Replies</title>
+<style>
+  :root{--bg:#0d1117;--card:#161b22;--border:#27303b;--txt:#e6edf3;--mut:#8b949e;--accent:#2f81f7;--green:#3fb950;--amber:#d29922;--red:#f85149;--purple:#d2a8ff;}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  body{background:var(--bg);color:var(--txt);padding:24px;max-width:1000px;margin:0 auto}
+  a{color:var(--accent);text-decoration:none}
+  nav{display:flex;gap:16px;margin-bottom:20px;font-size:13px;align-items:center;flex-wrap:wrap}
+  nav a{color:var(--mut)} nav a.on{color:var(--txt);font-weight:600}
+  h1{font-size:22px;margin-bottom:2px}
+  .sub{color:var(--mut);font-size:13px;margin-bottom:18px}
+  .row{display:flex;gap:12px;align-items:center;margin-bottom:14px;font-size:13px}
+  .row label{color:var(--mut);display:flex;gap:6px;align-items:center;cursor:pointer}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px}
+  .card.handled{opacity:.55}
+  .head{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap;margin-bottom:8px}
+  .who{font-weight:700;font-size:15px}
+  .meta{color:var(--mut);font-size:12px}
+  .pill{display:inline-block;font-size:10px;padding:1px 7px;border-radius:5px;background:#1a2535;color:#79c0ff;margin-left:6px}
+  .pill.job{background:#1d2b1d;color:#7ee787}
+  .lbl{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.04em;margin:10px 0 4px}
+  .their{background:#0d1117;border:1px solid var(--border);border-radius:8px;padding:10px;font-size:13px;white-space:pre-wrap;max-height:160px;overflow:auto;color:var(--mut)}
+  textarea{width:100%;background:#0d1117;border:1px solid var(--border);color:var(--txt);border-radius:8px;padding:10px;font-size:13px;font-family:inherit;min-height:140px;resize:vertical;line-height:1.5}
+  .actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  button{background:var(--accent);color:#fff;border:0;padding:8px 14px;border-radius:8px;font-size:13px;cursor:pointer}
+  button.ghost{background:transparent;border:1px solid var(--border);color:var(--txt)}
+  button.green{background:var(--green)}
+  .empty{color:var(--mut);font-size:13px;text-align:center;padding:40px}
+  .toast{position:fixed;top:14px;right:14px;background:var(--card);border:1px solid var(--border);border-left:3px solid var(--green);padding:10px 14px;border-radius:8px;font-size:13px;display:none}
+</style>
+</head>
+<body>
+  <div class="toast" id="toast"></div>
+  <nav>
+    <a href="/home">🏠 Home</a>
+    <a href="/">Leads</a>
+    <a href="/jobs">Jobs (AI)</a>
+    <a href="/businesses">Businesses</a>
+    <a href="/outreach">Outreach</a>
+    <a href="/analytics">📊 Analytics</a>
+    <a href="/replies" class="on">📨 Replies</a>
+  </nav>
+
+  <h1>📨 Replies + AI drafts</h1>
+  <div class="sub">Jinhone reply kiya — AI ka suggested jawab ready hai. Review karo, edit karo, copy karke Gmail se bhejo, phir "Mark done".</div>
+
+  <div class="row">
+    <label><input type="checkbox" id="showAll" /> Handled bhi dikhao</label>
+    <a href="#" id="refresh">↻ Refresh</a>
+  </div>
+
+  <div id="list"></div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+  function toast(msg) { const t=$("toast"); t.textContent=msg; t.style.display="block"; setTimeout(()=>t.style.display="none",2200); }
+
+  async function api(path, opts) {
+    const r = await fetch(path, opts);
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    return r.json();
+  }
+
+  async function load() {
+    const all = $("showAll").checked ? "?all=1" : "";
+    let d;
+    try { d = await api("/api/replies" + all); }
+    catch (e) { $("list").innerHTML = `<div class="empty">Load fail: ${esc(e.message)} — backend chal raha hai?</div>`; return; }
+
+    const rs = d.replies || [];
+    if (!rs.length) { $("list").innerHTML = `<div class="empty">Abhi koi reply nahi 🤷 (ya sab handled). Jab koi reply karega, yahan AI draft ke saath aa jayega.</div>`; return; }
+
+    $("list").innerHTML = rs.map((r) => {
+      const when = r.repliedAt ? new Date(r.repliedAt).toLocaleString() : "";
+      const jobPill = r.leadType === "JOB" ? '<span class="pill job">JOB</span>' : '<span class="pill">SERVICE</span>';
+      return `<div class="card ${r.handled?"handled":""}" data-id="${r.id}">
+        <div class="head">
+          <div><span class="who">${esc(r.who)}</span>${jobPill}</div>
+          <div class="meta">${esc(r.email)} · ${when}</div>
+        </div>
+        ${r.jobTitle?`<div class="meta">Role: ${esc(r.jobTitle)}</div>`:""}
+        ${r.subject?`<div class="meta">Re: ${esc(r.subject)}</div>`:""}
+        <div class="lbl">Unka reply</div>
+        <div class="their">${esc(r.replyText) || "(text capture nahi hua)"}</div>
+        <div class="lbl">✍️ AI draft (edit kar sakti ho)</div>
+        <textarea data-draft="${r.id}">${esc(r.draftReply) || ""}</textarea>
+        <div class="actions">
+          <button data-copy="${r.id}">📋 Copy</button>
+          <button class="ghost" data-save="${r.id}">💾 Save draft</button>
+          <button class="green" data-done="${r.id}">${r.handled?"✓ Handled":"Mark done"}</button>
+        </div>
+      </div>`;
+    }).join("");
+  }
+
+  document.addEventListener("click", async (e) => {
+    const copyId = e.target.getAttribute("data-copy");
+    const saveId = e.target.getAttribute("data-save");
+    const doneId = e.target.getAttribute("data-done");
+    if (copyId) {
+      const ta = document.querySelector(`textarea[data-draft="${copyId}"]`);
+      try { await navigator.clipboard.writeText(ta.value); toast("Draft copied — Gmail me paste karo"); }
+      catch { ta.select(); document.execCommand("copy"); toast("Copied"); }
+    }
+    if (saveId) {
+      const ta = document.querySelector(`textarea[data-draft="${saveId}"]`);
+      try { await api("/api/replies/draft", { method:"POST", headers:{"content-type":"application/json"}, body: JSON.stringify({ id: saveId, draftReply: ta.value }) }); toast("Draft saved"); }
+      catch (err) { toast("Save fail: " + err.message); }
+    }
+    if (doneId) {
+      try { await api("/api/replies/handled", { method:"POST", headers:{"content-type":"application/json"}, body: JSON.stringify({ id: doneId, handled: true }) }); toast("Marked done"); load(); }
+      catch (err) { toast("Fail: " + err.message); }
+    }
+  });
+
+  $("showAll").addEventListener("change", load);
+  $("refresh").addEventListener("click", (e) => { e.preventDefault(); load(); });
+  load();
+</script>
+</body>
+</html>
