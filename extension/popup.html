@@ -65,6 +65,13 @@
   .toast{position:sticky;top:0;background:var(--green);color:#06210f;font-size:11px;padding:5px;border-radius:6px;text-align:center;margin-bottom:8px;display:none;z-index:9}
   .filt{display:flex;align-items:center;gap:6px;font-size:12px;margin:2px 0 6px;cursor:pointer;user-select:none}
   .filt input{width:auto}
+  /* prominent auto-advance toggle — apply page ka badge isi ki taraf ishara karta */
+  .autoadv{display:flex;align-items:center;gap:8px;font-size:12px;line-height:1.35;
+    background:#16220f;border:1px solid #2f5320;border-radius:8px;padding:9px 10px;margin:2px 0 10px;
+    cursor:pointer;user-select:none;color:var(--txt)}
+  .autoadv input{width:auto;flex:0 0 auto;transform:scale(1.15)}
+  .autoadv b{color:var(--green);font-weight:700}
+  .autoadv span{color:var(--mut);font-size:11px}
   .srch{display:flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:5px 7px;margin-bottom:5px;font-size:11px}
   .srch span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#79c0ff}
   .srch button{flex:0;padding:2px 7px;font-size:11px}
@@ -103,6 +110,8 @@
   </div>
   <div class="count" id="count"></div>
 
+  <label class="autoadv"><input type="checkbox" id="autoAdvance" /> <b>⚡ Auto-fill &amp; advance apply steps</b><span> — Continue khud dabega, Submit tum dabao</span></label>
+
   <details id="autoBox">
     <summary>🤖 Daily auto-scrape (set &amp; forget)</summary>
     <label class="filt" style="margin-top:8px"><input type="checkbox" id="autoDaily" /> Chrome khulte hi saved searches khud scrape ho</label>
@@ -135,7 +144,7 @@
     <label>Experience — job title</label><input id="p_exptitle" placeholder="MERN Stack Developer" />
     <label>Experience — company</label><input id="p_expcompany" placeholder="Nexal IT Services" />
     <label>Interview availability</label><input id="p_interview" placeholder="Any day, 11:00 AM – 6:00 PM" />
-    <label class="filt" style="margin-top:8px"><input type="checkbox" id="autoAdvance" /> ⚡ Indeed apply steps auto-advance (Submit tum dabao)</label>
+    <div class="sub" style="margin-top:8px">⚡ Auto-advance toggle ab upar hai (list ke oopar).</div>
     <div class="row" style="margin-top:8px"><button id="saveProfile">💾 Save profile</button></div>
   </details>
 

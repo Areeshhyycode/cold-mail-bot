@@ -277,7 +277,7 @@
     fillBasic();
     if (isIndeedApply()) { fillApplyExtras(); captureAnswers(); }
 
-    if (!autoAdvance) { setBadge("Auto-advance OFF — popup me ⚡ toggle ON karo", "#f0a955"); return; }
+    if (!autoAdvance) { setBadge("Auto-advance OFF — popup ke sabse oopar ⚡ toggle ON karo", "#f0a955"); return; }
     if (captchaChallenge()) { setBadge("⏸ Captcha — tum solve karo", "#f0a955"); return; }
 
     const btns = [...document.querySelectorAll('button, [role="button"], input[type="submit"]')].filter(shown);
