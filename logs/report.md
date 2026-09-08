@@ -1,12 +1,12 @@
 # 📊 Cold Mail Bot — Activity Report
 
-_Last updated: 2026-09-08T08:29:38.189Z_
+_Last updated: 2026-09-08T09:18:05.744Z_
 
 ## Summary
 
 | Metric | Value |
 |---|---|
-| Total leads | 313 |
+| Total leads | 316 |
 | Emails sent (unique leads) | 0 |
 | Sent today | 0 |
 | Replies | 0 |
@@ -18,7 +18,7 @@ _Last updated: 2026-09-08T08:29:38.189Z_
 
 | Status | Count |
 |---|---|
-| new | 293 |
+| new | 296 |
 | ready | 20 |
 
 ## Recent activity (last 15)
