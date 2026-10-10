@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3001",
+    "dev": "node api.js && next dev -p 3001",
     "build": "next build",
-    "start": "next start -p 3001"
+    "start": "node api.js && next start -p 3001"
   },
   "dependencies": {
     "next": "14.2.15",
