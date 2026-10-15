@@ -206,6 +206,91 @@
     }
   }
 
+  /* ===== CHOICE QUESTIONS (dropdown / radio / checkbox) =====================
+     Ye wahi cheez thi jo jobs ko ATKA deti thi: Indeed ke screening questions
+     aksar dropdown/radio hote hain, jinhe purana code bharta hi nahi tha → wo
+     "required khali" reh jate → extension ruk jata. Ab:
+       - saved answer → match
+       - common yes/no (relocate/remote/shift/start) → sensible default
+       - warna AI (SW ke through) best option pick kare (profile se, jhoot nahi)
+       - koi confident jawab na mile → chhod do (user bharega = NEEDS_USER_INPUT) */
+  function radioLabel(el) {
+    if (el.labels && el.labels[0]) return (el.labels[0].textContent || "").trim();
+    if (el.id) { try { const l = document.querySelector(`label[for="${CSS.escape(el.id)}"]`); if (l) return (l.textContent || "").trim(); } catch { /* */ } }
+    const lab = el.closest("label"); if (lab) return (lab.textContent || "").trim();
+    return (el.value || el.getAttribute("aria-label") || "").trim();
+  }
+
+  async function resolveChoice(q, options) {
+    const opts = options.filter(Boolean);
+    if (!opts.length) return "";
+    // 1) saved answer
+    const saved = lookupSaved(q);
+    if (saved) { const m = opts.find((o) => norm(o) === norm(saved) || norm(o).includes(norm(saved))); if (m) return m; }
+    // 2) safe yes/no defaults — location/availability/willingness pe "Yes" (reject se
+    //    bachne ko; interview me baat ho sakti). AUTHORIZATION/VISA/SALARY/DEGREE pe
+    //    NAHI (wo AI/UNSURE ya user — jhoot ya galat commit na ho).
+    const ql = norm(q);
+    const yes = opts.find((o) => /^yes\b/i.test(o.trim()));
+    const benign = /relocat|work from (home|office)|on-?site|\boffice\b|commute|hybrid|shift|weekend|night|overtime|available to (start|join|work)|able to (start|join)|willing to (work|join|relocat|travel|start|commute)|start (immediately|asap|now)|notice period|background check|provide (a )?reference|comfortable (with|working)/;
+    const risky = /salary|compensation|expected pay|degree|visa|sponsor|citizen|authoriz|eligib|years? of experience/;
+    if (yes && benign.test(ql) && !risky.test(ql)) return yes;
+    // 3) AI pick (profile se) — low confidence pe "" (chhod do)
+    const res = await send("pickOption", { question: q, options: opts });
+    return (res && res.ok && res.data && res.data.choice) || "";
+  }
+
+  const choiceAsked = new Set();
+  let choicesRunning = false;
+  async function fillChoices() {
+    if (choicesRunning) return;
+    choicesRunning = true;
+    try {
+      // consent / agreement checkboxes → check karo (aage barhne ko zaroori)
+      for (const el of document.querySelectorAll("input[type='checkbox']")) {
+        if (!shown(el) || el.checked) continue;
+        const q = norm(getQuestion(el));
+        const required = el.required || el.getAttribute("aria-required") === "true";
+        if (required && /agree|consent|certify|terms|privacy|i confirm|acknowledge|authorize.*contact/.test(q)) el.click();
+      }
+      // dropdowns
+      for (const sel of document.querySelectorAll("select")) {
+        if (!shown(sel) || (sel.value && sel.selectedIndex > 0)) continue;
+        const q = getQuestion(sel);
+        const key = "s:" + normQ(q);
+        if (choiceAsked.has(key)) continue;
+        choiceAsked.add(key);
+        const opts = [...sel.options].filter((o) => o.value && !/^\s*(select|choose|please|--)/i.test(o.textContent)).map((o) => (o.textContent || "").trim());
+        if (!opts.length) continue;
+        const choice = await resolveChoice(q, opts);
+        if (choice) {
+          const opt = [...sel.options].find((o) => norm(o.textContent) === norm(choice) || norm(o.textContent).includes(norm(choice)));
+          if (opt) { sel.value = opt.value; sel.dispatchEvent(new Event("change", { bubbles: true })); sel.dispatchEvent(new Event("input", { bubbles: true })); }
+        }
+      }
+      // radio groups
+      const groups = {};
+      for (const el of document.querySelectorAll("input[type='radio']")) {
+        if (!shown(el)) continue;
+        const gk = el.name || getQuestion(el);
+        (groups[gk] = groups[gk] || []).push(el);
+      }
+      for (const els of Object.values(groups)) {
+        if (els.some((e) => e.checked)) continue;
+        const q = getQuestion(els[0]);
+        const key = "r:" + normQ(q);
+        if (choiceAsked.has(key)) continue;
+        choiceAsked.add(key);
+        const labels = els.map(radioLabel);
+        const choice = await resolveChoice(q, labels);
+        if (choice) {
+          const idx = labels.findIndex((l) => l && (norm(l) === norm(choice) || norm(l).includes(norm(choice)) || norm(choice).includes(norm(l))));
+          if (idx >= 0) els[idx].click();
+        }
+      }
+    } catch { /* ignore */ } finally { choicesRunning = false; }
+  }
+
   let lastSavedJSON = "";
   function captureAnswers() {
     let changed = false;
@@ -295,6 +380,9 @@
     if (isIndeedApply()) { fillApplyExtras(); captureAnswers(); }
 
     if (!autoAdvance) { setBadge("Auto-advance OFF — popup ke sabse oopar ⚡ toggle ON karo", "#f0a955"); return; }
+
+    // auto mode me dropdown/radio/checkbox bhi bhar do (ye skip ki asli wajah thi)
+    if (isIndeedApply()) fillChoices();
     if (captchaChallenge()) { setBadge("⏸ Captcha — tum solve karo", "#f0a955"); return; }
 
     const btns = [...document.querySelectorAll('button, [role="button"], input[type="submit"]')].filter(shown);

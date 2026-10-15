@@ -91,6 +91,10 @@ export const ping = () => request("/api/health");
 export const answerQuestion = (question, maxLen) =>
   request("/api/answer", { method: "POST", body: { question, maxLen } });
 
+/** Multiple-choice (dropdown/radio) ka best option pick — low confidence pe "". */
+export const pickOption = (question, options) =>
+  request("/api/pick", { method: "POST", body: { question, options } });
+
 /** LinkedIn recruiter/HR capture (user-initiated) — backend AI note bana deta hai. */
 export const postLinkedInPerson = (person) =>
   request("/api/linkedin/capture", { method: "POST", body: person });

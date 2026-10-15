@@ -25,7 +25,7 @@ import {
   normalizeJob, dedupeKey, fingerprint, extractAtsId, detectAts,
   classify, fitScore, sleep, DEAD_STATUSES,
 } from "./lib/core.js";
-import { postJobs, patchJobStatus, ping, answerQuestion, postLinkedInPerson, noteForUrl, setLinkedInStatus, regenNote, ApiError } from "./lib/api.js";
+import { postJobs, patchJobStatus, ping, answerQuestion, pickOption, postLinkedInPerson, noteForUrl, setLinkedInStatus, regenNote, ApiError } from "./lib/api.js";
 
 /* --------------------------------- config -------------------------------- */
 const ALARM_SCRAPE = "daily-scrape";
@@ -557,6 +557,7 @@ const HANDLERS = {
   // karta: API token SW me rehta hai, job-site page me nahi (agar page compromise
   // ho to token leak na ho).
   answerQuestion: (m) => answerQuestion(m.question, m.maxLen),
+  pickOption: (m) => pickOption(m.question, m.options),   // dropdown/radio ka best option
   ping: async () => {
     try { await ping(); await setSyncStatus({ online: true, lastError: null }); return { online: true }; }
     catch (e) { await setSyncStatus({ online: false, lastError: e.message }); return { online: false, error: e.message }; }

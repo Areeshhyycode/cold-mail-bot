@@ -40,6 +40,7 @@ import {
 import {
   capturePerson, listPeople, regenerateNote, updatePersonStatus, noteForUrl, appliedCompanies,
 } from "../api/linkedinApi.js";
+import { getDailyQueue } from "../api/dailyApi.js";
 import { resumePending, queueStats } from "../core/analysisQueue.js";
 import { handleOutreach } from "../api/outreachRoutes.js";
 import { handleAssistant } from "../api/assistantRoutes.js";
@@ -108,6 +109,47 @@ Portfolio: ${PROFILE.links.Portfolio} | GitHub: ${PROFILE.links.GitHub} | Linked
   let a = (c.choices[0]?.message?.content || "").trim().replace(/^["']|["']$/g, "");
   if (maxLen && a.length > maxLen) a = a.slice(0, maxLen);
   return { answer: a };
+}
+
+/* ============================== /api/pick ================================ */
+/* Multiple-choice question (dropdown/radio) ka BEST option pick karo candidate
+ * ke profile se. Confidence low ho to "" return — extension us question ko user
+ * ke liye chhod deta hai (NEEDS_USER_INPUT). Jhoot nahi. */
+async function pickOption(body) {
+  const q = vStr(body?.question, 600);
+  const options = Array.isArray(body?.options) ? body.options.map((o) => vStr(o, 200)).filter(Boolean).slice(0, 25) : [];
+  if (!q || !options.length) return { choice: "" };
+  if (!groq) return { choice: "" };
+
+  const sys = `Tum ek job application form bhar rahi ho candidate ki taraf se. Ek multiple-choice sawaal ke diye gaye OPTIONS me se SABSE SAHI ek option chuno (candidate ke real profile ke mutabiq).
+Rules:
+- SIRF diye gaye options me se EXACT ek wapas karo (hu-ba-hu text), aur kuch nahi.
+- Agar sahi jawab pata nahi / options me koi fit nahi / jhoot bolna pare, to "UNSURE" wapas karo.
+- Work authorization/visa/citizenship/sponsorship/salary ka pata na ho to UNSURE (guess mat karo).
+- Experience: candidate junior (~1 saal) hai. Notice period: immediately available.
+- Location/availability/willingness (relocate, office, remote, hybrid, shift, start date, references, background check) jaise sawaalon pe: candidate FLEXIBLE hai — reject se bachne ko "Yes"/positive option choose karo (jhoot nahi, ye genuinely flexible hai).
+CANDIDATE: ${PROFILE.name}, ${PROFILE.title}, ${PROFILE.location}. Skills: ${PROFILE.skills.slice(0, 12).join(", ")}.`;
+  const user = `SAWAAL: ${q}\nOPTIONS:\n${options.map((o, i) => `${i + 1}. ${o}`).join("\n")}\n\nSahi option ka EXACT text wapas karo (ya UNSURE):`;
+
+  try {
+    const c = await groq.chat.completions.create({
+      model: GROQ_MODEL,
+      messages: [{ role: "system", content: sys }, { role: "user", content: user }],
+      temperature: 0.2,
+      max_tokens: 60,
+      reasoning_effort: "low",
+    });
+    let a = (c.choices[0]?.message?.content || "").trim().replace(/^["']|["']$/g, "").replace(/^\d+\.\s*/, "");
+    if (/unsure/i.test(a)) return { choice: "" };
+    // exact ya closest option match
+    const norm = (s) => String(s).toLowerCase().replace(/\s+/g, " ").trim();
+    const exact = options.find((o) => norm(o) === norm(a));
+    if (exact) return { choice: exact };
+    const partial = options.find((o) => norm(o).includes(norm(a)) || norm(a).includes(norm(o)));
+    return { choice: partial || "" };
+  } catch {
+    return { choice: "" };
+  }
 }
 
 /* ============================= leads (purana) ============================= */
@@ -274,6 +316,7 @@ const server = http.createServer(async (req, res) => {
       return json(res, 200, result);
     }
     if (p === "/api/answer" && req.method === "POST") return json(res, 200, await answerQuestion(await readJson(req)));
+    if (p === "/api/pick" && req.method === "POST") return json(res, 200, await pickOption(await readJson(req)));
     if (p === "/api/data") return json(res, 200, await getLeadData());
 
     /* ---------------------- analytics + replies ------------------------ */
@@ -287,6 +330,9 @@ const server = http.createServer(async (req, res) => {
     if (p === "/api/linkedin/people" && req.method === "GET") return json(res, 200, await listPeople(url.searchParams));
     if (p === "/api/linkedin/note-for" && req.method === "GET") return json(res, 200, await noteForUrl(url.searchParams));
     if (p === "/api/linkedin/applied-companies" && req.method === "GET") return json(res, 200, await appliedCompanies());
+
+    /* ----------------------------- daily hub --------------------------- */
+    if (p === "/api/daily") return json(res, 200, await getDailyQueue());
     if (p === "/api/linkedin/note" && req.method === "POST") return json(res, 200, await regenerateNote(await readJson(req)));
     if (p === "/api/linkedin/status" && req.method === "POST") return json(res, 200, await updatePersonStatus(await readJson(req)));
 
