@@ -21,6 +21,7 @@ import { connectDB } from "../db/connect.js";
 import { Lead } from "../db/Lead.js";
 import { PROFILE } from "../ai/profile.js";
 import { GROQ_MODEL } from "../ai/model.js";
+import { aiChat } from "../ai/llm.js";
 import {
   API_TOKEN, suggestToken, applyCors, authorize, csvSafe, vStr, vNum,
 } from "../core/httpAuth.js";
@@ -103,13 +104,14 @@ Skills: ${PROFILE.skills.join(", ")}
 Highlights: ${PROFILE.highlights.join(" | ")}
 Portfolio: ${PROFILE.links.Portfolio} | GitHub: ${PROFILE.links.GitHub} | LinkedIn: ${PROFILE.links.LinkedIn}`;
 
-  const c = await groq.chat.completions.create({
-    model: GROQ_MODEL,
-    messages: [{ role: "system", content: sys }, { role: "user", content: q }],
-    temperature: 0.5,
-    max_tokens: 220,
-  });
-  let a = (c.choices[0]?.message?.content || "").trim().replace(/^["']|["']$/g, "");
+  let a = "";
+  try {
+    a = (await aiChat([{ role: "system", content: sys }, { role: "user", content: q }], { temperature: 0.5, max_tokens: 320 }))
+      .trim().replace(/^["']|["']$/g, "");
+  } catch (e) {
+    console.log("   ⚠️ answer AI fail:", e.message);
+    return { answer: "" };   // sab providers fail → khali (autofill gracefully skip)
+  }
   if (maxLen && a.length > maxLen) a = a.slice(0, maxLen);
   return { answer: a };
 }
@@ -122,7 +124,6 @@ async function pickOption(body) {
   const q = vStr(body?.question, 600);
   const options = Array.isArray(body?.options) ? body.options.map((o) => vStr(o, 200)).filter(Boolean).slice(0, 25) : [];
   if (!q || !options.length) return { choice: "" };
-  if (!groq) return { choice: "" };
 
   const sys = `Tum ek job application form bhar rahi ho candidate ki taraf se. Ek multiple-choice sawaal ke diye gaye OPTIONS me se SABSE SAHI ek option chuno (candidate ke real profile ke mutabiq).
 Rules:
@@ -135,14 +136,8 @@ CANDIDATE: ${PROFILE.name}, ${PROFILE.title}, ${PROFILE.location}. Skills: ${PRO
   const user = `SAWAAL: ${q}\nOPTIONS:\n${options.map((o, i) => `${i + 1}. ${o}`).join("\n")}\n\nSahi option ka EXACT text wapas karo (ya UNSURE):`;
 
   try {
-    const c = await groq.chat.completions.create({
-      model: GROQ_MODEL,
-      messages: [{ role: "system", content: sys }, { role: "user", content: user }],
-      temperature: 0.2,
-      max_tokens: 60,
-      reasoning_effort: "low",
-    });
-    let a = (c.choices[0]?.message?.content || "").trim().replace(/^["']|["']$/g, "").replace(/^\d+\.\s*/, "");
+    let a = (await aiChat([{ role: "system", content: sys }, { role: "user", content: user }], { temperature: 0.2, max_tokens: 120, reasoning_effort: "low" }))
+      .trim().replace(/^["']|["']$/g, "").replace(/^\d+\.\s*/, "");
     if (/unsure/i.test(a)) return { choice: "" };
     // exact ya closest option match
     const norm = (s) => String(s).toLowerCase().replace(/\s+/g, " ").trim();
