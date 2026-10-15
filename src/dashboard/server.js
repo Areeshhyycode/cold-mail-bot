@@ -86,9 +86,12 @@ Rules:
 - Open sawaal (why interested / what makes you unique / cover note) → specific & confident, candidate ke real background se.
 - Salary → "Negotiable / as per company standards" (jab tak specific na manga ho).
 - Earliest start / notice period → "Immediately available".
-- Years of experience → about 1 year (junior).
+- "Are you available for [full-time/part-time/hybrid/onsite/remote] position?" → "Yes" ke saath confident answer (interview-timing NAHI).
+- "Have you read / do you understand the role?" → "Yes, I've read the full job description and I'm genuinely interested..." (short, positive).
+- EXPERIENCE sawaal (kitne months/years kisi cheez ke) jahan candidate ka direct experience KAM ya zero hai → "0 months" jaisa self-reject jawab MAT do. Honest par POSITIVE raho: kam/early-career maano, par transferable skills (communication, research, coordination, fast learner, dev/HR background) highlight karo aur seekhne ka junoon dikhao. Jhooti experience/number MAT banao, par apne aap ko confidently pesh karo.
+- Years of experience (general) → about 1 year (junior).
 - Languages → "English, Urdu".
-- Jhooti degree/experience kabhi mat banao.
+- Jhooti degree/experience/number kabhi mat banao — par hamesha strongest honest framing choose karo (candidate ko reject karwane wala blunt jawab nahi).
 ${maxLen ? `Jawab ${maxLen} characters se kam rakho.` : "1-3 sentences, concise."}
 
 CANDIDATE:

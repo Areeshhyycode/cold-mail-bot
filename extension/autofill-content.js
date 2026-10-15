@@ -192,7 +192,13 @@
       const ql = q.toLowerCase();
       if (/\bjob title\b|position title/.test(ql) && !/\bcompany\b/.test(sig(el))) { setVal(el, profile.expTitle || profile.pitch || ""); continue; }
       if (/\bcompany\b|employer/.test(ql) && !/cover|describe|why/.test(ql)) { setVal(el, profile.expCompany || ""); continue; }
-      if (/interview|availab/.test(ql) || (/\bdate/.test(ql) && /\btime/.test(ql))) { setVal(el, interviewText()); continue; }
+      // INTERVIEW scheduling availability (sirf jab sawaal interview ke bare me ho)
+      if ((/interview/.test(ql) && /(availab|date|time|schedul|when|slot)/.test(ql)) || (/\binterview\b/.test(ql) && /\btime\b/.test(ql))) { setVal(el, interviewText()); continue; }
+      // "available for the POSITION/role/job" → affirmative (interview-timing NAHI)
+      if (/\bavailab/.test(ql) && /(position|role|\bjob\b|full[- ]?time|part[- ]?time|hybrid|on-?site|remote|work|start|join|shift)/.test(ql) && !/interview/.test(ql)) {
+        setVal(el, "Yes, I am available and can join immediately.");
+        continue;
+      }
 
       const saved = lookupSaved(q);
       if (saved) { setVal(el, el.maxLength > 0 ? saved.slice(0, el.maxLength) : saved); continue; }
